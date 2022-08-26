@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LT.DigitalOffice.Kernel.Attributes;
+using LT.DigitalOffice.Kernel.EFSupport.Provider;
+using LT.DigitalOffice.Kernel.Enums;
 
-namespace SurveyService.Data.Provider
+namespace LT.DigitalOffice.SurveyService.Data.Provider
 {
-    public interface IDataProvider
-    {
-    }
+  [AutoInject(InjectType.Scoped)]
+  public interface IDataProvider : IBaseDataProvider
+  {
+  }
 }

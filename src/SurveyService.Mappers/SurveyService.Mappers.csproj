@@ -1,11 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
-  <ItemGroup>
-    <Folder Include="Db\Interfaces\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SurveyService.Models.Db\SurveyService.Models.Db.csproj" />
+		<ProjectReference Include="..\SurveyService.Models.Dto\SurveyService.Models.Dto.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Db\Interfaces\" />
+	</ItemGroup>
 
 </Project>

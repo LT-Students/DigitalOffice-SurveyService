@@ -1,12 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
-  <ItemGroup>
-    <Folder Include="Option\Interfaces\" />
-    <Folder Include="Question\Interfaces\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SurveyService.Data\SurveyService.Data.csproj" />
+		<ProjectReference Include="..\SurveyService.Models.Dto\SurveyService.Models.Dto.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Question\Interfaces\" />
+		<Folder Include="Option\Interfaces\" />
+	</ItemGroup>
 
 </Project>

@@ -1,8 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+  <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurveyService.Broker\SurveyService.Broker.csproj" />
+    <ProjectReference Include="..\SurveyService.Data\SurveyService.Data.csproj" />
+    <ProjectReference Include="..\SurveyService.Mappers\SurveyService.Mappers.csproj" />
+    <ProjectReference Include="..\SurveyService.Validation\SurveyService.Validation.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Commands\" />
