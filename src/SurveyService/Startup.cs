@@ -38,7 +38,6 @@ namespace LT.DigitalOffice.SurveyService
 
     public const string CorsPolicyName = "LtDoCorsPolicy";
 
-
     public IConfiguration Configuration { get; }
 
     #region private methods
@@ -58,8 +57,6 @@ namespace LT.DigitalOffice.SurveyService
         .OfType<NewtonsoftJsonPatchInputFormatter>()
         .First();
     }
-
-
 
     #region configure masstransit
 
@@ -94,9 +91,9 @@ namespace LT.DigitalOffice.SurveyService
     }
 
     private void ConfigureEndpoints(
-        IBusRegistrationContext context,
-        IRabbitMqBusFactoryConfigurator cfg,
-        RabbitMqConfig rabbitMqConfig)
+      IBusRegistrationContext context,
+      IRabbitMqBusFactoryConfigurator cfg,
+      RabbitMqConfig rabbitMqConfig)
     {
     }
 
@@ -117,7 +114,7 @@ namespace LT.DigitalOffice.SurveyService
         .Get<RabbitMqConfig>();
 
       Version = "1.0.0.0";
-      Description = "SurveyService is an API that intended to work with surveies.";
+      Description = "SurveyService is an API that intended to work with surveys.";
       StartTime = DateTime.UtcNow;
       ApiName = $"LT Digital Office - {_serviceInfoConfig.Name}";
     }
