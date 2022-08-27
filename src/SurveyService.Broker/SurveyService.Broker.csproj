@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SurveyService.Data\SurveyService.Data.csproj" />
+    <ProjectReference Include="..\SurveyService.Mappers\SurveyService.Mappers.csproj" />
+    <ProjectReference Include="..\SurveyService.Models.Db\SurveyService.Models.Db.csproj" />
+  </ItemGroup>
+
+</Project>
