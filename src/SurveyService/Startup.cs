@@ -11,21 +11,15 @@ using LT.DigitalOffice.Kernel.Middlewares.ApiInformation;
 using LT.DigitalOffice.SurveyService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.SurveyService.Models.Dto.Configurations;
 using MassTransit;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
-using MassTransit.RabbitMqTransport;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace LT.DigitalOffice.SurveyService
@@ -33,73 +27,13 @@ namespace LT.DigitalOffice.SurveyService
   public class Startup : BaseApiInfo
   {
     private readonly BaseServiceInfoConfig _serviceInfoConfig;
-
     private readonly RabbitMqConfig _rabbitMqConfig;
 
     public const string CorsPolicyName = "LtDoCorsPolicy";
 
     public IConfiguration Configuration { get; }
 
-    #region private methods
-
-    private static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
-    {
-      var builder = new ServiceCollection()
-        .AddLogging()
-        .AddMvc()
-        .AddNewtonsoftJson()
-        .Services.BuildServiceProvider();
-
-      return builder
-        .GetRequiredService<IOptions<MvcOptions>>()
-        .Value
-        .InputFormatters
-        .OfType<NewtonsoftJsonPatchInputFormatter>()
-        .First();
-    }
-
-    #region configure masstransit
-
-    private void ConfigureMassTransit(IServiceCollection services)
-    {
-      (string username, string password) = RabbitMqCredentialsHelper
-        .Get(_rabbitMqConfig, _serviceInfoConfig);
-
-      services.AddMassTransit(busConfigurator =>
-      {
-        busConfigurator.UsingRabbitMq((context, cfg) =>
-          {
-            cfg.Host(_rabbitMqConfig.Host, "/", host =>
-              {
-                host.Username(username);
-                host.Password(password);
-              });
-
-            ConfigureEndpoints(context, cfg, _rabbitMqConfig);
-          });
-
-        ConfigureConsumers(busConfigurator);
-
-        busConfigurator.AddRequestClients(_rabbitMqConfig);
-      });
-
-      services.AddMassTransitHostedService();
-    }
-
-    private void ConfigureConsumers(IServiceCollectionBusConfigurator x)
-    {
-    }
-
-    private void ConfigureEndpoints(
-      IBusRegistrationContext context,
-      IRabbitMqBusFactoryConfigurator cfg,
-      RabbitMqConfig rabbitMqConfig)
-    {
-    }
-
-    #endregion
-
-    #endregion
+    #region public methods
 
     public Startup(IConfiguration configuration)
     {
@@ -118,7 +52,6 @@ namespace LT.DigitalOffice.SurveyService
       StartTime = DateTime.UtcNow;
       ApiName = $"LT Digital Office - {_serviceInfoConfig.Name}";
     }
-
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -165,7 +98,6 @@ namespace LT.DigitalOffice.SurveyService
         .AddNewtonsoftJson();
     }
 
-
     public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
     {
       app.UpdateDatabase<SurveyServiceDbContext>();
@@ -199,5 +131,37 @@ namespace LT.DigitalOffice.SurveyService
       });
 
     }
+
+    #endregion
+
+    #region private methods
+
+    #region configure masstransit
+
+    private void ConfigureMassTransit(IServiceCollection services)
+    {
+      (string username, string password) = RabbitMqCredentialsHelper
+        .Get(_rabbitMqConfig, _serviceInfoConfig);
+
+      services.AddMassTransit(busConfigurator =>
+      {
+        busConfigurator.UsingRabbitMq((context, cfg) =>
+          {
+            cfg.Host(_rabbitMqConfig.Host, "/", host =>
+              {
+                host.Username(username);
+                host.Password(password);
+              });
+          });
+
+        busConfigurator.AddRequestClients(_rabbitMqConfig);
+      });
+
+      services.AddMassTransitHostedService();
+    }
+
+    #endregion
+
+    #endregion
   }
 }

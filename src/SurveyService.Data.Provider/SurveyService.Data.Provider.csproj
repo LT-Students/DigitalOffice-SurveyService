@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
+  <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
-	<ItemGroup>
-		<ProjectReference Include="..\SurveyService.Models.Db\SurveyService.Models.Db.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurveyService.Models.Db\SurveyService.Models.Db.csproj" />
+  </ItemGroup>
 
 </Project>
