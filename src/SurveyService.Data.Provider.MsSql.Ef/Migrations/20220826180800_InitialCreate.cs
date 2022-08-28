@@ -6,8 +6,8 @@ using System;
 namespace LT.DigitalOffice.SurveyService.Data.Provider.MsSql.Ef.Migrations;
 
 [DbContext(typeof(SurveyServiceDbContext))]
-[Migration("20220826180800_InitialQuestionsTable")]
-class InitialQuestionsTable : Migration
+[Migration("20220826180800_InitialCreate")]
+class InitialCreate : Migration
 {
   protected override void Up(MigrationBuilder builder)
   {
@@ -27,9 +27,9 @@ class InitialQuestionsTable : Migration
         HasMultipleChoice = table.Column<bool>(nullable: false),
         HasCustomOptions = table.Column<bool>(nullable: false),
         CreatedBy = table.Column<Guid>(nullable: false),
-        CreatedAtUTC = table.Column<DateTime>(nullable: false),
+        CreatedAtUtc = table.Column<DateTime>(nullable: false),
         ModifiedBy = table.Column<Guid>(nullable: true),
-        ModifiedAtUTC = table.Column<DateTime>(nullable: true),
+        ModifiedAtUtc = table.Column<DateTime>(nullable: true),
         IsActive = table.Column<bool>(nullable: false)
       },
       constraints: table =>

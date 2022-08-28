@@ -20,11 +20,11 @@ public class DbQuestion
   public bool IsPrivate { get; set; }
   public bool HasMultipleChoice { get; set; }
   public bool HasCustomOptions { get; set; }
-  public Guid CreatedBy { get; set; }
-  public DateTime CreatedAtUTC { get; set; }
-  public Guid? ModifiedBy { get; set; }
-  public DateTime? ModifiedAtUTC { get; set; }
   public bool IsActive { get; set; }
+  public Guid CreatedBy { get; set; }
+  public DateTime CreatedAtUtc { get; set; }
+  public Guid? ModifiedBy { get; set; }
+  public DateTime? ModifiedAtUtc { get; set; }
 
   public ICollection<DbOption> Options { get; set; }
   public DbGroup Group { get; set; }
