@@ -22,7 +22,7 @@ namespace LT.DigitalOffice.SurveyService.Models.Db
     public bool HasCustomOptions { get; set; }
     public Guid CreatedBy { get; set; }
     public DateTime CreatedAtUTC { get; set; }
-    public Guid ModifiedBy { get; set; }
+    public Guid? ModifiedBy { get; set; }
     public DateTime? ModifiedAtUTC { get; set; }
     public bool IsActive { get; set; }
     public ICollection<DbOption> Options { get; set; }

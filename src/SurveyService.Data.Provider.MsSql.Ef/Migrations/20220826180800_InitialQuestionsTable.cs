@@ -28,7 +28,7 @@ namespace LT.DigitalOffice.SurveyService.Data.Provider.MsSql.Ef.Migrations
           HasCustomOptions = table.Column<bool>(nullable: false),
           CreatedBy = table.Column<Guid>(nullable: false),
           CreatedAtUTC = table.Column<DateTime>(nullable: false),
-          ModifiedBy = table.Column<Guid>(nullable: false),
+          ModifiedBy = table.Column<Guid>(nullable: true),
           ModifiedAtUTC = table.Column<DateTime>(nullable: true),
           IsActive = table.Column<bool>(nullable: false)
         },
