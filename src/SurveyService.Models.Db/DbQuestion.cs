@@ -51,7 +51,7 @@ public class QuestionConfiguration : IEntityTypeConfiguration<DbQuestion>
 
     builder
         .HasMany(q => q.Options)
-        .WithOne(o => o.Questions);
+        .WithOne(o => o.Question);
 
     builder
         .HasOne(q => q.Group)
