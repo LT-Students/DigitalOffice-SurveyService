@@ -11,5 +11,7 @@ namespace LT.DigitalOffice.SurveyService.Data.Provider
   {
     DbSet<DbQuestion> Questions { get; set; }
     DbSet<DbOption> Options { get; set; }
+    DbSet<DbUserAnswer> UsersAnswers { get; set; }
+    DbSet<DbGroup> Groups { get; set; }
   }
 }

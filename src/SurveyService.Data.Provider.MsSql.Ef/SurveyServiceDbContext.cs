@@ -10,6 +10,8 @@ namespace LT.DigitalOffice.SurveyService.Data.Provider.MsSql.Ef
   {
     public DbSet<DbQuestion> Questions { get; set; }
     public DbSet<DbOption> Options { get; set; }
+    public DbSet<DbUserAnswer> UsersAnswers { get; set; }
+    public DbSet<DbGroup> Groups { get; set; }
 
     public SurveyServiceDbContext(DbContextOptions<SurveyServiceDbContext> options)
       : base(options)
