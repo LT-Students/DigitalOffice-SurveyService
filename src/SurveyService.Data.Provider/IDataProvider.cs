@@ -10,5 +10,6 @@ namespace LT.DigitalOffice.SurveyService.Data.Provider
   public interface IDataProvider : IBaseDataProvider
   {
     DbSet<DbQuestion> Questions { get; set; }
+    DbSet<DbOption> Options { get; set; }
   }
 }
