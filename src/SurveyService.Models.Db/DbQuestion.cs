@@ -40,21 +40,21 @@ public class QuestionConfiguration : IEntityTypeConfiguration<DbQuestion>
   public void Configure(EntityTypeBuilder<DbQuestion> builder)
   {
     builder
-        .ToTable(DbQuestion.TableName);
+      .ToTable(DbQuestion.TableName);
 
     builder
-        .HasKey(q => q.Id);
+      .HasKey(q => q.Id);
 
     builder
-        .Property(q => q.Content)
-        .IsRequired();
+      .Property(q => q.Content)
+      .IsRequired();
 
     builder
-        .HasMany(q => q.Options)
-        .WithOne(o => o.Question);
+      .HasMany(q => q.Options)
+      .WithOne(o => o.Question);
 
     builder
-        .HasOne(q => q.Group)
-        .WithMany(g => g.Questions);
+      .HasOne(q => q.Group)
+      .WithMany(g => g.Questions);
   }
 }
