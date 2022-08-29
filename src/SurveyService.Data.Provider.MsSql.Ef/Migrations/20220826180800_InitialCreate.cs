@@ -36,5 +36,20 @@ class InitialCreate : Migration
       {
         table.PrimaryKey($"PK_{DbQuestion.TableName}", x => x.Id);
       });
+
+    builder.CreateTable(
+      name: DbOption.TableName,
+      columns: table => new
+      {
+        Id = table.Column<Guid>(nullable: false),
+        Content = table.Column<string>(nullable: false),
+        CreatedBy = table.Column<Guid>(nullable: false),
+        CreatedAtUtc = table.Column<DateTime>(nullable: false),
+        IsCustom = table.Column<bool>(nullable: false)
+      },
+      constraints: table =>
+      {
+        table.PrimaryKey($"PK_{DbOption.TableName}", x => x.Id);
+      });
   }
 }
