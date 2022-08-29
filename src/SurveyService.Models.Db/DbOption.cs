@@ -25,7 +25,7 @@ public class DbOption
   }
 }
 
-public class OptionsConfiguration : IEntityTypeConfiguration<DbOption>
+public class OptionConfiguration : IEntityTypeConfiguration<DbOption>
 {
   public void Configure(EntityTypeBuilder<DbOption> builder)
   {
