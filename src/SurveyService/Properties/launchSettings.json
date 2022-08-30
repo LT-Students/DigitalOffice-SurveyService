@@ -5,7 +5,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "RabbitMqUsername": "guest",
-        "RabbitMqPassword": "guest"
+        "RabbitMqPassword": "guest",
+        "ConnectionString": "Server=localhost;Database=SurveyDB;User Id=sa;Password=Testing1122;;"
       },
       "externalUrlConfiguration": true
     }

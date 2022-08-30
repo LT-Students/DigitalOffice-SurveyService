@@ -7,8 +7,11 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Requests\" />
     <Folder Include="Responses\" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\SurveyService.Models.Db\SurveyService.Models.Db.csproj" />
   </ItemGroup>
 
 </Project>
