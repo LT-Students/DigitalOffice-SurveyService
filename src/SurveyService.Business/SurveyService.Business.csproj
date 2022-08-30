@@ -9,8 +9,4 @@
     <ProjectReference Include="..\SurveyService.Validation\SurveyService.Validation.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
-
 </Project>
