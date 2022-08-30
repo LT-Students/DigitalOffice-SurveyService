@@ -13,8 +13,11 @@ public class DbOption
   public Guid QuestionId { get; set; }
   public string Content { get; set; }
   public bool IsCustom { get; set; }
+  public bool IsActive { get; set; }
   public Guid CreatedBy { get; set; }
   public DateTime CreatedAtUtc { get; set; }
+  public Guid? ModifiedBy { get; set; }
+  public DateTime? ModifiedAtUtc { get; set; }
 
   public DbQuestion Question { get; set; }
   public ICollection<DbUserAnswer> UsersAnswers { get; set; }

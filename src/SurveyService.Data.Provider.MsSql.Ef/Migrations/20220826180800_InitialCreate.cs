@@ -44,9 +44,12 @@ class InitialCreate : Migration
         Id = table.Column<Guid>(nullable: false),
         QuestionId = table.Column<Guid>(nullable: false),
         Content = table.Column<string>(nullable: false),
+        IsCustom = table.Column<bool>(nullable: false),
         CreatedBy = table.Column<Guid>(nullable: false),
         CreatedAtUtc = table.Column<DateTime>(nullable: false),
-        IsCustom = table.Column<bool>(nullable: false)
+        ModifiedBy = table.Column<Guid>(nullable: true),
+        ModifiedAtUtc = table.Column<DateTime>(nullable: true),
+        IsActive = table.Column<bool>(nullable: false)
       },
       constraints: table =>
       {
@@ -78,7 +81,7 @@ class InitialCreate : Migration
         CreatedBy = table.Column<Guid>(nullable: false),
         CreatedAtUtc = table.Column<DateTime>(nullable: false),
         ModifiedBy = table.Column<Guid>(nullable: true),
-        ModifiedAtUtc = table.Column<DateTime>(nullable: true),
+        ModifiedAtUtc = table.Column<DateTime>(nullable: true)
       },
       constraints: table =>
       {
