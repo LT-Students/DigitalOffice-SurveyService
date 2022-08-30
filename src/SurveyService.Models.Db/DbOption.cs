@@ -10,21 +10,25 @@ public class DbOption
   public const string TableName = "Options";
 
   public Guid Id { get; set; }
+  public Guid QuestionId { get; set; }
   public string Content { get; set; }
   public bool IsCustom { get; set; }
+  public bool IsActive { get; set; }
   public Guid CreatedBy { get; set; }
   public DateTime CreatedAtUtc { get; set; }
+  public Guid? ModifiedBy { get; set; }
+  public DateTime? ModifiedAtUtc { get; set; }
 
   public DbQuestion Question { get; set; }
-  public ICollection<DbAnswer> Answers { get; set; }
+  public ICollection<DbUserAnswer> UsersAnswers { get; set; }
 
   public DbOption()
   {
-    Answers = new HashSet<DbAnswer>();
+    UsersAnswers = new HashSet<DbUserAnswer>();
   }
 }
 
-public class OptionsConfiguration : IEntityTypeConfiguration<DbOption>
+public class OptionConfiguration : IEntityTypeConfiguration<DbOption>
 {
   public void Configure(EntityTypeBuilder<DbOption> builder)
   {
@@ -43,7 +47,7 @@ public class OptionsConfiguration : IEntityTypeConfiguration<DbOption>
       .WithMany(q => q.Options);
 
     builder
-      .HasMany(o => o.Answers)
-      .WithOne(a => a.Option);
+      .HasMany(o => o.UsersAnswers)
+      .WithOne(ua => ua.Option);
   }
 }
