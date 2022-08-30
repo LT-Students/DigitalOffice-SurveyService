@@ -26,11 +26,11 @@ class InitialCreate : Migration
         IsPrivate = table.Column<bool>(nullable: false),
         HasMultipleChoice = table.Column<bool>(nullable: false),
         HasCustomOptions = table.Column<bool>(nullable: false),
+        IsActive = table.Column<bool>(nullable: false),
         CreatedBy = table.Column<Guid>(nullable: false),
         CreatedAtUtc = table.Column<DateTime>(nullable: false),
         ModifiedBy = table.Column<Guid>(nullable: true),
-        ModifiedAtUtc = table.Column<DateTime>(nullable: true),
-        IsActive = table.Column<bool>(nullable: false)
+        ModifiedAtUtc = table.Column<DateTime>(nullable: true)
       },
       constraints: table =>
       {
@@ -45,11 +45,11 @@ class InitialCreate : Migration
         QuestionId = table.Column<Guid>(nullable: false),
         Content = table.Column<string>(nullable: false),
         IsCustom = table.Column<bool>(nullable: false),
+        IsActive = table.Column<bool>(nullable: false),
         CreatedBy = table.Column<Guid>(nullable: false),
         CreatedAtUtc = table.Column<DateTime>(nullable: false),
         ModifiedBy = table.Column<Guid>(nullable: true),
-        ModifiedAtUtc = table.Column<DateTime>(nullable: true),
-        IsActive = table.Column<bool>(nullable: false)
+        ModifiedAtUtc = table.Column<DateTime>(nullable: true)
       },
       constraints: table =>
       {
