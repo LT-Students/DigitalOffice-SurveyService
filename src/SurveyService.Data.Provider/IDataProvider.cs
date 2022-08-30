@@ -4,14 +4,13 @@ using LT.DigitalOffice.Kernel.Enums;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using Microsoft.EntityFrameworkCore;
 
-namespace LT.DigitalOffice.SurveyService.Data.Provider
+namespace LT.DigitalOffice.SurveyService.Data.Provider;
+
+[AutoInject(InjectType.Scoped)]
+public interface IDataProvider : IBaseDataProvider
 {
-  [AutoInject(InjectType.Scoped)]
-  public interface IDataProvider : IBaseDataProvider
-  {
-    DbSet<DbQuestion> Questions { get; set; }
-    DbSet<DbOption> Options { get; set; }
-    DbSet<DbUserAnswer> UsersAnswers { get; set; }
-    DbSet<DbGroup> Groups { get; set; }
-  }
+  DbSet<DbQuestion> Questions { get; set; }
+  DbSet<DbOption> Options { get; set; }
+  DbSet<DbUserAnswer> UsersAnswers { get; set; }
+  DbSet<DbGroup> Groups { get; set; }
 }
