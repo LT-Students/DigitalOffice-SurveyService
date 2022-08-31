@@ -7,9 +7,4 @@
     <ProjectReference Include="..\SurveyService.Models.Dto\SurveyService.Models.Dto.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Question\Interfaces\" />
-    <Folder Include="Option\Interfaces\" />
-  </ItemGroup>
-
 </Project>

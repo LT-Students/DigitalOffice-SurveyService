@@ -4,25 +4,32 @@ using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Linq;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Db;
 
 public class DbGroupMapper : IDbGroupMapper
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
-
-  public DbGroupMapper(IHttpContextAccessor httpContextAccessor)
+  private readonly IDbQuestionMapper _questionMapper;
+  
+  public DbGroupMapper(
+    IHttpContextAccessor httpContextAccessor,
+    IDbQuestionMapper questionMapper)
   {
     _httpContextAccessor = httpContextAccessor;
+    _questionMapper = questionMapper;
   }
   
   public DbGroup Map(CreateGroupRequest request)
   {
+    Guid groupId = Guid.NewGuid();
+    
     return request is null
       ? null
       : new DbGroup 
       {
-        Id = Guid.NewGuid(),
+        Id = groupId,
         Subject = request.Subject,
         Description = request.Description,
         IsActive = true,
@@ -30,7 +37,7 @@ public class DbGroupMapper : IDbGroupMapper
         CreatedAtUtc = DateTime.Now,
         ModifiedBy = null, 
         ModifiedAtUtc = null,
-        Questions = request.Questions
+        Questions = request.Questions.Select(question => _questionMapper.Map(question, groupId)).ToList()
       };
   }
 }
