@@ -4,7 +4,6 @@ using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.SurveyService.Business.Commands.Group.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
-using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
 using LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
 using System;
@@ -46,8 +45,7 @@ public class CreateGroupCommand : ICreateGroupCommand
       );
     }
 
-    DbGroup dbGroup = _dbGroupMapper.Map(request);
-    Guid? createGroupGuid = await _groupRepository.CreateAsync(dbGroup);
+    Guid? createGroupGuid = await _groupRepository.CreateAsync(_dbGroupMapper.Map(request));
     
     if (createGroupGuid is null)
     {
