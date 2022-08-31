@@ -34,7 +34,7 @@ public class DbGroupMapper : IDbGroupMapper
         Description = request.Description,
         IsActive = true,
         CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
-        CreatedAtUtc = DateTime.Now,
+        CreatedAtUtc = DateTime.UtcNow,
         Questions = request.Questions.Select(question => _questionMapper.Map(question, groupId)).ToList()
       };
   }
