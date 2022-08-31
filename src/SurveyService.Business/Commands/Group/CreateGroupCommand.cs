@@ -51,8 +51,7 @@ public class CreateGroupCommand : ICreateGroupCommand
     {
       return _responseCreator.CreateFailureResponse<Guid>(
         HttpStatusCode.BadRequest,
-        new List<string> { "Error occured while creating group." }
-        );
+        new List<string> { "Error occured while creating group." });
     }
     
     return new OperationResultResponse<Guid>(body: (Guid)createGroupGuid);

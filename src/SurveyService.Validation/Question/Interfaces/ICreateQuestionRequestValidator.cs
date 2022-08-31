@@ -7,5 +7,4 @@ namespace LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
 [AutoInject()]
 public interface ICreateQuestionRequestValidator : IValidator<CreateQuestionRequest>
 {
-  
 }

@@ -13,7 +13,7 @@ public class GroupController : ControllerBase
 {
   [HttpPost("create")]
   public async Task<OperationResultResponse<Guid>> CreateAsync(
-    ICreateGroupCommand command,
+    [FromServices] ICreateGroupCommand command,
     [FromBody] CreateGroupRequest request)
   {
     return await command.ExecuteAsync(request);

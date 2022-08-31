@@ -24,6 +24,7 @@ public class GroupRepository : IGroupRepository
 
     _provider.Groups.Add(dbGroup);
     await _provider.SaveAsync();
+    
     return dbGroup.Id;
   }
 }
