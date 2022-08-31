@@ -33,13 +33,13 @@ public class CreateGroupCommand : ICreateGroupCommand
     _validator = validator;
   }
 
-  public async Task<OperationResultResponse<Guid>> ExecuteAsync(CreateGroupRequest request)
+  public async Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateGroupRequest request)
   {
     ValidationResult validationResult = await _validator.ValidateAsync(request);
     
     if (!validationResult.IsValid)
     {
-      return _responseCreator.CreateFailureResponse<Guid>(
+      return _responseCreator.CreateFailureResponse<Guid?>(
         HttpStatusCode.BadRequest,
         validationResult.Errors.Select(vf => vf.ErrorMessage).ToList()
       );
@@ -49,11 +49,11 @@ public class CreateGroupCommand : ICreateGroupCommand
     
     if (createGroupGuid is null)
     {
-      return _responseCreator.CreateFailureResponse<Guid>(
+      return _responseCreator.CreateFailureResponse<Guid?>(
         HttpStatusCode.BadRequest,
         new List<string> { "Error occured while creating group." });
     }
     
-    return new OperationResultResponse<Guid>(body: (Guid)createGroupGuid);
+    return new OperationResultResponse<Guid?>(body: createGroupGuid);
   }
 }

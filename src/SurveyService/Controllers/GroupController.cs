@@ -12,7 +12,7 @@ namespace LT.DigitalOffice.SurveyService.Controllers;
 public class GroupController : ControllerBase
 {
   [HttpPost("create")]
-  public async Task<OperationResultResponse<Guid>> CreateAsync(
+  public async Task<OperationResultResponse<Guid?>> CreateAsync(
     [FromServices] ICreateGroupCommand command,
     [FromBody] CreateGroupRequest request)
   {

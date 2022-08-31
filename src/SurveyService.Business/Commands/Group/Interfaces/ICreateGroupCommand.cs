@@ -7,5 +7,5 @@ namespace LT.DigitalOffice.SurveyService.Business.Commands.Group.Interfaces;
 
 public interface ICreateGroupCommand
 {
-  Task<OperationResultResponse<Guid>> ExecuteAsync(CreateGroupRequest request);
+  Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateGroupRequest request);
 }
