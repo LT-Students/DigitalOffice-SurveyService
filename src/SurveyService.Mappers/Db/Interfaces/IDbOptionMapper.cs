@@ -1,6 +1,6 @@
 ﻿using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 

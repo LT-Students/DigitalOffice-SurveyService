@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LT.DigitalOffice.SurveyService.Models.Dto;
+namespace LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 
 public record CreateOptionRequest
 {

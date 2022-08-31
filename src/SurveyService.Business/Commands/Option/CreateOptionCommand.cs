@@ -5,7 +5,7 @@ using LT.DigitalOffice.SurveyService.Business.Commands.Option.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -39,7 +39,7 @@ public class CreateOptionCommand : ICreateOptionCommand
 
   public async Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateOptionRequest request)
   {
-    ValidationResult validationResult = await _validator.ValidateAsync(request);
+    ValidationResult validationResult = await _validator.ValidateAsync((request, null));
 
     if (!validationResult.IsValid)
     {

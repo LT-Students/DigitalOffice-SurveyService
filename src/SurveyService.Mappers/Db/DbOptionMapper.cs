@@ -1,7 +1,7 @@
 ﻿using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using Microsoft.AspNetCore.Http;
 using System;
 

@@ -1,6 +1,6 @@
 ﻿using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.Kernel.Responses;
-using LT.DigitalOffice.SurveyService.Models.Dto;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using System;
 using System.Threading.Tasks;
 
