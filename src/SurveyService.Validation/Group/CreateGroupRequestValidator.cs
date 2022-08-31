@@ -23,8 +23,10 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
       .WithMessage("Description should not exceed maximum length of 500 symbols.");
 
     RuleFor(group => group.Questions)
+      .Cascade(CascadeMode.Stop)
       .NotEmpty()
       .WithMessage("Group should contain at least 1 question.")
-      .ForEach(question => question.SetValidator(createQuestionRequestValidator));
+      .ForEach(question => question.SetValidator(createQuestionRequestValidator))
+      .WithMessage("While Validating question error occured.");
   }
 }
