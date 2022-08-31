@@ -47,12 +47,16 @@ public class CreateOptionCommand : ICreateOptionCommand
         validationResult.Errors.Select(vf => vf.ErrorMessage).ToList());
     }
 
-    DbOption dbOption = _mapper.Map(request);
-    await _optionRepository.CreateAsync(dbOption);
+    OperationResultResponse<Guid?> response = new();
+    response.Body = await _optionRepository.CreateAsync(_mapper.Map(request));
+
+    if (response.Body is null)
+    {
+      return _responseCreator.CreateFailureResponse<Guid?>(HttpStatusCode.BadRequest);
+    }
 
     _httpContextAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
 
-    return new OperationResultResponse<Guid?>(
-      body: dbOption.Id);
+    return response;
   }
 }

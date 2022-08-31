@@ -16,11 +16,11 @@ public class OptionRepository : IOptionRepository
     _provider = provider;
   }
 
-  public async Task<Guid> CreateAsync(DbOption dbOption)
+  public async Task<Guid?> CreateAsync(DbOption dbOption)
   {
-    if (dbOption == null)
+    if (dbOption is null)
     {
-      return default;
+      return null;
     }
 
     _provider.Options.Add(dbOption);

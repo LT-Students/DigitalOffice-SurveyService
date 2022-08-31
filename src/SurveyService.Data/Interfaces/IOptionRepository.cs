@@ -8,5 +8,5 @@ namespace LT.DigitalOffice.SurveyService.Data.Interfaces;
 [AutoInject]
 public interface IOptionRepository
 {
-  Task<Guid> CreateAsync(DbOption dbOption);
+  Task<Guid?> CreateAsync(DbOption dbOption);
 }

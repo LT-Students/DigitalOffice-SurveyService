@@ -29,9 +29,7 @@ public class DbOptionMapper : IDbOptionMapper
         IsCustom = request.IsCustom,
         IsActive = true,
         CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
-        CreatedAtUtc = DateTime.UtcNow,
-        ModifiedBy = _httpContextAccessor.HttpContext.GetUserId(),
-        ModifiedAtUtc = DateTime.UtcNow
+        CreatedAtUtc = DateTime.UtcNow
       };
   }
 }
