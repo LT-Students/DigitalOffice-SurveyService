@@ -14,10 +14,13 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
       .MaximumLength(150)
       .WithMessage("Subject should not exceed maximum length of 150 symbols.");
 
-    RuleFor(group => group.Description)
-      .MaximumLength(500)
-      .WithMessage("Description should not exceed maximum length of 500 symbols.");
-
+    When(group => string.IsNullOrEmpty(group.Description), () =>
+    {
+      RuleFor(group => group.Description)
+        .MaximumLength(500)
+        .WithMessage("Description should not exceed maximum length of 500 symbols.");
+    });
+    
     RuleFor(group => group.Questions)
       .ForEach(question => question.SetValidator(createQuestionRequestValidator))
       .WithMessage("While Validating question error occured.");
