@@ -14,7 +14,7 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
       .MaximumLength(150)
       .WithMessage("Subject should not exceed maximum length of 150 symbols.");
 
-    When(group => string.IsNullOrEmpty(group.Description), () =>
+    When(group => !string.IsNullOrEmpty(group.Description), () =>
     {
       RuleFor(group => group.Description)
         .MaximumLength(500)
