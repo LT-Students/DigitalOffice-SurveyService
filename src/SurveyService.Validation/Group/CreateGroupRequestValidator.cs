@@ -11,9 +11,6 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
     ICreateQuestionRequestValidator createQuestionRequestValidator)
   {
     RuleFor(group => group.Subject)
-      .Cascade(CascadeMode.Stop)
-      .NotEmpty()
-      .WithMessage("Subject can't be empty")
       .MaximumLength(150)
       .WithMessage("Subject should not exceed maximum length of 150 symbols.");
 

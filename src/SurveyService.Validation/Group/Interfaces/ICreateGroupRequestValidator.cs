@@ -7,5 +7,4 @@ namespace LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
 [AutoInject()]
 public interface ICreateGroupRequestValidator : IValidator<CreateGroupRequest>
 {
-  
 }
