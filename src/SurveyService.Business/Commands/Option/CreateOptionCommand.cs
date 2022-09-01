@@ -4,7 +4,6 @@ using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.SurveyService.Business.Commands.Option.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
-using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -47,8 +46,8 @@ public class CreateOptionCommand : ICreateOptionCommand
         validationResult.Errors.Select(vf => vf.ErrorMessage).ToList());
     }
 
-    OperationResultResponse<Guid?> response = new();
-    response.Body = await _optionRepository.CreateAsync(_mapper.Map(request));
+    OperationResultResponse<Guid?> response = new(
+      body: await _optionRepository.CreateAsync(_mapper.Map(request)));
 
     if (response.Body is null)
     {

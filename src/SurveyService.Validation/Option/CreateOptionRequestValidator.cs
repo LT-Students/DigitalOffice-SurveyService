@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 
@@ -17,12 +18,12 @@ public class CreateOptionRequestValidator : AbstractValidator<(CreateOptionReque
     {
       RuleFor(x => x.request.QuestionId)
         .MustAsync(async (x, _) => await _questionRepository.GetAsync(x) is not null)
-        .WithMessage("Can't create option for non-existent question.");
+        .WithMessage("The question id doesn't exist.");
 
       When(x => x.request.IsCustom, () =>
       {
         RuleFor(x => x.request.QuestionId)
-          .MustAsync(async (x, _) => await _questionRepository.GetAsync(x).HasCustomOptions)
+          .MustAsync(async (x, _) => (await _questionRepository.GetAsync(x)).HasCustomOptions)
           .WithMessage("This question can't have custom options.");
       });
     });
