@@ -1,4 +1,5 @@
-﻿using LT.DigitalOffice.SurveyService.Models.Db;
+﻿using LT.DigitalOffice.SurveyService.DataLayer;
+using LT.DigitalOffice.SurveyService.DataLayer.Models;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;

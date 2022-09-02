@@ -1,21 +1,26 @@
-﻿using LT.DigitalOffice.Kernel.Responses;
-using LT.DigitalOffice.SurveyService.Business.Commands.Option.Interfaces;
-using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
+﻿using LT.DigitalOffice.SurveyService.Business.Commands.Option.Create;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Controllers;
 
-[Route("[controller]")]
-[ApiController]
+[ApiController, Route("[controller]")]
 public class OptionController : ControllerBase
 {
-  [HttpPost("create")]
-  public async Task<OperationResultResponse<Guid?>> CreateAsync(
-    [FromServices] ICreateOptionCommand command,
-    [FromBody] CreateOptionRequest request)
+  private readonly IMediator _mediator;
+
+  public OptionController(IMediator mediator)
   {
-    return await command.ExecuteAsync(request);
+    _mediator = mediator;
+  }
+
+  [HttpPost("create")]
+  public async Task<IActionResult> CreateAsync(
+    [FromBody] CreateOptionRequest request,
+    CancellationToken ct)
+  {
+    return Created(string.Empty, await _mediator.Send(request, ct));
   }
 }

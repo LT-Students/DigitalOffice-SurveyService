@@ -1,5 +1,6 @@
 ﻿using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
+using LT.DigitalOffice.SurveyService.Data.Provider.MsSql.Ef.Models;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using System;
 using System.Threading.Tasks;

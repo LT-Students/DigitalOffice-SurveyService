@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
+namespace LT.DigitalOffice.SurveyService.Business.Commands.Option.Create;
 
-public record CreateOptionRequest
+public record CreateOptionRequest : IRequest<Guid>
 {
   public Guid QuestionId { get; set; }
   [Required]

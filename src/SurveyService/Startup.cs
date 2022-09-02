@@ -1,3 +1,4 @@
+using FluentValidation;
 using HealthChecks.UI.Client;
 using LT.DigitalOffice.Kernel.BrokerSupport.Configurations;
 using LT.DigitalOffice.Kernel.BrokerSupport.Extensions;
@@ -8,9 +9,10 @@ using LT.DigitalOffice.Kernel.EFSupport.Extensions;
 using LT.DigitalOffice.Kernel.EFSupport.Helpers;
 using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.Middlewares.ApiInformation;
-using LT.DigitalOffice.SurveyService.Data.Provider.MsSql.Ef;
-using LT.DigitalOffice.SurveyService.Models.Dto.Configurations;
+using LT.DigitalOffice.SurveyService.Business;
+using LT.DigitalOffice.SurveyService.DataLayer;
 using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
@@ -85,7 +87,9 @@ namespace LT.DigitalOffice.SurveyService
       services.Configure<BaseServiceInfoConfig>(Configuration.GetSection(BaseServiceInfoConfig.SectionName));
       services.Configure<BaseRabbitMqConfig>(Configuration.GetSection(BaseRabbitMqConfig.SectionName));
 
-      services.AddBusinessObjects();
+      services.AddValidatorsFromAssemblyContaining(typeof(AssemblyMarker));
+
+      services.AddMediatR(typeof(AssemblyMarker));
 
       ConfigureMassTransit(services);
 
@@ -129,7 +133,6 @@ namespace LT.DigitalOffice.SurveyService
           ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
         });
       });
-
     }
 
     #endregion

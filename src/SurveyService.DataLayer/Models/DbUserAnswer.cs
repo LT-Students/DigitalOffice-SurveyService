@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
-namespace LT.DigitalOffice.SurveyService.Models.Db;
+namespace LT.DigitalOffice.SurveyService.DataLayer.Models;
 
 public class DbUserAnswer
 {

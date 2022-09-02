@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
-namespace LT.DigitalOffice.SurveyService.Models.Db;
+namespace LT.DigitalOffice.SurveyService.DataLayer.Models;
 
 public class DbOption
 {
