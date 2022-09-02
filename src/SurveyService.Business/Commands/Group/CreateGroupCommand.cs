@@ -49,17 +49,15 @@ public class CreateGroupCommand : ICreateGroupCommand
       );
     }
 
-    Guid? createGroupGuid = await _groupRepository.CreateAsync(_dbGroupMapper.Map(request));
-    
-    if (createGroupGuid is null)
+    OperationResultResponse<Guid?> response = new (){ Body = await _groupRepository.CreateAsync(_dbGroupMapper.Map(request)) };
+
+    if (response.Body is null)
     {
-      return _responseCreator.CreateFailureResponse<Guid?>(
-        HttpStatusCode.BadRequest,
-        new List<string> { "Error occured while creating group." });
+      return _responseCreator.CreateFailureResponse<Guid?>(HttpStatusCode.BadRequest);
     }
     
     _httpContextAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
-    
-    return new OperationResultResponse<Guid?>(body: createGroupGuid);
+
+    return response;
   }
 }

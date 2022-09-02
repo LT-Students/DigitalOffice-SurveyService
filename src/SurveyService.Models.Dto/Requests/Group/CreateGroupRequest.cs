@@ -6,10 +6,10 @@ namespace LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
 
 public record CreateGroupRequest
 {
-  [Required(ErrorMessage = "Subject is required.")]
+  [Required]
   public string Subject { get; set; }
   public string Description { get; set; }
 
-  [Required(ErrorMessage = "At least 1 question is required.")]
+  [Required]
   public ICollection<CreateQuestionRequest> Questions { get; set; }
 }

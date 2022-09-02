@@ -2,6 +2,7 @@ using FluentValidation;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
 using LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
 using LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
+using System.Linq;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Group;
 
@@ -22,6 +23,9 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
     });
     
     RuleFor(group => group.Questions)
+      .Cascade(CascadeMode.Stop)
+      .Must(question => question.Any())
+      .WithMessage("At least 1 question in group is required.")
       .ForEach(question => question.SetValidator(createQuestionRequestValidator))
       .WithMessage("While Validating question error occured.");
   }
