@@ -7,7 +7,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Requests\" />
     <Folder Include="Responses\" />
   </ItemGroup>
 

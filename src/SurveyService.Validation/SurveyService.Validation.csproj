@@ -1,15 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
   <ItemGroup>
     <ProjectReference Include="..\SurveyService.Data\SurveyService.Data.csproj" />
     <ProjectReference Include="..\SurveyService.Models.Dto\SurveyService.Models.Dto.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Question\Interfaces\" />
-    <Folder Include="Option\Interfaces\" />
   </ItemGroup>
 
 </Project>
