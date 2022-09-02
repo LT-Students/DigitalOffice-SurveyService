@@ -9,4 +9,5 @@ namespace LT.DigitalOffice.SurveyService.Data.Interfaces;
 public interface IQuestionRepository
 {
   Task<DbQuestion> GetAsync(Guid questionId);
+  Task<bool> DoesExistAsync(Guid questionId);
 }

@@ -22,4 +22,10 @@ public class QuestionRepository : IQuestionRepository
     return _provider.Questions
       .FirstOrDefaultAsync(x => x.Id == questionId);
   }
+
+  public Task<bool> DoesExistAsync(Guid questionId)
+  {
+    return _provider.Questions
+      .AnyAsync(x => x.Id == questionId);
+  }
 }

@@ -14,10 +14,10 @@ public class CreateOptionRequestValidator : AbstractValidator<(CreateOptionReque
   {
     _questionRepository = questionRepository;
 
-    When(x => x.hasCustomOptions is null, () =>
+    When(x => !x.hasCustomOptions.HasValue, () =>
     {
       RuleFor(x => x.request.QuestionId)
-        .MustAsync(async (x, _) => await _questionRepository.GetAsync(x) is not null)
+        .MustAsync(async (x, _) => await _questionRepository.DoesExistAsync(x))
         .WithMessage("The question id doesn't exist.");
 
       When(x => x.request.IsCustom, () =>
@@ -28,7 +28,7 @@ public class CreateOptionRequestValidator : AbstractValidator<(CreateOptionReque
       });
     });
 
-    When(x => x.hasCustomOptions is not null && x.request.IsCustom, () =>
+    When(x => x.hasCustomOptions.HasValue && x.request.IsCustom, () =>
     {
       RuleFor(x => x.hasCustomOptions)
         .Must(x => (bool)x)
