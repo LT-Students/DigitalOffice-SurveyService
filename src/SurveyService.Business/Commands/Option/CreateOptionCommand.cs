@@ -38,7 +38,7 @@ public class CreateOptionCommand : ICreateOptionCommand
 
   public async Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateOptionRequest request)
   {
-    ValidationResult validationResult = await _validator.ValidateAsync((request, null));
+    ValidationResult validationResult = await _validator.ValidateAsync(request);
 
     if (!validationResult.IsValid)
     {
