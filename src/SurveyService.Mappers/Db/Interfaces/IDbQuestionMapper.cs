@@ -6,5 +6,5 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 
 public interface IDbQuestionMapper
 {
-  DbQuestion Map(CreateQuestionRequest dbQuestionRequest, Guid? groupId);
+  DbQuestion Map(CreateQuestionRequest createQuestionRequest, Guid? groupId);
 }
