@@ -4,7 +4,7 @@ using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
 
-[AutoInject()]
+[AutoInject]
 public interface ICreateGroupRequestValidator : IValidator<CreateGroupRequest>
 {
 }

@@ -4,7 +4,7 @@ using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
 
-[AutoInject()]
+[AutoInject]
 public interface ICreateQuestionRequestValidator : IValidator<CreateQuestionRequest>
 {
 }
