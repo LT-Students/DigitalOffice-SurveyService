@@ -7,18 +7,14 @@ namespace LT.DigitalOffice.SurveyService.Validation.Option;
 
 public class CreateOptionRequestValidator : AbstractValidator<CreateOptionRequest>, ICreateOptionRequestValidator
 {
-  private readonly IQuestionRepository _questionRepository;
-
   public CreateOptionRequestValidator(
-    IQuestionRepository questionRepository)
+    IQuestionRepository _questionRepository)
   {
-    _questionRepository = questionRepository;
-
     RuleFor(x => x.QuestionId)
       .MustAsync(async (x, _) => await _questionRepository.DoesExistAsync(x))
       .WithMessage("The question id doesn't exist.");
 
-    When(x => x.IsCustom, () =>
+    WhenAsync(async (x, _) => await _questionRepository.DoesExistAsync(x.QuestionId) && x.IsCustom, () =>
     {
       RuleFor(x => x.QuestionId)
         .MustAsync(async (x, _) => (await _questionRepository.GetAsync(x)).HasCustomOptions)
