@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 
-[AutoInject(InjectType.Transient)]
+[AutoInject]
 public interface ICreateQuestionCommand
 {
   Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateQuestionRequest request);
