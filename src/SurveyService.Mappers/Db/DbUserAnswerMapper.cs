@@ -18,13 +18,11 @@ public class DbUserAnswerMapper : IDbUserAnswerMapper
 
   public DbUserAnswer Map(CreateUserAnswerRequest request)
   {
-    Guid userAnswerGuid = Guid.NewGuid();
-
     return request is null
       ? null
       : new DbUserAnswer
       {
-        Id = userAnswerGuid,
+        Id = Guid.NewGuid(),
         OptionId = request.OptionId,
         UserId = _httpContextAccessor.HttpContext.GetUserId(),
         CreatedAtUtc = DateTime.UtcNow
