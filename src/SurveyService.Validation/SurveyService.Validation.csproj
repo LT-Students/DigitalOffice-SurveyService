@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Question\Interfaces\" />
-    <Folder Include="Option\Interfaces\" />
   </ItemGroup>
 
 </Project>
