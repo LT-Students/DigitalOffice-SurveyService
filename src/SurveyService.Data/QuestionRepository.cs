@@ -31,11 +31,6 @@ public class QuestionRepository : IQuestionRepository
     return dbQuestion.Id;
   }
 
-  public Task<DbQuestion> GetAsync(Guid questionId)
-  {
-    throw new NotImplementedException();
-  }
-
   public async Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter)
   {
     DbQuestion question = null;

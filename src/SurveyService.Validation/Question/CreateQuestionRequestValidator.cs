@@ -46,7 +46,8 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
         .Cascade(CascadeMode.Stop)
         .Must(q => !q.IsCustom)
         .WithMessage("This question can't have custom options.")
-        .Must(q => q.Content.Length < 301);
+        .Must(q => q.Content.Length < 301)
+        .WithMessage("Option is too long");
     });
   }
 }
