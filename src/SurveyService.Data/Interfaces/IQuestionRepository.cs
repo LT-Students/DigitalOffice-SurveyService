@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Data.Interfaces;
 
-[AutoInject(InjectType.Transient)]
+[AutoInject]
 public interface IQuestionRepository
 {
   Task<Guid?> CreateAsync(DbQuestion dbQuestion);
