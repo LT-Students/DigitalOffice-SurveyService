@@ -21,13 +21,15 @@ public class DbQuestionMapper : IDbQuestionMapper
 
   public DbQuestion Map(CreateQuestionRequest request)
   {
-    return request is null ? null : new DbQuestion()
+    return request is null 
+    ? null
+    : new DbQuestion()
     {
       Id = Guid.NewGuid(),
       GroupId = request.GroupId,
       Content = request.Content,
       Deadline = request.Deadline,
-      HasRealTimeResult = request.HasRealTimeResults,
+      HasRealTimeResult = request.HasRealTimeResult,
       IsAnonymous = request.IsAnonymous,
       IsRevoteAvailable = request.IsRevoteAvaible,
       IsObligatory = request.IsObligatory,

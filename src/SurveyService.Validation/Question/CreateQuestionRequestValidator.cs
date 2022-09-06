@@ -18,25 +18,28 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
       .MaximumLength(300)
       .WithMessage("Content is too long.");
 
-    RuleFor(q => q.Deadline)
-      .Must(v => v > new DateTime(v.Value.Year, v.Value.Month, v.Value.Day + 1,
-                                  v.Value.Hour, v.Value.Minute, v.Value.Millisecond))
-      .WithMessage("The deadline is too close.");
+    When(q => q.Deadline.HasValue, () =>
+    {
+      RuleFor(q => q.Deadline)
+        .Must(v => v > new DateTime(v.Value.Year, v.Value.Month, v.Value.Day + 1,
+                                    v.Value.Hour, v.Value.Minute, v.Value.Millisecond))
+        .WithMessage("The deadline must be at least 24 hours from now.");
+    });
 
     When(q => q.GroupId.HasValue, () =>
     {
       RuleFor(q => q)
-        .Cascade(CascadeMode.Stop)
         .MustAsync(async (q, _) => (await _questionRepository.GetPropertiesAsync(new GetQuestionPropertiesFilter() { GroupId = q.GroupId })).Deadline == q.Deadline)
-        .WithMessage("The deadlines of questions in the group are not equal.")
-        .MustAsync(async (q, _) => (await _questionRepository.GetPropertiesAsync(new GetQuestionPropertiesFilter() { GroupId = q.GroupId })).HasRealTimeResult == q.HasRealTimeResults)
+        .WithMessage("The deadlines of questions in the group are not equal.");
+
+      RuleFor(q => q)
+        .MustAsync(async (q, _) => (await _questionRepository.GetPropertiesAsync(new GetQuestionPropertiesFilter() { GroupId = q.GroupId })).HasRealTimeResult == q.HasRealTimeResult)
         .WithMessage("The conditions for displaying the results of the questions are different.");
     });
 
     When(q => !q.HasMultipleChoice && q.HasCustomOptions, () =>
     {
       RuleFor(q => q.Options)
-        .Cascade(CascadeMode.Stop)
         .NotEmpty().WithMessage("No options in the question.");
     });
 
@@ -45,7 +48,7 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
       RuleForEach(q => q.Options)
         .Cascade(CascadeMode.Stop)
         .Must(q => !q.IsCustom)
-        .WithMessage("This question can't have custom options.")
+        .WithMessage("This question should have one option at least.")
         .Must(q => q.Content.Length < 301)
         .WithMessage("Option is too long");
     });

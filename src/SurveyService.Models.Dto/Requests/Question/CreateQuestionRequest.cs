@@ -11,7 +11,7 @@ public record CreateQuestionRequest
   [Required]
   public string Content { get; set; }
   public DateTime? Deadline { get; set; }
-  public bool HasRealTimeResults { get; set; } = true;
+  public bool HasRealTimeResult { get; set; } = true;
   [Required]
   public bool IsAnonymous { get; set; }
   [Required]
