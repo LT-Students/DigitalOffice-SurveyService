@@ -85,8 +85,6 @@ namespace LT.DigitalOffice.SurveyService
       services.Configure<BaseServiceInfoConfig>(Configuration.GetSection(BaseServiceInfoConfig.SectionName));
       services.Configure<BaseRabbitMqConfig>(Configuration.GetSection(BaseRabbitMqConfig.SectionName));
 
-      services.AddHttpContextAccessor();
-      
       services.AddBusinessObjects();
 
       ConfigureMassTransit(services);
