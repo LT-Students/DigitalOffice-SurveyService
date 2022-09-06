@@ -114,6 +114,8 @@ namespace LT.DigitalOffice.SurveyService
       
       app.UseCors(CorsPolicyName);
 
+      app.UseCors(CorsPolicyName);
+
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers().RequireCors(CorsPolicyName);
