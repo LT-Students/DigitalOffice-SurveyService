@@ -108,11 +108,11 @@ namespace LT.DigitalOffice.SurveyService
 
       app.UseApiInformation();
 
-      app.UseCors(CorsPolicyName);
-
       app.UseRouting();
 
       app.UseMiddleware<TokenMiddleware>();
+      
+      app.UseCors(CorsPolicyName);
 
       app.UseEndpoints(endpoints =>
       {

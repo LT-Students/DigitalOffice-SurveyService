@@ -10,5 +10,5 @@ public record CreateGroupRequest
   public string Subject { get; set; }
   public string Description { get; set; }
   [Required]
-  public ICollection<CreateQuestionRequest> Questions { get; set; }
+  public List<CreateQuestionRequest> Questions { get; set; }
 }
