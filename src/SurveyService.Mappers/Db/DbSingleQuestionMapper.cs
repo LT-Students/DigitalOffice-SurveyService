@@ -8,18 +8,18 @@ using System.Linq;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Db;
 
-public class DbQuestionMapper : IDbQuestionMapper
+public class DbSingleQuestionMapper : IDbQuestionMapper
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
   private readonly IDbOptionMapper _dbOptionsMapper;
 
-  public DbQuestionMapper(IHttpContextAccessor httpContextAccessor, IDbOptionMapper dbOptionsMapper)
+  public DbSingleQuestionMapper(IHttpContextAccessor httpContextAccessor, IDbOptionMapper dbOptionsMapper)
   {
     _httpContextAccessor = httpContextAccessor;
     _dbOptionsMapper = dbOptionsMapper;
   }
 
-  public DbQuestion Map(CreateQuestionRequest request)
+  public DbQuestion Map(CreateSingleQuestionRequest request)
   {
     return request is null 
     ? null

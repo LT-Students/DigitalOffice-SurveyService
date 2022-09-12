@@ -7,5 +7,5 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 [AutoInject]
 public interface IDbQuestionMapper
 {
-  DbQuestion Map(CreateQuestionRequest request);
+  DbQuestion Map(CreateSingleQuestionRequest request);
 }

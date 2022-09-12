@@ -10,5 +10,5 @@ namespace LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 [AutoInject]
 public interface ICreateQuestionCommand
 {
-  Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateQuestionRequest request);
+  Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateSingleQuestionRequest request);
 }

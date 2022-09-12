@@ -36,7 +36,7 @@ public class CreateQuestionCommand : ICreateQuestionCommand
     _responseCreator = responseCreator;
   }
   
-  public async Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateQuestionRequest request)
+  public async Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateSingleQuestionRequest request)
   {
     ValidationResult validationResult = await _validator.ValidateAsync(request);
 

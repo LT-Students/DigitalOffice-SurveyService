@@ -8,7 +8,7 @@ using System;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Question;
 
-public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRequest>, ICreateQuestionRequestValidator
+public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQuestionRequest>, ICreateQuestionRequestValidator
 {
   public CreateQuestionRequestValidator(
     IQuestionRepository _questionRepository
@@ -21,8 +21,7 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
     When(q => q.Deadline.HasValue, () =>
     {
       RuleFor(q => q.Deadline)
-        .Must(v => v > new DateTime(v.Value.Year, v.Value.Month, v.Value.Day + 1,
-                                    v.Value.Hour, v.Value.Minute, v.Value.Millisecond))
+        .Must(d => d > DateTime.UtcNow.AddDays(1).AddSeconds(2))
         .WithMessage("The deadline must be at least 24 hours from now.");
     });
 

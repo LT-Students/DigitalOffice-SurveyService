@@ -14,7 +14,7 @@ public class QuestionController : ControllerBase
   [HttpPost("create")]
   public async Task<OperationResultResponse<Guid?>> CreateAsync(
     [FromServices] ICreateQuestionCommand command,
-    [FromBody] CreateQuestionRequest request)
+    [FromBody] CreateSingleQuestionRequest request)
   {
     return await command.ExecuteAsync(request);
   }

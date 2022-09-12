@@ -33,7 +33,7 @@ public class QuestionRepository : IQuestionRepository
 
   public async Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter)
   {
-    DbQuestion question = null;
+    DbQuestion question = new DbQuestion();
 
     if (filter.GroupId.HasValue)
     {

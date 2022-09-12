@@ -5,13 +5,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 
-public record CreateQuestionRequest
+public record CreateGroupQuestionRequest
 {
-  public Guid? GroupId { get; set; }
   [Required]
   public string Content { get; set; }
-  public DateTime? Deadline { get; set; }
-  public bool HasRealTimeResult { get; set; } = true;
   [Required]
   public bool IsAnonymous { get; set; }
   [Required]
