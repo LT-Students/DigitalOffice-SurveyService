@@ -37,19 +37,25 @@ public class QuestionRepository : IQuestionRepository
   }
 
   public async Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter)
+  public Task<DbQuestion> GetAsync(Guid questionId)
   {
     DbQuestion question = new DbQuestion();
 
     if (filter.GroupId.HasValue)
     {
       question = await _provider.Questions.FirstOrDefaultAsync(q => q.Id == filter.GroupId);
-    }
+    return _provider.Questions
+      .FirstOrDefaultAsync(x => x.Id == questionId);
+  }
 
     if (filter.QuestionId.HasValue)
-    {
+  public Task<bool> DoesExistAsync(Guid questionId)
+  {
       question = await _provider.Questions.FirstOrDefaultAsync(q => q.Id == filter.QuestionId);
     }
 
     return question;
+    return _provider.Questions
+      .AnyAsync(x => x.Id == questionId);
   }
 }

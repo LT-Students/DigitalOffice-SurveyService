@@ -14,5 +14,7 @@ public interface IQuestionRepository
 
   Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter);
 
-  Task<DbQuestion> GetAsync(Guid id);
+  Task<DbQuestion> GetAsync(Guid questionId);
+
+  Task<bool> DoesExistAsync(Guid questionId);
 }
