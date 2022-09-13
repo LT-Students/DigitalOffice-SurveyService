@@ -1,7 +1,10 @@
 ﻿using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
+using LT.DigitalOffice.SurveyService.Models.Db;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Data;
@@ -16,9 +19,11 @@ public class OptionRepository : IOptionRepository
     _provider = provider;
   }
 
-  public Task<bool> DoesExistAsync(Guid optionId)
+  public async Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds)
   {
-    return _provider.Options
-      .AnyAsync(o => o.Id == optionId);
+    return await _provider.Options
+      .Where(dbOption => optionIds.Contains(dbOption.Id))
+      .Include(option => option.Question)
+      .Include(option => option.UsersAnswers).ToListAsync();
   }
 }

@@ -1,7 +1,6 @@
 ﻿using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto.Requests.UserAnswer;
 using Microsoft.AspNetCore.Http;
 using System;
 
@@ -16,14 +15,14 @@ public class DbUserAnswerMapper : IDbUserAnswerMapper
     _httpContextAccessor = httpContextAccessor;
   }
 
-  public DbUserAnswer Map(CreateUserAnswerRequest request)
+  public DbUserAnswer Map(Guid? request)
   {
     return request is null
       ? null
       : new DbUserAnswer
       {
         Id = Guid.NewGuid(),
-        OptionId = request.OptionId,
+        OptionId = (Guid)request,
         UserId = _httpContextAccessor.HttpContext.GetUserId(),
         CreatedAtUtc = DateTime.UtcNow
       };

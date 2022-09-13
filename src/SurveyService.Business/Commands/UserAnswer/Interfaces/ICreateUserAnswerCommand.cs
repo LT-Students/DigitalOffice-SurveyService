@@ -9,5 +9,5 @@ namespace LT.DigitalOffice.SurveyService.Business.Commands.UserAnswer.Interfaces
 [AutoInject]
 public interface ICreateUserAnswerCommand
 {
-  Task<OperationResultResponse<Guid?>> ExecuteAsync(CreateUserAnswerRequest request);
+  Task<OperationResultResponse<bool>> ExecuteAsync(CreateUserAnswerRequest request);
 }
