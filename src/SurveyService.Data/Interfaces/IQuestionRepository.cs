@@ -13,4 +13,6 @@ public interface IQuestionRepository
   Task<Guid?> CreateAsync(DbQuestion dbQuestion);
 
   Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter);
+
+  Task<DbQuestion> GetAsync(Guid id);
 }

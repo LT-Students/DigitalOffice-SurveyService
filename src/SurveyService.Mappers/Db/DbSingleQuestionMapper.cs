@@ -4,6 +4,7 @@ using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Db;
@@ -21,7 +22,7 @@ public class DbSingleQuestionMapper : IDbQuestionMapper
 
   public DbQuestion Map(CreateSingleQuestionRequest request)
   {
-    return request is null 
+    return request is null
     ? null
     : new DbQuestion()
     {
@@ -39,7 +40,7 @@ public class DbSingleQuestionMapper : IDbQuestionMapper
       IsActive = true,
       CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
       CreatedAtUtc = DateTime.UtcNow,
-      Options = request.Options.Select(option =>  _dbOptionsMapper.Map(option)).ToList()
+      Options = new List<DbOption>() //request.Options.Select(option =>  _dbOptionsMapper.Map(option)).ToList()
     };
   }
 }

@@ -31,6 +31,11 @@ public class QuestionRepository : IQuestionRepository
     return dbQuestion.Id;
   }
 
+  public async Task<DbQuestion> GetAsync(Guid id)
+  {
+    return null;
+  }
+
   public async Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter)
   {
     DbQuestion question = new DbQuestion();
