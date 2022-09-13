@@ -21,6 +21,5 @@ public record CreateGroupQuestionRequest
   public bool HasMultipleChoice { get; set; }
   [Required]
   public bool HasCustomOptions { get; set; }
-  [Required]
   public List<CreateOptionRequest> Options { get; set; }
 }

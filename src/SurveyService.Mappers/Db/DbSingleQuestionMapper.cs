@@ -22,11 +22,18 @@ public class DbSingleQuestionMapper : IDbQuestionMapper
 
   public DbQuestion Map(CreateSingleQuestionRequest request)
   {
+    Guid questionId = Guid.NewGuid();
+
+    for(int i = 0; i < request.Options.Count; i++)
+    {
+      request.Options[i].QuestionId = questionId;
+    }
+
     return request is null
     ? null
     : new DbQuestion()
     {
-      Id = Guid.NewGuid(),
+      Id = questionId,
       GroupId = request.GroupId,
       Content = request.Content,
       Deadline = request.Deadline,
@@ -40,7 +47,7 @@ public class DbSingleQuestionMapper : IDbQuestionMapper
       IsActive = true,
       CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
       CreatedAtUtc = DateTime.UtcNow,
-      Options = request.Options.Select(option =>  _dbOptionsMapper.Map(option)).ToList()
+      Options = request.Options.Select(option => _dbOptionsMapper.Map(option)).ToList()
     };
   }
 }

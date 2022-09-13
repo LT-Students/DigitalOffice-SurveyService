@@ -36,20 +36,17 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQues
         .WithMessage("The conditions for displaying the results of the questions are different.");
     });
 
-    When(q => !q.HasMultipleChoice && q.HasCustomOptions, () =>
+    When(q =>  !q.HasCustomOptions, () =>
     {
       RuleFor(q => q.Options)
         .NotEmpty().WithMessage("No options in the question.");
     });
 
-    When(q => !q.HasCustomOptions, () =>
-    {
       RuleForEach(q => q.Options)
         .Cascade(CascadeMode.Stop)
         .Must(q => !q.IsCustom)
         .WithMessage("This question should have one option at least.")
         .Must(q => q.Content.Length < 301)
         .WithMessage("Option is too long");
-    });
   }
 }
