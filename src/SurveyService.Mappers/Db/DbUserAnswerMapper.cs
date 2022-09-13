@@ -15,14 +15,12 @@ public class DbUserAnswerMapper : IDbUserAnswerMapper
     _httpContextAccessor = httpContextAccessor;
   }
 
-  public DbUserAnswer Map(Guid? request)
+  public DbUserAnswer Map(Guid id)
   {
-    return request is null
-      ? null
-      : new DbUserAnswer
+    return new DbUserAnswer
       {
         Id = Guid.NewGuid(),
-        OptionId = (Guid)request,
+        OptionId = (Guid)id,
         UserId = _httpContextAccessor.HttpContext.GetUserId(),
         CreatedAtUtc = DateTime.UtcNow
       };

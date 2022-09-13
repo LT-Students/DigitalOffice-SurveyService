@@ -7,5 +7,5 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 [AutoInject]
 public interface IDbUserAnswerMapper
 {
-  DbUserAnswer Map(Guid? id);
+  DbUserAnswer Map(Guid id);
 }

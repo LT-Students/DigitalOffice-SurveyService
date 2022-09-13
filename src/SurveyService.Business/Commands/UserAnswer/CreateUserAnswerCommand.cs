@@ -47,7 +47,7 @@ public class CreateUserAnswerCommand : ICreateUserAnswerCommand
     }
 
     OperationResultResponse<bool> response = new(
-      body: await _userAnswerRepository.CreateAsync(request.OptionIds.Select(id => _mapper.Map(id)).ToList()));
+      body: await _userAnswerRepository.CreateAsync(request.OptionIds.Select(_mapper.Map).ToList()));
 
     if (response.Body is false)
     {

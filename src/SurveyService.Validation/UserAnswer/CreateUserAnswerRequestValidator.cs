@@ -16,7 +16,6 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<CreateUserAnsw
     IOptionRepository _optionRepository,
     IHttpContextAccessor _httpContextAccessor)
   {
-
     RuleFor(request => new
     {
       optionsIds = request.OptionIds,
