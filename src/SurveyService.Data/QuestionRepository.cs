@@ -31,31 +31,30 @@ public class QuestionRepository : IQuestionRepository
     return dbQuestion.Id;
   }
 
-  public async Task<DbQuestion> GetAsync(Guid id)
+  public Task<DbQuestion> GetAsync(Guid questionId)
   {
-    return null;
+    return _provider.Questions.FirstOrDefaultAsync(x => x.Id == questionId);
+  }
+
+  public Task<bool> DoesExistAsync(Guid questionId)
+  {
+    return _provider.Questions.AnyAsync(x => x.Id == questionId);
   }
 
   public async Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter)
-  public Task<DbQuestion> GetAsync(Guid questionId)
   {
     DbQuestion question = new DbQuestion();
 
     if (filter.GroupId.HasValue)
     {
       question = await _provider.Questions.FirstOrDefaultAsync(q => q.Id == filter.GroupId);
-    return _provider.Questions
-      .FirstOrDefaultAsync(x => x.Id == questionId);
-  }
+    }
 
     if (filter.QuestionId.HasValue)
-  public Task<bool> DoesExistAsync(Guid questionId)
-  {
+    {
       question = await _provider.Questions.FirstOrDefaultAsync(q => q.Id == filter.QuestionId);
     }
 
     return question;
-    return _provider.Questions
-      .AnyAsync(x => x.Id == questionId);
   }
 }
