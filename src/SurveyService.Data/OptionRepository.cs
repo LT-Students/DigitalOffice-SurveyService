@@ -19,6 +19,19 @@ public class OptionRepository : IOptionRepository
     _provider = provider;
   }
 
+  public async Task<Guid?> CreateAsync(DbOption dbOption)
+  {
+    if (dbOption is null)
+    {
+      return null;
+    }
+
+    _provider.Options.Add(dbOption);
+    await _provider.SaveAsync();
+
+    return dbOption.Id;
+  }
+
   public async Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds)
   {
     return await _provider.Options
