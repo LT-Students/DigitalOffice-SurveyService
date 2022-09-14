@@ -24,6 +24,7 @@ public class OptionRepository : IOptionRepository
     return await _provider.Options
       .Where(dbOption => optionIds.Contains(dbOption.Id))
       .Include(option => option.Question)
-      .Include(option => option.UsersAnswers).ToListAsync();
+      .Include(option => option.UsersAnswers)
+      .ToListAsync();
   }
 }

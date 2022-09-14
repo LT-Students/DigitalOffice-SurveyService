@@ -31,7 +31,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<CreateUserAnsw
       .WithMessage("There are questions from different groups.")
       .Must(x => x.options.Select(o => o.Question).Distinct().ToList()
         .TrueForAll(question => question.Deadline is null
-          || DateTime.Compare((DateTime)question.Deadline, DateTime.UtcNow) > 0))
+          || (DateTime)question.Deadline > DateTime.UtcNow))
       .WithMessage("Deadline has expired.")
       .Must(x => x.options.GroupBy(option => option.QuestionId)
         .ToDictionary(qo => qo.Key, qo => qo.ToList()).Values.ToList()
