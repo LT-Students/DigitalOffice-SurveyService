@@ -39,7 +39,8 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQues
     When(q =>  !q.HasCustomOptions, () =>
     {
       RuleFor(q => q.Options)
-        .NotEmpty().WithMessage("No options in the question.");
+        .NotEmpty()
+        .WithMessage("This question should have one option at least.");
     });
 
       RuleForEach(q => q.Options)

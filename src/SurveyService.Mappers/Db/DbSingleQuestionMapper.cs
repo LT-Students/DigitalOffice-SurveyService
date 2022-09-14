@@ -4,12 +4,11 @@ using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Db;
 
-public class DbSingleQuestionMapper : IDbQuestionMapper
+public class DbSingleQuestionMapper : IDbSingleQuestionMapper
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
   private readonly IDbOptionMapper _dbOptionsMapper;

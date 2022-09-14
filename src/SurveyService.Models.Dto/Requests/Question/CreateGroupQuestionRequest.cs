@@ -9,17 +9,11 @@ public record CreateGroupQuestionRequest
 {
   [Required]
   public string Content { get; set; }
-  [Required]
   public bool IsAnonymous { get; set; }
-  [Required]
   public bool IsRevoteAvaible { get; set; }
-  [Required]
   public bool IsObligatory { get; set; }
-  [Required]
   public bool IsPrivate { get; set; }
-  [Required]
   public bool HasMultipleChoice { get; set; }
-  [Required]
   public bool HasCustomOptions { get; set; }
   public List<CreateOptionRequest> Options { get; set; }
 }

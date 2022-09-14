@@ -17,14 +17,14 @@ namespace LT.DigitalOffice.SurveyService.Business.Commands.Question;
 public class CreateQuestionCommand : ICreateQuestionCommand
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
-  private readonly IDbQuestionMapper _mapper;
+  private readonly IDbSingleQuestionMapper _mapper;
   private readonly IQuestionRepository _questionRepository;
   private readonly ICreateQuestionRequestValidator _validator;
   private readonly IResponseCreator _responseCreator;
 
   public CreateQuestionCommand(
     IHttpContextAccessor httpContextAccessor, 
-    IDbQuestionMapper mapper, 
+    IDbSingleQuestionMapper mapper, 
     IQuestionRepository questionRepository,
     ICreateQuestionRequestValidator validator,
     IResponseCreator responseCreator)
