@@ -40,21 +40,4 @@ public class QuestionRepository : IQuestionRepository
   {
     return _provider.Questions.AnyAsync(x => x.Id == questionId);
   }
-
-  public async Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter)
-  {
-    DbQuestion question = new DbQuestion();
-
-    if (filter.GroupId.HasValue)
-    {
-      question = await _provider.Questions.FirstOrDefaultAsync(q => q.Id == filter.GroupId);
-    }
-
-    if (filter.QuestionId.HasValue)
-    {
-      question = await _provider.Questions.FirstOrDefaultAsync(q => q.Id == filter.QuestionId);
-    }
-
-    return question;
-  }
 }

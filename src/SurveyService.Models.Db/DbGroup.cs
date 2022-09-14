@@ -12,6 +12,8 @@ public class DbGroup
   public Guid Id { get; set; }
   public string Subject { get; set; }
   public string Description { get; set; }
+  public DateTime? Deadline { get; set; }
+  public bool HasRealTimeResult { get; set; } = true;
   public bool IsActive { get; set; }
   public Guid CreatedBy { get; set; }
   public DateTime CreatedAtUtc { get; set; }

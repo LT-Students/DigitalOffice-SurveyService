@@ -15,5 +15,5 @@ public record CreateGroupQuestionRequest
   public bool IsPrivate { get; set; }
   public bool HasMultipleChoice { get; set; }
   public bool HasCustomOptions { get; set; }
-  public List<CreateOptionRequest> Options { get; set; }
+  public List<CreateQuestionOptionRequest> Options { get; set; }
 }
