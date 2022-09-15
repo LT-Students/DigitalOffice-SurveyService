@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
-using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
-using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 using LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
 using System;
 
@@ -36,15 +34,15 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQues
         .WithMessage("The conditions for displaying the results of the questions are different.");
     });
 
-    When(q =>  !q.HasCustomOptions, () =>
+    When(q => !q.HasCustomOptions, () =>
     {
       RuleFor(q => q.Options)
         .NotEmpty()
         .WithMessage("This question should have one option at least.");
     });
 
-      RuleForEach(q => q.Options)
-        .Must(q => q.Content.Length < 301)
-        .WithMessage("Option is too long");
+    RuleForEach(q => q.Options)
+      .Must(q => q.Content.Length < 301)
+      .WithMessage("Option is too long");
   }
 }
