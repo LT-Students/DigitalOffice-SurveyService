@@ -20,7 +20,7 @@ public class DbUserAnswerMapper : IDbUserAnswerMapper
     return new DbUserAnswer
       {
         Id = Guid.NewGuid(),
-        OptionId = (Guid)id,
+        OptionId = id,
         UserId = _httpContextAccessor.HttpContext.GetUserId(),
         CreatedAtUtc = DateTime.UtcNow
       };

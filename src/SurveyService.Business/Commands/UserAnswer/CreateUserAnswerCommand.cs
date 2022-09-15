@@ -49,7 +49,7 @@ public class CreateUserAnswerCommand : ICreateUserAnswerCommand
     OperationResultResponse<bool> response = new(
       body: await _userAnswerRepository.CreateAsync(request.OptionIds.Select(_mapper.Map).ToList()));
 
-    if (response.Body is false)
+    if (!response.Body)
     {
       return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.BadRequest);
     }

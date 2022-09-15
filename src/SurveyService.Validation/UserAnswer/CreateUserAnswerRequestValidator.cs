@@ -23,23 +23,21 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<CreateUserAnsw
     })
       .Cascade(CascadeMode.Stop)
       .Must(x => x.optionsIds.Any())
-      .WithMessage("There are no optionIds.")
+      .WithMessage("There should be at least one option in request.")
       .Must(x => x.optionsIds.Count == x.options.Count)
       .WithMessage("Some option ids don't exist.")
       .Must(x => x.options.Select(o => o.Question).Distinct().Count() == 1
         || x.options.Select(o => o.Question).Distinct().Select(q => q.GroupId).Distinct().Count() == 1)
-      .WithMessage("There are questions from different groups.")
+      .WithMessage("Questions must belong to the same group.")
       .Must(x => x.options.Select(o => o.Question).Distinct().ToList()
-        .TrueForAll(question => question.Deadline is null
-          || (DateTime)question.Deadline > DateTime.UtcNow))
+        .TrueForAll(question => question.Deadline is null || question.Deadline > DateTime.UtcNow))
       .WithMessage("Deadline has expired.")
       .Must(x => x.options.GroupBy(option => option.QuestionId)
         .ToDictionary(qo => qo.Key, qo => qo.ToList()).Values.ToList()
         .TrueForAll(options => options.Count == 1 || options.First().Question.HasMultipleChoice))
       .WithMessage("Several answers are given, to a question that requires one.")
-      .Must(x => x.options.TrueForAll(o => o.Question.IsRevoteAvailable
-        || !o.UsersAnswers.Select(answer => answer.UserId).ToList()
-          .Contains(_httpContextAccessor.HttpContext.GetUserId())))
-      .WithMessage("Trying to answer twice in a question that doesn't allow it.");
+      .Must(x => x.options.TrueForAll(o => o.UsersAnswers.Select(answer => answer.UserId).ToList()
+        .Contains(_httpContextAccessor.HttpContext.GetUserId())))
+      .WithMessage("Trying to answer twice in a question.");
   }
 }
