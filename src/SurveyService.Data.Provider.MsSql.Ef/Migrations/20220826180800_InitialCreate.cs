@@ -77,8 +77,6 @@ class InitialCreate : Migration
         Id = table.Column<Guid>(nullable: false),
         Subject = table.Column<string>(nullable: false),
         Description = table.Column<string>(nullable: true),
-        Deadline = table.Column<DateTime>(nullable: true),
-        HasRealTimeResult = table.Column<bool>(nullable: false),
         IsActive = table.Column<bool>(nullable: false),
         CreatedBy = table.Column<Guid>(nullable: false),
         CreatedAtUtc = table.Column<DateTime>(nullable: false),

@@ -1,5 +1,6 @@
 ﻿using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.SurveyService.Models.Db;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using System;
 using System.Threading.Tasks;
 
@@ -9,6 +10,8 @@ namespace LT.DigitalOffice.SurveyService.Data.Interfaces;
 public interface IQuestionRepository
 {
   Task<Guid?> CreateAsync(DbQuestion dbQuestion);
+
+  Task<DbQuestion> GetPropertiesAsync(GetQuestionPropertiesFilter filter);
 
   Task<DbQuestion> GetAsync(Guid questionId);
 
