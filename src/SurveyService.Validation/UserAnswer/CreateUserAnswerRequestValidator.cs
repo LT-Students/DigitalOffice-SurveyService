@@ -36,7 +36,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<CreateUserAnsw
         .ToDictionary(qo => qo.Key, qo => qo.ToList()).Values.ToList()
         .TrueForAll(options => options.Count == 1 || options.First().Question.HasMultipleChoice))
       .WithMessage("Several answers are given, to a question that requires one.")
-      .Must(x => x.options.TrueForAll(o => o.UsersAnswers.Select(answer => answer.UserId).ToList()
+      .Must(x => x.options.TrueForAll(o => !o.UsersAnswers.Select(answer => answer.UserId).ToList()
         .Contains(_httpContextAccessor.HttpContext.GetUserId())))
       .WithMessage("Trying to answer twice in a question.");
   }
