@@ -1,5 +1,4 @@
 ﻿using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

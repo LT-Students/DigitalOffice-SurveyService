@@ -8,4 +8,3 @@ public record CreateSingleQuestionRequest : CreateGroupQuestionRequest
   public DateTime? Deadline { get; set; }
   public bool HasRealTimeResult { get; set; } = true;
 }
-

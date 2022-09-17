@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
-using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
 using System;
 
@@ -27,12 +26,8 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQues
     When(q => q.GroupId.HasValue, () =>
     {
       RuleFor(q => q)
-        .MustAsync(async (q, _) => (await _questionRepository.GetPropertiesAsync(new GetQuestionPropertiesFilter() { GroupId = q.GroupId})).Deadline == q.Deadline)
-        .WithMessage("The deadlines of questions in the group are not equal.");
-
-      RuleFor(q => q)
-        .MustAsync(async (q, _) => (await _questionRepository.GetPropertiesAsync(new GetQuestionPropertiesFilter() { GroupId = q.GroupId})).HasRealTimeResult == q.HasRealTimeResult)
-        .WithMessage("The conditions for displaying the results of the questions are different.");
+        .MustAsync(async (q, _) => await _questionRepository.CheckGroupProperties((Guid)q.GroupId, q.Deadline, q.HasRealTimeResult))
+        .WithMessage("Group properties are incorrect, please - check the deadline and result display settings");
     });
 
     When(q => !q.HasCustomOptions, () =>
