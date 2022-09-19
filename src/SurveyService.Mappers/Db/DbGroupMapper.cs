@@ -11,14 +11,14 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Db;
 public class DbGroupMapper : IDbGroupMapper
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
-  private readonly IDbQuestionMapper _questionMapper;
+  private readonly IDbGroupQuestionMapper _groupQuestionMapper;
   
   public DbGroupMapper(
     IHttpContextAccessor httpContextAccessor,
-    IDbQuestionMapper questionMapper)
+    IDbGroupQuestionMapper groupQuestionMapper)
   {
     _httpContextAccessor = httpContextAccessor;
-    _questionMapper = questionMapper;
+    _groupQuestionMapper = groupQuestionMapper;
   }
   
   public DbGroup Map(CreateGroupRequest request)
@@ -35,7 +35,7 @@ public class DbGroupMapper : IDbGroupMapper
         IsActive = true,
         CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
         CreatedAtUtc = DateTime.UtcNow,
-        Questions = request.Questions.Select(question => _questionMapper.Map(question, groupId)).ToList()
+        Questions = request.Questions.Select(question => _groupQuestionMapper.Map(question, groupId, request.Deadline, request.HasRealTimeResults)).ToList()
       };
   }
 }

@@ -6,7 +6,7 @@ using System;
 namespace LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 
 [AutoInject]
-public interface IDbQuestionMapper
+public interface IDbGroupQuestionMapper
 {
-  DbQuestion Map(CreateQuestionRequest createQuestionRequest, Guid? groupId);
+  DbQuestion Map(CreateGroupQuestionRequest request, Guid groupId, DateTime? groupDeadline, bool groupHasRealTimeResult);
 }

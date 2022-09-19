@@ -6,9 +6,9 @@ using System;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Question;
 
-public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQuestionRequest>, ICreateQuestionRequestValidator
+public class CreateSingleQuestionRequestValidator : AbstractValidator<CreateSingleQuestionRequest>, ICreateSingleQuestionRequestValidator
 {
-  public CreateQuestionRequestValidator(
+  public CreateSingleQuestionRequestValidator(
     IQuestionRepository questionRepository
     )
   {
