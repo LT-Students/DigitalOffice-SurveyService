@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.SurveyService.Validation.Question;
 public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQuestionRequest>, ICreateQuestionRequestValidator
 {
   public CreateQuestionRequestValidator(
-    IQuestionRepository _questionRepository
+    IQuestionRepository questionRepository
     )
   {
     RuleFor(q => q.Content)
@@ -18,7 +18,7 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQues
 
     When(q => q.Deadline.HasValue, () =>
     {
-      RuleFor(q => q.Deadline)
+      RuleFor(q => q.Deadline.Value)
         .Must(d => d > DateTime.UtcNow.AddDays(1).AddSeconds(2))
         .WithMessage("The deadline must be at least 24 hours from now.");
     });
@@ -26,7 +26,7 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQues
     When(q => q.GroupId.HasValue, () =>
     {
       RuleFor(q => q)
-        .MustAsync(async (q, _) => await _questionRepository.CheckGroupProperties((Guid)q.GroupId, q.Deadline, q.HasRealTimeResult))
+        .MustAsync(async (q, _) => await questionRepository.CheckGroupProperties(q.GroupId.Value, q.Deadline, q.HasRealTimeResult))
         .WithMessage("Group properties are incorrect, please - check the deadline and result display settings");
     });
 

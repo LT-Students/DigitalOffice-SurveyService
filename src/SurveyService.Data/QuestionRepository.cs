@@ -37,9 +37,7 @@ public class QuestionRepository : IQuestionRepository
 
   public async Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult)
   {
-    DbQuestion question = new DbQuestion();
-
-    question = await _provider.Questions.FirstOrDefaultAsync(q => q.GroupId == groupId);
+    DbQuestion question = await _provider.Questions.FirstOrDefaultAsync(q => q.GroupId == groupId);
 
     if((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
     {
