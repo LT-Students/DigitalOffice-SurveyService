@@ -3,14 +3,14 @@ using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
 using LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
 using LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Group;
 
 public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>, ICreateGroupRequestValidator
 {
   public CreateGroupRequestValidator(
-    [FromServices] ICreateSingleQuestionRequestValidator createSingleQuestionRequestValidator)
+    [FromServices] ICreateGroupQuestionRequestValidator createGroupQuestionRequestValidator)
   {
     RuleFor(group => group.Subject)
       .MaximumLength(150)
@@ -22,5 +22,19 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
         .MaximumLength(500)
         .WithMessage("Description should not exceed maximum length of 500 symbols.");
     });
+
+    RuleFor(group => group.Questions)
+      .NotEmpty()
+      .WithMessage("Group must contain at least 1 question.");
+    
+    When(groupQuestion => groupQuestion.Deadline.HasValue, () =>
+    {
+      RuleFor(q => q.Deadline.Value)
+        .Must(d => d > DateTime.UtcNow.AddDays(1).AddSeconds(2))
+        .WithMessage("The deadline must be at least 24 hours from now.");
+    });
+
+    RuleForEach(group => group.Questions)
+      .SetValidator(createGroupQuestionRequestValidator);
   }
 }

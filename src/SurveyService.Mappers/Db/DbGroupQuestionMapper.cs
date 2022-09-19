@@ -27,7 +27,7 @@ public class DbGroupQuestionMapper : IDbGroupQuestionMapper
           Deadline = groupDeadline,
           HasRealTimeResult = groupHasRealTimeResult,
           IsAnonymous = request.IsAnonymous,
-          IsRevoteAvaible = request.IsRevoteAvaible,
+          IsRevoteAvailable = request.IsRevoteAvailable,
           IsObligatory = request.IsObligatory,
           IsPrivate = request.IsPrivate,
           HasMultipleChoice = request.HasMultipleChoice,

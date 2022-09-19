@@ -33,7 +33,7 @@ public class DbSingleQuestionMapper : IDbSingleQuestionMapper
       Deadline = request.Deadline,
       HasRealTimeResult = request.HasRealTimeResult,
       IsAnonymous = request.IsAnonymous,
-      IsRevoteAvailable = request.IsRevoteAvaible,
+      IsRevoteAvailable = request.IsRevoteAvailable,
       IsObligatory = request.IsObligatory,
       IsPrivate = request.IsPrivate,
       HasMultipleChoice = request.HasMultipleChoice,
