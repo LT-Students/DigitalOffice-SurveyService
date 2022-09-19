@@ -20,7 +20,6 @@ public class CreateQuestionCommand : ICreateQuestionCommand
   private readonly IDbSingleQuestionMapper _mapper;
   private readonly IQuestionRepository _questionRepository;
   private readonly ICreateSingleQuestionRequestValidator _validator;
-  private readonly IResponseCreator _responseCreator;
 
   public CreateQuestionCommand(
     IHttpContextAccessor httpContextAccessor, 
