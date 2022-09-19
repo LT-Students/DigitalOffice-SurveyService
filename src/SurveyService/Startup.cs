@@ -111,8 +111,6 @@ namespace LT.DigitalOffice.SurveyService
       app.UseRouting();
 
       app.UseMiddleware<TokenMiddleware>();
-      
-      app.UseCors(CorsPolicyName);
 
       app.UseCors(CorsPolicyName);
 
