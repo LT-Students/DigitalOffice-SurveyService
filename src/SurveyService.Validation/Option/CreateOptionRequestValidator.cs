@@ -8,16 +8,16 @@ namespace LT.DigitalOffice.SurveyService.Validation.Option;
 public class CreateOptionRequestValidator : AbstractValidator<CreateOptionRequest>, ICreateOptionRequestValidator
 {
   public CreateOptionRequestValidator(
-    IQuestionRepository _questionRepository)
+    IQuestionRepository questionRepository)
   {
     RuleFor(x => x.QuestionId)
-      .MustAsync(async (x, _) => await _questionRepository.DoesExistAsync(x))
+      .MustAsync(async (x, _) => await questionRepository.DoesExistAsync(x))
       .WithMessage("The question id doesn't exist.");
 
-    WhenAsync(async (x, _) => await _questionRepository.DoesExistAsync(x.QuestionId) && x.IsCustom, () =>
+    WhenAsync(async (x, _) => await questionRepository.DoesExistAsync(x.QuestionId) && x.IsCustom, () =>
     {
       RuleFor(x => x.QuestionId)
-        .MustAsync(async (x, _) => (await _questionRepository.GetAsync(x)).HasCustomOptions)
+        .MustAsync(async (x, _) => (await questionRepository.GetAsync(x)).HasCustomOptions)
         .WithMessage("This question can't have custom options.");
     });
 

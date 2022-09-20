@@ -8,7 +8,7 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Db;
 
 public class DbGroupQuestionMapper : IDbGroupQuestionMapper
 {
-  private IDbSingleQuestionMapper _dbSingleQuestionMapper;
+  private readonly IDbSingleQuestionMapper _dbSingleQuestionMapper;
 
   public DbGroupQuestionMapper(
     [FromServices] IDbSingleQuestionMapper dbSingleQuestionMapper)
