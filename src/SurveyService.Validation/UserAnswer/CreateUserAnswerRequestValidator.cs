@@ -23,10 +23,10 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
 
     When(x => x.Item2 is not null, () =>
     {
-      RuleFor(request => new
+      RuleFor(pair => new
       {
-        requestOptions = request.Item1.OptionIds,
-        dbOptions = request.Item2
+        requestOptions = pair.Item1.OptionIds,
+        dbOptions = pair.Item2
       })
         .Cascade(CascadeMode.Stop)
         .Must(x => x.dbOptions.Where(o => o.IsActive).ToList().Count == x.requestOptions.Count)
