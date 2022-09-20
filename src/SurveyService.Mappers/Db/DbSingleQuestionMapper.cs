@@ -41,7 +41,7 @@ public class DbSingleQuestionMapper : IDbSingleQuestionMapper
       IsActive = true,
       CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
       CreatedAtUtc = DateTime.UtcNow,
-      Options = request.Options.Select(option => _dbQuestionOptionsMapper.Map(option, questionId)).ToList()
+      Options = request.Options?.Select(option => _dbQuestionOptionsMapper.Map(option, questionId)).ToList()
     };
   }
 }
