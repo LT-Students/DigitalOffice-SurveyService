@@ -17,15 +17,38 @@ public class QuestionRepository : IQuestionRepository
     _provider = provider;
   }
 
+  public async Task<Guid?> CreateAsync(DbQuestion dbQuestion)
+  {
+    if (dbQuestion is null)
+    {
+      return null;
+    }
+
+    _provider.Questions.Add(dbQuestion);
+    await _provider.SaveAsync();
+
+    return dbQuestion.Id;
+  }
+
   public Task<DbQuestion> GetAsync(Guid questionId)
   {
-    return _provider.Questions
-      .FirstOrDefaultAsync(x => x.Id == questionId);
+    return _provider.Questions.FirstOrDefaultAsync(x => x.Id == questionId);
+  }
+
+  public async Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult)
+  {
+    DbQuestion question = await _provider.Questions.FirstOrDefaultAsync(q => q.GroupId == groupId);
+
+    if((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
+    {
+      return false;
+    }
+
+    return true;
   }
 
   public Task<bool> DoesExistAsync(Guid questionId)
   {
-    return _provider.Questions
-      .AnyAsync(x => x.Id == questionId);
+    return _provider.Questions.AnyAsync(x => x.Id == questionId);
   }
 }
