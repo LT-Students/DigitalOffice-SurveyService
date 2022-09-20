@@ -80,7 +80,6 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
 
           List<Guid> obligatoryQuestionIds = question.Group.Questions.Where(q => q.IsObligatory).Select(q => q.Id).ToList();
           List<Guid> answeredQuestionIds = x.dbOptions.Select(o => o.QuestionId).Distinct().ToList();
-
           return !obligatoryQuestionIds.Except(answeredQuestionIds).Any();
         })
         .WithMessage("Not all required questions from the group were answered.");
