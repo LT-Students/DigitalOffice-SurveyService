@@ -48,7 +48,8 @@ public class CreateGroupCommand : ICreateGroupCommand
       );
     }
 
-    OperationResultResponse<Guid?> response = new (body: await _groupRepository.CreateAsync(_dbGroupMapper.Map(request)));
+    OperationResultResponse<Guid?> response = new (
+      body: await _groupRepository.CreateAsync(_dbGroupMapper.Map(request)));
 
     if (response.Body is null)
     {
