@@ -1,9 +1,6 @@
 using FluentValidation;
-using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
-using LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
 using LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
-using System;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Question;
 
