@@ -11,7 +11,7 @@ public record CreateGroupRequest
   public string Subject { get; set; }
   public string Description { get; set; }
   public DateTime? Deadline { get; set; }
-  public bool HasRealTimeResults { get; set; }
+  public bool HasRealTimeResult { get; set; }
   [Required]
   public List<CreateGroupQuestionRequest> Questions { get; set; }
 }

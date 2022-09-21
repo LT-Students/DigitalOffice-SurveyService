@@ -10,7 +10,7 @@ namespace LT.DigitalOffice.SurveyService.Validation.Group;
 public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>, ICreateGroupRequestValidator
 {
   public CreateGroupRequestValidator(
-    [FromServices] ICreateGroupQuestionRequestValidator createGroupQuestionRequestValidator)
+    ICreateGroupQuestionRequestValidator createGroupQuestionRequestValidator)
   {
     RuleFor(group => group.Subject)
       .MaximumLength(150)
@@ -32,6 +32,10 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
       RuleFor(q => q.Deadline.Value)
         .Must(d => d > DateTime.UtcNow.AddDays(1).AddSeconds(2))
         .WithMessage("The deadline must be at least 24 hours from now.");
+    }).Otherwise(() =>
+    {
+      RuleFor(q => q.HasRealTimeResult)
+        .Must(realTime => realTime);
     });
 
     RuleForEach(group => group.Questions)

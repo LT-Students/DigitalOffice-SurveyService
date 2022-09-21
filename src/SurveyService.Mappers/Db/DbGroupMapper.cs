@@ -35,7 +35,7 @@ public class DbGroupMapper : IDbGroupMapper
         IsActive = true,
         CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
         CreatedAtUtc = DateTime.UtcNow,
-        Questions = request.Questions.Select(question => _groupQuestionMapper.Map(question, groupId, request.Deadline, request.HasRealTimeResults)).ToList()
+        Questions = request.Questions.Select(question => _groupQuestionMapper.Map(question, groupId, request.Deadline, request.HasRealTimeResult)).ToList()
       };
   }
 }
