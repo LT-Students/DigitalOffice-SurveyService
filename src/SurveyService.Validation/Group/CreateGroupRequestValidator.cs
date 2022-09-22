@@ -33,7 +33,7 @@ public class CreateGroupRequestValidator : AbstractValidator<CreateGroupRequest>
         .WithMessage("The deadline must be at least 24 hours from now.");
     }).Otherwise(() =>
     {
-      RuleFor(q => q.HasRealTimeResult)
+      RuleFor(group => group.HasRealTimeResult)
         .Must(realTime => realTime);
     });
 
