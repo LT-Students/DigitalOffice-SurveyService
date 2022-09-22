@@ -25,7 +25,7 @@ public class CreateSingleQuestionRequestValidator : AbstractValidator<CreateSing
     {
       RuleFor(question => question.HasRealTimeResult)
         .Must(realTime => realTime);
-    });;
+    });
 
     When(q => q.GroupId.HasValue, () =>
     {
