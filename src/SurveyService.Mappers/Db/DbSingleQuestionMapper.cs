@@ -11,12 +11,12 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Db;
 public class DbSingleQuestionMapper : IDbSingleQuestionMapper
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
-  private readonly IDbQuestionOptionMapper _dbQuestionOptionsMapper;
+  private readonly IDbOptionMapper _dbOptionMapper;
 
-  public DbSingleQuestionMapper(IHttpContextAccessor httpContextAccessor, IDbQuestionOptionMapper dbQuestionOptionsMapper)
+  public DbSingleQuestionMapper(IHttpContextAccessor httpContextAccessor, IDbOptionMapper dbOptionMapper)
   {
     _httpContextAccessor = httpContextAccessor;
-    _dbQuestionOptionsMapper = dbQuestionOptionsMapper;
+    _dbOptionMapper = dbOptionMapper;
   }
 
   public DbQuestion Map(CreateSingleQuestionRequest request)
@@ -41,7 +41,7 @@ public class DbSingleQuestionMapper : IDbSingleQuestionMapper
       IsActive = true,
       CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
       CreatedAtUtc = DateTime.UtcNow,
-      Options = request.Options?.Select(option => _dbQuestionOptionsMapper.Map(option, questionId)).ToList()
+      Options = request.Options?.Select(option => _dbOptionMapper.Map(option, questionId)).ToList()
     };
   }
 }

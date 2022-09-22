@@ -32,4 +32,20 @@ public class DbOptionMapper : IDbOptionMapper
         CreatedAtUtc = DateTime.UtcNow
       };
   }
+  
+  public DbOption Map(CreateQuestionOptionRequest request, Guid questionId)
+  {
+    return request is null
+      ? null
+      : new DbOption
+      {
+        Id = Guid.NewGuid(),
+        QuestionId = questionId,
+        Content = request.Content,
+        IsCustom = request.IsCustom,
+        IsActive = true,
+        CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
+        CreatedAtUtc = DateTime.UtcNow
+      };
+  }
 }
