@@ -9,5 +9,9 @@
   <ItemGroup>
     <Folder Include="Responses\" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\SurveyService.Models.Db\SurveyService.Models.Db.csproj" />
+  </ItemGroup>
 
 </Project>

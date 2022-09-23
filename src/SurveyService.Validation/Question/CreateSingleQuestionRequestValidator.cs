@@ -6,9 +6,9 @@ using System;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Question;
 
-public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQuestionRequest>, ICreateQuestionRequestValidator
+public class CreateSingleQuestionRequestValidator : AbstractValidator<CreateSingleQuestionRequest>, ICreateSingleQuestionRequestValidator
 {
-  public CreateQuestionRequestValidator(
+  public CreateSingleQuestionRequestValidator(
     IQuestionRepository questionRepository
     )
   {
@@ -21,6 +21,10 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateSingleQues
       RuleFor(q => q.Deadline.Value)
         .Must(d => d > DateTime.UtcNow.AddDays(1).AddSeconds(2))
         .WithMessage("The deadline must be at least 24 hours from now.");
+    }).Otherwise(() =>
+    {
+      RuleFor(question => question.HasRealTimeResult)
+        .Must(realTime => realTime);
     });
 
     When(q => q.GroupId.HasValue, () =>
