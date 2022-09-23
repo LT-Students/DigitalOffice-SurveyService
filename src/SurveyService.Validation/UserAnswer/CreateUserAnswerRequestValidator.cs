@@ -35,10 +35,11 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
         {
           if (x.dbOptions.Select(o => o.Question.GroupId).Where(id => id is null).Count() > 0)
           {
-            return x.dbOptions.GroupBy(option => option.QuestionId).ToDictionary(qo => qo.Key, qo => qo.ToList()).Values.Count == 1;
+            Guid questionId = x.dbOptions.First().QuestionId;
+            return x.dbOptions.TrueForAll(o => o.QuestionId == questionId);
           }
 
-          return x.dbOptions.Select(o => o.Question.Id).Distinct().Count() == 1
+          return x.dbOptions.Select(o => o.QuestionId).Distinct().Count() == 1
             || x.dbOptions.Select(o => o.Question.GroupId).Distinct().Count() == 1;
         })
         .WithMessage("Answer must contain options from one question or one group of questions.")
@@ -49,40 +50,17 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
           .ToDictionary(qo => qo.Key, qo => qo.ToList()).Values.ToList()
           .TrueForAll(options => options.Count == 1 || options.First().Question.HasMultipleChoice))
         .WithMessage("Several answers are given, to a question that requires one.")
-        .Must(x =>
-        {
-          HashSet<Guid> usersIds = new HashSet<Guid>();
-
-          foreach (DbOption option in x.dbOptions)
-          {
-            List<DbOption> optionsFromQuestion = option.Question.Options.ToList();
-
-            foreach (DbOption optionFromQuestion in optionsFromQuestion)
-            {
-              foreach (DbUserAnswer userAnswer in optionFromQuestion.UsersAnswers)
-              {
-                usersIds.Add(userAnswer.UserId);
-              }
-            }
-          }
-
-          return !usersIds.Contains(_httpContextAccessor.HttpContext.GetUserId());
-        })
+        .Must(x => x.dbOptions.GroupBy(o => o.QuestionId).Select(g => g.First()).ToList()
+          .TrueForAll(o => !o.Question.Options
+            .SelectMany(o => o.UsersAnswers)
+            .Select(answer => answer.UserId).ToList()
+            .Contains(_httpContextAccessor.HttpContext.GetUserId())))
         .WithMessage("Trying to answer twice in a question.")
-        .Must(x =>
-        {
-          DbQuestion question = x.dbOptions.First().Question;
-
-          if (question.GroupId is null)
-          {
-            return true;
-          }
-
-          List<Guid> obligatoryQuestionIds = question.Group.Questions.Where(q => q.IsObligatory).Select(q => q.Id).ToList();
-          List<Guid> answeredQuestionIds = x.dbOptions.Select(o => o.QuestionId).Distinct().ToList();
-          return !obligatoryQuestionIds.Except(answeredQuestionIds).Any();
-        })
-        .WithMessage("Not all required questions from the group were answered.");
+        .Must(x => x.dbOptions.First().Question is null 
+          || !x.dbOptions.First().Question.Group.Questions.Where(q => q.IsObligatory)
+            .Select(q => q.Id).ToList().Except(x.dbOptions.Select(o => o.QuestionId).Distinct().ToList()).Any())
+        .WithMessage("Not all required questions from the group were answered.")
+        ;
     });
   }
 }
