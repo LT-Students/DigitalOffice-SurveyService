@@ -18,11 +18,11 @@ public class DbUserAnswerMapper : IDbUserAnswerMapper
   public DbUserAnswer Map(Guid id)
   {
     return new DbUserAnswer
-      {
-        Id = Guid.NewGuid(),
-        OptionId = id,
-        UserId = _httpContextAccessor.HttpContext.GetUserId(),
-        CreatedAtUtc = DateTime.UtcNow
-      };
+    {
+      Id = Guid.NewGuid(),
+      OptionId = id,
+      UserId = _httpContextAccessor.HttpContext.GetUserId(),
+      CreatedAtUtc = DateTime.UtcNow
+    };
   }
 }

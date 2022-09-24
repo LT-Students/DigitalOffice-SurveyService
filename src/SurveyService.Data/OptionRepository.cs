@@ -37,11 +37,10 @@ public class OptionRepository : IOptionRepository
     return await _provider.Options
       .Where(dbOption => optionIds.Contains(dbOption.Id))
       .Include(option => option.Question)
-      .ThenInclude(question => question.Options)
-      .ThenInclude(option => option.UsersAnswers)
-      .Include(option => option.Question)
-      .ThenInclude(question => question.Group)
-      .ThenInclude(group => group.Questions)
+        .ThenInclude(question => question.Options)
+          .ThenInclude(option => option.UsersAnswers)
+      .Include(option => option.Question.Group)
+        .ThenInclude(group => group.Questions)
       .ToListAsync();
   }
 }
