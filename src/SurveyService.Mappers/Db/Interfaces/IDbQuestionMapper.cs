@@ -8,7 +8,7 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 [AutoInject]
 public interface IDbQuestionMapper
 {
-  DbQuestion Map(CreateSingleQuestionRequest request);
   DbQuestion Map(CreateGroupQuestionRequest request, Guid groupId, DateTime? groupDeadline,
     bool groupHasRealTimeResult);
+  DbQuestion Map(CreateSingleQuestionRequest request);
 }

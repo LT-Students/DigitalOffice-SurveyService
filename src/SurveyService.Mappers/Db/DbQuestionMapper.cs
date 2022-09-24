@@ -12,49 +12,20 @@ public class DbQuestionMapper : IDbQuestionMapper
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
   private readonly IDbOptionMapper _dbOptionMapper;
-  private readonly IDbQuestionMapper _dbQuestionMapper;
 
   public DbQuestionMapper(
     IHttpContextAccessor httpContextAccessor, 
-    IDbOptionMapper dbOptionMapper,
-    IDbQuestionMapper dbSingleQuestionMapper)
+    IDbOptionMapper dbOptionMapper)
   {
     _httpContextAccessor = httpContextAccessor;
     _dbOptionMapper = dbOptionMapper;
-    _dbQuestionMapper = dbSingleQuestionMapper;
   }
 
-  public DbQuestion Map(CreateSingleQuestionRequest request)
-  {
-    Guid questionId = Guid.NewGuid();
-
-    return request is null
-    ? null
-    : new DbQuestion
-    {
-      Id = questionId,
-      GroupId = request.GroupId,
-      Content = request.Content,
-      Deadline = request.Deadline,
-      HasRealTimeResult = request.HasRealTimeResult,
-      IsAnonymous = request.IsAnonymous,
-      IsRevoteAvailable = request.IsRevoteAvailable,
-      IsObligatory = request.IsObligatory,
-      IsPrivate = request.IsPrivate,
-      HasMultipleChoice = request.HasMultipleChoice,
-      HasCustomOptions = request.HasCustomOptions,
-      IsActive = true,
-      CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
-      CreatedAtUtc = DateTime.UtcNow,
-      Options = request.Options?.Select(option => _dbOptionMapper.Map(option, questionId)).ToList()
-    };
-  }
-  
   public DbQuestion Map(CreateGroupQuestionRequest request, Guid groupId, DateTime? groupDeadline, bool groupHasRealTimeResult)
   {
     return request is null
       ? null
-      : _dbQuestionMapper.Map(
+      : Map(
         new CreateSingleQuestionRequest 
         {
           GroupId = groupId,
@@ -69,5 +40,31 @@ public class DbQuestionMapper : IDbQuestionMapper
           HasCustomOptions = request.HasCustomOptions,
           Options = request.Options
         });
+  }
+  
+  public DbQuestion Map(CreateSingleQuestionRequest request)
+  {
+    Guid questionId = Guid.NewGuid();
+
+    return request is null
+      ? null
+      : new DbQuestion
+      {
+        Id = questionId,
+        GroupId = request.GroupId,
+        Content = request.Content,
+        Deadline = request.Deadline,
+        HasRealTimeResult = request.HasRealTimeResult,
+        IsAnonymous = request.IsAnonymous,
+        IsRevoteAvailable = request.IsRevoteAvailable,
+        IsObligatory = request.IsObligatory,
+        IsPrivate = request.IsPrivate,
+        HasMultipleChoice = request.HasMultipleChoice,
+        HasCustomOptions = request.HasCustomOptions,
+        IsActive = true,
+        CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
+        CreatedAtUtc = DateTime.UtcNow,
+        Options = request.Options?.Select(option => _dbOptionMapper.Map(option, questionId)).ToList()
+      };
   }
 }
