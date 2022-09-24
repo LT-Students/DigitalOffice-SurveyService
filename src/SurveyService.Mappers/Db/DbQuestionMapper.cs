@@ -21,27 +21,6 @@ public class DbQuestionMapper : IDbQuestionMapper
     _dbOptionMapper = dbOptionMapper;
   }
 
-  public DbQuestion Map(CreateGroupQuestionRequest request, Guid groupId, DateTime? groupDeadline, bool groupHasRealTimeResult)
-  {
-    return request is null
-      ? null
-      : Map(
-        new CreateSingleQuestionRequest 
-        {
-          GroupId = groupId,
-          Content = request.Content,
-          Deadline = groupDeadline,
-          HasRealTimeResult = groupHasRealTimeResult,
-          IsAnonymous = request.IsAnonymous,
-          IsRevoteAvailable = request.IsRevoteAvailable,
-          IsObligatory = request.IsObligatory,
-          IsPrivate = request.IsPrivate,
-          HasMultipleChoice = request.HasMultipleChoice,
-          HasCustomOptions = request.HasCustomOptions,
-          Options = request.Options
-        });
-  }
-  
   public DbQuestion Map(CreateSingleQuestionRequest request)
   {
     Guid questionId = Guid.NewGuid();
@@ -66,5 +45,26 @@ public class DbQuestionMapper : IDbQuestionMapper
         CreatedAtUtc = DateTime.UtcNow,
         Options = request.Options?.Select(option => _dbOptionMapper.Map(option, questionId)).ToList()
       };
+  }
+  
+  public DbQuestion Map(CreateGroupQuestionRequest request, Guid groupId, DateTime? groupDeadline, bool groupHasRealTimeResult)
+  {
+    return request is null
+      ? null
+      : Map(
+        new CreateSingleQuestionRequest 
+        {
+          GroupId = groupId,
+          Content = request.Content,
+          Deadline = groupDeadline,
+          HasRealTimeResult = groupHasRealTimeResult,
+          IsAnonymous = request.IsAnonymous,
+          IsRevoteAvailable = request.IsRevoteAvailable,
+          IsObligatory = request.IsObligatory,
+          IsPrivate = request.IsPrivate,
+          HasMultipleChoice = request.HasMultipleChoice,
+          HasCustomOptions = request.HasCustomOptions,
+          Options = request.Options
+        });
   }
 }
