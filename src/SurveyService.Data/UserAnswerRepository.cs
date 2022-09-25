@@ -14,14 +14,14 @@ public class UserAnswerRepository : IUserAnswerRepository
     _provider = provider;
   }
 
-  public async Task<bool> CreateAsync(List<DbUserAnswer> dbUserAnswer)
+  public async Task<bool> CreateAsync(List<DbUserAnswer> dbUserAnswers)
   {
-    if (dbUserAnswer is null)
+    if (dbUserAnswers is null)
     {
       return false;
     }
 
-    _provider.UsersAnswers.AddRange(dbUserAnswer);
+    _provider.UsersAnswers.AddRange(dbUserAnswers);
     await _provider.SaveAsync();
 
     return true;

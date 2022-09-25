@@ -14,7 +14,7 @@ namespace LT.DigitalOffice.SurveyService.Validation.UserAnswer;
 public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAnswerRequest, List<DbOption>)>, ICreateUserAnswerRequestValidator
 {
   public CreateUserAnswerRequestValidator(
-    IHttpContextAccessor _httpContextAccessor)
+    IHttpContextAccessor httpContextAccessor)
   {
 
     RuleFor(request => request.Item1.OptionIds)
@@ -54,13 +54,12 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
           .TrueForAll(o => !o.Question.Options
             .SelectMany(o => o.UsersAnswers)
             .Select(answer => answer.UserId).ToList()
-            .Contains(_httpContextAccessor.HttpContext.GetUserId())))
+            .Contains(httpContextAccessor.HttpContext.GetUserId())))
         .WithMessage("Trying to answer twice in a question.")
         .Must(x => x.dbOptions.First().Question is null
           || !x.dbOptions.First().Question.Group.Questions.Where(q => q.IsObligatory)
             .Select(q => q.Id).ToList().Except(x.dbOptions.Select(o => o.QuestionId).Distinct().ToList()).Any())
-        .WithMessage("Not all required questions from the group were answered.")
-        ;
+        .WithMessage("Not all required questions from the group were answered.");
     });
   }
 }
