@@ -16,7 +16,6 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
   public CreateUserAnswerRequestValidator(
     IHttpContextAccessor httpContextAccessor)
   {
-
     RuleFor(request => request.Item1.OptionIds)
       .Must(options => options.Any())
       .WithMessage("There should be at least one option in request.");
