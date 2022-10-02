@@ -9,12 +9,14 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Responses;
 public class QuestionResponseMapper : IQuestionResponseMapper
 {
   private readonly IOptionInfoMapper _mapper;
+  
   public QuestionResponseMapper(
     IOptionInfoMapper optionInfoMapper
     )
   {
     _mapper = optionInfoMapper;
   }
+  
   public QuestionResponse Map(DbQuestion dbQuestion)
   {
     return dbQuestion is null
