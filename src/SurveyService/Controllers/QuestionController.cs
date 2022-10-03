@@ -1,6 +1,7 @@
 ﻿using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Question;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,8 +24,8 @@ public class QuestionController : ControllerBase
   [HttpGet("get")]
   public async Task<OperationResultResponse<QuestionResponse>> CreateAsync(
     [FromServices] IGetQuestionCommand command,
-    [FromQuery] Guid questionId)
+    [FromQuery] GetQuestionFilter filter)
   {
-    return await command.ExecuteAsync(questionId);
+    return await command.ExecuteAsync(filter);
   }
 }

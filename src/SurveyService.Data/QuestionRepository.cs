@@ -1,8 +1,10 @@
 ﻿using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Data;
@@ -33,6 +35,22 @@ public class QuestionRepository : IQuestionRepository
   public Task<DbQuestion> GetAsync(Guid questionId)
   {
     return _provider.Questions.FirstOrDefaultAsync(x => x.Id == questionId);
+  }
+
+  public Task<DbQuestion> GetAsync(GetQuestionFilter filter)
+  {
+    if (filter is null || filter.QuestionId is null)
+    {
+      return null;
+    }
+    
+    IQueryable<DbQuestion> dbQuestions = _provider.Questions.AsQueryable();
+    dbQuestions = dbQuestions.Where(q => q.Id.Equals(filter.QuestionId));
+    dbQuestions = filter.IncludeCustomOptions
+      ? dbQuestions.Include(question => question.Options.Where(option => option.IsActive))
+      : dbQuestions.Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
+    
+    return dbQuestions.FirstOrDefaultAsync();
   }
 
   public async Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult)

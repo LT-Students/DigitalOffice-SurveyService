@@ -13,8 +13,7 @@ public class UserAnswerInfoMapper : IUserAnswerInfoMapper
       : new UserAnswerInfo
       {
         Id = dbUserAnswer.Id,
-        UserId = dbUserAnswer.UserId,
-        OptionId = dbUserAnswer.OptionId
+        UserId = dbUserAnswer.UserId
       };
   }
 }

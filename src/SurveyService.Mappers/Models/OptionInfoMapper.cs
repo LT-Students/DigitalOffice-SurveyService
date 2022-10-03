@@ -22,7 +22,6 @@ public class OptionInfoMapper: IOptionInfoMapper
       : new OptionInfo
       {
         Id = dbOption.Id,
-        QuestionId = dbOption.QuestionId,
         Content = dbOption.Content,
         IsCustom = dbOption.IsCustom,
         UsersAnswers = dbOption.UsersAnswers.Select(_mapper.Map).ToList()

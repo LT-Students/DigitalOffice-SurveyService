@@ -24,7 +24,6 @@ public class QuestionResponseMapper : IQuestionResponseMapper
       : new QuestionResponse
       {
         Id = dbQuestion.Id,
-        GroupId = dbQuestion.GroupId,
         Content = dbQuestion.Content,
         Deadline = dbQuestion.Deadline,
         HasRealTimeResult = dbQuestion.HasRealTimeResult,
@@ -34,6 +33,7 @@ public class QuestionResponseMapper : IQuestionResponseMapper
         IsPrivate = dbQuestion.IsPrivate,
         HasMultipleChoice = dbQuestion.HasMultipleChoice,
         HasCustomOptions = dbQuestion.HasCustomOptions,
+        IsActive = dbQuestion.IsActive,
         Options = dbQuestion.Options.Select(_mapper.Map).ToList()
       };
   }

@@ -6,5 +6,4 @@ public record UserAnswerInfo
 {
   public Guid Id { get; set; }
   public Guid UserId { get; set; }
-  public Guid OptionId { get; set; }
 }
