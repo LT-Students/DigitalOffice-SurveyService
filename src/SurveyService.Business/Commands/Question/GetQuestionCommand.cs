@@ -1,13 +1,19 @@
 using LT.DigitalOffice.Kernel.Helpers.Interfaces;
 using LT.DigitalOffice.Kernel.Responses;
+using LT.DigitalOffice.Models.Broker.Models;
+using LT.DigitalOffice.SurveyService.Broker.Requests.Interfaces;
 using LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
+using LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
+using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
+using LT.DigitalOffice.SurveyService.Models.Dto.Models;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Question;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -16,17 +22,29 @@ namespace LT.DigitalOffice.SurveyService.Business.Commands.Question;
 public class GetQuestionCommand : IGetQuestionCommand
 {
   private readonly IQuestionRepository _repository;
-  private readonly IQuestionResponseMapper _mapper;
+  private readonly IQuestionResponseMapper _questionResponseMapper;
   private readonly IResponseCreator _responseCreator;
+  private readonly IUserService _userService;
+  private readonly IOptionInfoMapper _optionInfoMapper;
+  private readonly IUserInfoMapper _userInfoMapper;
+  private readonly IUserAnswerInfoMapper _userAnswerInfoMapper;
 
   public GetQuestionCommand(
     IQuestionRepository questionRepository, 
-    IQuestionResponseMapper mapper,
-    IResponseCreator responseCreator)
+    IQuestionResponseMapper questionResponseMapper,
+    IResponseCreator responseCreator,
+    IUserService userService,
+    IOptionInfoMapper optionInfoMapper,
+    IUserInfoMapper userInfoMapper,
+    IUserAnswerInfoMapper userAnswerInfoMapper)
   {
     _repository = questionRepository;
-    _mapper = mapper;
+    _questionResponseMapper = questionResponseMapper;
     _responseCreator = responseCreator;
+    _userService = userService;
+    _optionInfoMapper = optionInfoMapper;
+    _userInfoMapper = userInfoMapper;
+    _userAnswerInfoMapper = userAnswerInfoMapper;
   }
   
   public async Task<OperationResultResponse<QuestionResponse>> ExecuteAsync(GetQuestionFilter filter)
@@ -41,7 +59,26 @@ public class GetQuestionCommand : IGetQuestionCommand
     }
 
     DbQuestion dbQuestion = await _repository.GetAsync(filter.QuestionId.Value);
-    response.Body = _mapper.Map(dbQuestion);
+    if (filter.IncludeUserInfo)
+    {
+      List<OptionInfo> optionInfos = new();
+      foreach (DbOption option in dbQuestion.Options)
+      {
+        List<UserData> userDataForOption = await _userService.GetUsersDatasAsync(option.UsersAnswers.Select(x => x.Id).ToList());
+        List<UserAnswerInfo> userAnswerInfos = new();
+        foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
+        {
+          UserData userData = (await _userService.GetUsersDatasAsync(new List<Guid>() { optionUsersAnswer.Id })).FirstOrDefault();
+          UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
+          userAnswerInfos.Add(userAnswerInfo);
+        }
+
+        OptionInfo optionInfo = _optionInfoMapper.Map(option, userAnswerInfos);
+        optionInfos.Add(optionInfo);
+      }
+
+      response.Body = _questionResponseMapper.Map(dbQuestion, optionInfos);
+    }
     return response;
   }
 }

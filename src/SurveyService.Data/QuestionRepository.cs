@@ -39,16 +39,20 @@ public class QuestionRepository : IQuestionRepository
 
   public Task<DbQuestion> GetAsync(GetQuestionFilter filter)
   {
-    if (filter is null || filter.QuestionId is null)
+    if (filter?.QuestionId is null)
     {
       return null;
     }
     
     IQueryable<DbQuestion> dbQuestions = _provider.Questions.AsQueryable();
-    dbQuestions = dbQuestions.Where(q => q.Id.Equals(filter.QuestionId));
+    dbQuestions = dbQuestions.Where(question => question.Id.Equals(filter.QuestionId));
     dbQuestions = filter.IncludeCustomOptions
-      ? dbQuestions.Include(question => question.Options.Where(option => option.IsActive))
-      : dbQuestions.Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
+      ? dbQuestions
+        .Include(question => question.Options.Where(option => option.IsActive))
+        .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers))
+      : dbQuestions
+        .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
+        .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
     
     return dbQuestions.FirstOrDefaultAsync();
   }
