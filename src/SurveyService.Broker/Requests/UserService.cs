@@ -28,7 +28,7 @@ namespace LT.DigitalOffice.SurveyService.Broker.Requests
 
     public async Task<List<UserData>> GetUsersDatasAsync(
       List<Guid> usersIds,
-      List<string> errors = null,
+      List<string> errors,
       CancellationToken cancellationToken = default
       )
     {

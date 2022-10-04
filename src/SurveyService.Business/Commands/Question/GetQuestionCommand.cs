@@ -64,11 +64,10 @@ public class GetQuestionCommand : IGetQuestionCommand
       List<OptionInfo> optionInfos = new();
       foreach (DbOption option in dbQuestion.Options)
       {
-        List<UserData> userDataForOption = await _userService.GetUsersDatasAsync(option.UsersAnswers.Select(x => x.Id).ToList());
         List<UserAnswerInfo> userAnswerInfos = new();
         foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
         {
-          UserData userData = (await _userService.GetUsersDatasAsync(new List<Guid>() { optionUsersAnswer.Id })).FirstOrDefault();
+          UserData userData = (await _userService.GetUsersDatasAsync(new List<Guid>() { optionUsersAnswer.UserId }, null)).FirstOrDefault();
           UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
           userAnswerInfos.Add(userAnswerInfo);
         }

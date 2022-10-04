@@ -12,7 +12,7 @@ namespace LT.DigitalOffice.SurveyService.Broker.Requests.Interfaces
   {
     Task<List<UserData>> GetUsersDatasAsync(
       List<Guid> usersIds,
-      List<string> errors = null,
+      List<string> errors,
       CancellationToken cancellationToken = default);
   }
 }
