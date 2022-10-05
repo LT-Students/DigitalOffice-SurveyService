@@ -58,7 +58,7 @@ public class GetQuestionCommand : IGetQuestionCommand
         new List<string> { "You must enter 'questionid'" });
     }
 
-    DbQuestion dbQuestion = await _repository.GetAsync(filter.QuestionId.Value);
+    DbQuestion dbQuestion = await _repository.GetAsync(filter);
     if (filter.IncludeUserInfo)
     {
       List<OptionInfo> optionInfos = new();
@@ -67,7 +67,7 @@ public class GetQuestionCommand : IGetQuestionCommand
         List<UserAnswerInfo> userAnswerInfos = new();
         foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
         {
-          UserData userData = (await _userService.GetUsersDatasAsync(new List<Guid>() { optionUsersAnswer.UserId }, null)).FirstOrDefault();
+          UserData userData = (await _userService.GetUsersDataAsync(new List<Guid> { optionUsersAnswer.UserId }, null)).FirstOrDefault();
           UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
           userAnswerInfos.Add(userAnswerInfo);
         }

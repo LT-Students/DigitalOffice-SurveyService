@@ -26,7 +26,7 @@ namespace LT.DigitalOffice.SurveyService.Broker.Requests
       _logger = logger;
     }
 
-    public async Task<List<UserData>> GetUsersDatasAsync(
+    public async Task<List<UserData>> GetUsersDataAsync(
       List<Guid> usersIds,
       List<string> errors,
       CancellationToken cancellationToken = default

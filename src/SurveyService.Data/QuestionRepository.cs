@@ -45,7 +45,7 @@ public class QuestionRepository : IQuestionRepository
     }
     
     IQueryable<DbQuestion> dbQuestions = _provider.Questions.AsQueryable();
-    dbQuestions = dbQuestions.Where(question => question.Id.Equals(filter.QuestionId));
+    dbQuestions = dbQuestions.Where(question => question.Id == filter.QuestionId);
     dbQuestions = filter.IncludeCustomOptions
       ? dbQuestions
         .Include(question => question.Options.Where(option => option.IsActive))
