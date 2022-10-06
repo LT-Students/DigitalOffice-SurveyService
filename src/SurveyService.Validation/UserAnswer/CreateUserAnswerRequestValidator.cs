@@ -3,7 +3,6 @@ using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.UserAnswer;
 using LT.DigitalOffice.SurveyService.Validation.UserAnswer.Interfaces;
-using MassTransit.Initializers;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -28,7 +27,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
         .WithMessage("Some options don't exist.")
         .Must(x =>
         {
-          if (x.dbOptions.Select(o => o.Question.GroupId).Where(id => id is null).Count() > 0)
+          if (x.dbOptions.Select(o => o.Question.GroupId).Any(id => id is null))
           {
             Guid questionId = x.dbOptions.First().QuestionId;
             return x.dbOptions.TrueForAll(o => o.QuestionId == questionId);
@@ -47,7 +46,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
         .WithMessage("Several answers are given, to a question that requires one.")
         .Must(x => x.dbOptions.GroupBy(o => o.QuestionId).Select(g => g.First()).ToList()
           .TrueForAll(o => !o.Question.Options
-            .SelectMany(o => o.UsersAnswers)
+            .SelectMany(option => option.UsersAnswers)
             .Select(answer => answer.UserId).ToList()
             .Contains(httpContextAccessor.HttpContext.GetUserId())))
         .WithMessage("Trying to answer twice in a question.");
