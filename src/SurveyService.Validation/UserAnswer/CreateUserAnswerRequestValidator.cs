@@ -22,11 +22,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
 
     When(x => x.Item2 is not null, () =>
     {
-      RuleFor(pair => new
-      {
-        requestOptions = pair.Item1.OptionIds,
-        dbOptions = pair.Item2
-      })
+      RuleFor(pair => new { requestOptions = pair.Item1.OptionIds, dbOptions = pair.Item2 })
         .Cascade(CascadeMode.Stop)
         .Must(x => x.dbOptions.Where(o => o.IsActive).ToList().Count == x.requestOptions.Count)
         .WithMessage("Some options don't exist.")
@@ -39,7 +35,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
           }
 
           return x.dbOptions.Select(o => o.QuestionId).Distinct().Count() == 1
-            || x.dbOptions.Select(o => o.Question.GroupId).Distinct().Count() == 1;
+                 || x.dbOptions.Select(o => o.Question.GroupId).Distinct().Count() == 1;
         })
         .WithMessage("Answer must contain options from one question or one group of questions.")
         .Must(x => x.dbOptions.Select(o => o.Question).ToList()
@@ -54,11 +50,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
             .SelectMany(o => o.UsersAnswers)
             .Select(answer => answer.UserId).ToList()
             .Contains(httpContextAccessor.HttpContext.GetUserId())))
-        .WithMessage("Trying to answer twice in a question.")
-        .Must(x => x.dbOptions.First().Question is null
-          || !x.dbOptions.First().Question.Group.Questions.Where(q => q.IsObligatory)
-            .Select(q => q.Id).ToList().Except(x.dbOptions.Select(o => o.QuestionId).Distinct().ToList()).Any())
-        .WithMessage("Not all required questions from the group were answered.");
+        .WithMessage("Trying to answer twice in a question.");
     });
   }
 }

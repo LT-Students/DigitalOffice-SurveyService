@@ -59,25 +59,25 @@ public class GetQuestionCommand : IGetQuestionCommand
     }
 
     DbQuestion dbQuestion = await _repository.GetAsync(filter);
-    if (filter.IncludeUserInfo)
+    List<OptionInfo> optionInfos = new();
+    foreach (DbOption option in dbQuestion.Options)
     {
-      List<OptionInfo> optionInfos = new();
-      foreach (DbOption option in dbQuestion.Options)
+      List<UserAnswerInfo> userAnswerInfos = new();
+      foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
       {
-        List<UserAnswerInfo> userAnswerInfos = new();
-        foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
-        {
-          UserData userData = (await _userService.GetUsersDataAsync(new List<Guid> { optionUsersAnswer.UserId }, null)).FirstOrDefault();
-          UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
-          userAnswerInfos.Add(userAnswerInfo);
-        }
-
-        OptionInfo optionInfo = _optionInfoMapper.Map(option, userAnswerInfos);
-        optionInfos.Add(optionInfo);
+        UserData userData = filter.IncludeUserInfo 
+          ? (await _userService.GetUsersDataAsync(new List<Guid> { optionUsersAnswer.UserId }, null)).FirstOrDefault()
+          : null;
+        UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
+        userAnswerInfos.Add(userAnswerInfo);
       }
 
-      response.Body = _questionResponseMapper.Map(dbQuestion, optionInfos);
+      OptionInfo optionInfo = _optionInfoMapper.Map(option, userAnswerInfos);
+      optionInfos.Add(optionInfo);
     }
+
+    response.Body = _questionResponseMapper.Map(dbQuestion, optionInfos);
+    
     return response;
   }
 }

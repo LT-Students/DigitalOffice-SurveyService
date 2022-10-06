@@ -46,14 +46,25 @@ public class QuestionRepository : IQuestionRepository
     
     IQueryable<DbQuestion> dbQuestions = _provider.Questions.AsQueryable();
     dbQuestions = dbQuestions.Where(question => question.Id == filter.QuestionId);
-    dbQuestions = filter.IncludeCustomOptions
-      ? dbQuestions
-        .Include(question => question.Options.Where(option => option.IsActive))
-        .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers))
-      : dbQuestions
-        .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
-        .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
-    
+    if (filter.IncludeAnswers)
+    {
+      dbQuestions = filter.IncludeCustomOptions
+        ? dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive))
+          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers))
+        : dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
+          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
+    }
+    else
+    {
+      dbQuestions = filter.IncludeCustomOptions
+        ? dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive))
+        : dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
+    }
+
     return dbQuestions.FirstOrDefaultAsync();
   }
 
