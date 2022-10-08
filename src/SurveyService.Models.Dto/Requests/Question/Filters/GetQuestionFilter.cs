@@ -10,10 +10,10 @@ public class GetQuestionFilter
 
   [FromQuery(Name = "includecustomoptions")]
   public bool IncludeCustomOptions { get; set; } = true;
-  
+
   [FromQuery(Name = "includeanswers")]
-  public bool IncludeAnswers { get; set; }
-  
+  public bool IncludeAnswers { get; set; } = false;
+
   [FromQuery(Name = "includeuserinfo")]
-  public bool IncludeUserInfo { get; set; }
+  public bool IncludeUserInfo { get; set; } = false;
 }

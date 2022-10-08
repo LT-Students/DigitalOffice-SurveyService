@@ -4,7 +4,6 @@ using LT.DigitalOffice.Models.Broker.Models;
 using LT.DigitalOffice.SurveyService.Broker.Requests.Interfaces;
 using LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
-using LT.DigitalOffice.SurveyService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
@@ -60,9 +59,11 @@ public class GetQuestionCommand : IGetQuestionCommand
 
     DbQuestion dbQuestion = await _repository.GetAsync(filter);
     List<OptionInfo> optionInfos = new();
+    
     foreach (DbOption option in dbQuestion.Options)
     {
       List<UserAnswerInfo> userAnswerInfos = new();
+      
       foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
       {
         UserData userData = filter.IncludeUserInfo 
