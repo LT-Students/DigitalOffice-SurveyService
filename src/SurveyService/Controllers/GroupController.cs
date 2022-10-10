@@ -1,6 +1,8 @@
 using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.SurveyService.Business.Commands.Group.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
+using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Group;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -17,5 +19,13 @@ public class GroupController : ControllerBase
     [FromBody] CreateGroupRequest request)
   {
     return await command.ExecuteAsync(request);
+  }
+
+  [HttpGet("get")]
+  public async Task<OperationResultResponse<GroupResponse>> GetAsync(
+    [FromServices] IGetGroupCommand command,
+    [FromQuery] GetGroupFilter filter)
+  {
+    return await command.ExecuteAsync(filter);
   }
 }
