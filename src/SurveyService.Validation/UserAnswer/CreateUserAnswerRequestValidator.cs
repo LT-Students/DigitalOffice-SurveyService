@@ -55,7 +55,7 @@ public class CreateUserAnswerRequestValidator : AbstractValidator<(CreateUserAns
             .Select(answer => answer.UserId).ToList()
             .Contains(httpContextAccessor.HttpContext.GetUserId())))
         .WithMessage("Trying to answer twice in a question.")
-        .Must(x => x.dbOptions.First().Question is null
+        .Must(x => x.dbOptions.First().Question.Group is null
           || !x.dbOptions.First().Question.Group.Questions.Where(q => q.IsObligatory)
             .Select(q => q.Id).ToList().Except(x.dbOptions.Select(o => o.QuestionId).Distinct().ToList()).Any())
         .WithMessage("Not all required questions from the group were answered.");
