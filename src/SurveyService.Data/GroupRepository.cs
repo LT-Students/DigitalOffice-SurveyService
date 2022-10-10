@@ -34,7 +34,7 @@ public class GroupRepository : IGroupRepository
 
   public Task<DbGroup> GetAsync(GetGroupFilter filter)
   {
-    if(filter is null)
+    if (filter is null)
     {
       return null;
     }

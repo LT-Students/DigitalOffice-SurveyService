@@ -104,7 +104,8 @@ public class GetGroupCommand : IGetGroupCommand
 
       foreach (DbOption option in question.Options)
       {
-        List<UserAnswerInfo> userAnswerInfos = new();
+        List<UserAnswerInfo> userAnswerInfos = new();\
+
         foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
         {
           UserData userData = filter.IncludeUserInfo

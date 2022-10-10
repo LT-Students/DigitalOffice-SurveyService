@@ -10,13 +10,13 @@ public record GetGroupFilter
   [FromQuery(Name = "groupid")]
   public Guid GroupId { get; set; }
 
-  [FromQuery(Name = "includeQuestions")]
+  [FromQuery(Name = "includequestions")]
   public bool IncludeQuestions { get; set; } = true;
 
-  [FromQuery(Name = "includeOptions")]
+  [FromQuery(Name = "includeoptions")]
   public bool IncludeOptions { get; set; } = true;
 
-  [FromQuery(Name = "includeUserAnswers")]
+  [FromQuery(Name = "includeuseranswers")]
   public bool IncludeUserAnswers { get; set; } = false;
 
   [FromQuery(Name = "includeuserinfo")]
