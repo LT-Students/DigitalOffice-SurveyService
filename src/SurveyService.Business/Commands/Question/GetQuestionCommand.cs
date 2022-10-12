@@ -52,7 +52,7 @@ public class GetQuestionCommand : IGetQuestionCommand
   {
 
     OperationResultResponse<QuestionResponse> response = new();
-    if (filter is null || filter.QuestionId is null)
+    if (filter is null)
     {
       return _responseCreator.CreateFailureResponse<QuestionResponse>(
         HttpStatusCode.BadRequest,
