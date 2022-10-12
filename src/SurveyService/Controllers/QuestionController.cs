@@ -22,7 +22,7 @@ public class QuestionController : ControllerBase
   }
   
   [HttpGet("get")]
-  public async Task<OperationResultResponse<QuestionResponse>> CreateAsync(
+  public async Task<OperationResultResponse<QuestionResponse>> GetAsync(
     [FromServices] IGetQuestionCommand command,
     [FromQuery] GetQuestionFilter filter)
   {
