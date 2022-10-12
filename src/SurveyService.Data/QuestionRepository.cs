@@ -13,6 +13,31 @@ public class QuestionRepository : IQuestionRepository
 {
   private readonly IDataProvider _provider;
 
+  private IQueryable<DbQuestion> CreateGetPredicates(
+    GetQuestionFilter filter,
+    IQueryable<DbQuestion> dbQuestions)
+  {
+    if (filter.IncludeAnswers)
+    {
+      dbQuestions = filter.IncludeCustomOptions
+        ? dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive))
+          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers))
+        : dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
+          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
+    }
+    else
+    {
+      dbQuestions = filter.IncludeCustomOptions
+        ? dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive))
+        : dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
+    }
+
+    return dbQuestions;
+  }
   public QuestionRepository(
     IDataProvider provider)
   {
@@ -39,33 +64,11 @@ public class QuestionRepository : IQuestionRepository
 
   public Task<DbQuestion> GetAsync(GetQuestionFilter filter)
   {
-    if (filter?.QuestionId is null)
-    {
-      return null;
-    }
-    
-    IQueryable<DbQuestion> dbQuestions = _provider.Questions.AsQueryable();
-    dbQuestions = dbQuestions.Where(question => question.Id == filter.QuestionId);
-    if (filter.IncludeAnswers)
-    {
-      dbQuestions = filter.IncludeCustomOptions
-        ? dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive))
-          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers))
-        : dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
-          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
-    }
-    else
-    {
-      dbQuestions = filter.IncludeCustomOptions
-        ? dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive))
-        : dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
-    }
-
-    return dbQuestions.FirstOrDefaultAsync();
+    return filter is null
+      ? Task.FromResult(default(DbQuestion))
+      : CreateGetPredicates(filter,
+        _provider.Questions.AsQueryable().Where(question => question.Id == filter.QuestionId))
+        .FirstOrDefaultAsync();
   }
 
   public async Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult)
