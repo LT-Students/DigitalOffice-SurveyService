@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Data;
@@ -17,6 +18,34 @@ public class GroupRepository : IGroupRepository
   public GroupRepository(IDataProvider provider)
   {
     _provider = provider;
+  }
+
+  private IQueryable<DbGroup> CreateGetPredicates(
+      GetGroupFilter filter,
+      IQueryable<DbGroup> query)
+  {
+    if (filter.IncludeUserAnswers)
+    {
+      return query
+              .Include(group => group.Questions.Where(question => question.IsActive))
+              .ThenInclude(question => question.Options.Where(option => option.IsActive))
+              .ThenInclude(option => option.UsersAnswers);
+    }
+
+    if (filter.IncludeOptions)
+    {
+      return query
+              .Include(group => group.Questions.Where(question => question.IsActive))
+              .ThenInclude(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
+    }
+
+    if (filter.IncludeQuestions)
+    {
+      return query
+              .Include(group => group.Questions.Where(question => question.IsActive));
+    }
+
+    return query;
   }
 
   public async Task<Guid?> CreateAsync(DbGroup dbGroup)
@@ -39,32 +68,12 @@ public class GroupRepository : IGroupRepository
       return null;
     }
 
-    IQueryable<DbGroup> dbGroup = _provider.Groups.AsQueryable();
-    dbGroup = dbGroup.Where(group => group.Id == filter.GroupId && group.IsActive);
+    IQueryable<DbGroup> dbGroup = _provider
+      .Groups
+      .Where(group => group.Id == filter.GroupId)
+      .AsQueryable();
 
-    if (filter.IncludeUserAnswers)
-    {
-      return dbGroup
-              .Include(group => group.Questions.Where(question => question.IsActive))
-              .ThenInclude(question => question.Options.Where(option => option.IsActive))
-              .ThenInclude(option => option.UsersAnswers)
-              .FirstOrDefaultAsync();
-    }
-
-    if (filter.IncludeOptions)
-    {
-      return dbGroup
-              .Include(group => group.Questions.Where(question => question.IsActive))
-              .ThenInclude(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
-              .FirstOrDefaultAsync();
-    }
-
-    if (filter.IncludeQuestions)
-    {
-      return dbGroup
-              .Include(group => group.Questions.Where(question => question.IsActive))
-              .FirstOrDefaultAsync();
-    }
+    dbGroup = CreateGetPredicates(filter, dbGroup);
 
     return dbGroup.FirstOrDefaultAsync();
   }

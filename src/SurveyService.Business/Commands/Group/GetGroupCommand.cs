@@ -54,13 +54,6 @@ public class GetGroupCommand : IGetGroupCommand
 
   public async Task<OperationResultResponse<GroupResponse>> ExecuteAsync(GetGroupFilter filter)
   {
-    if (filter is null)
-    {
-      return _responseCreator.CreateFailureResponse<GroupResponse>(
-        HttpStatusCode.BadRequest,
-        new List<string> { "You must enter the GroupId" });
-    }
-
     DbGroup dbGroup = await _repository.GetAsync(filter);
     List<QuestionInfo> questionInfos = new();
 
@@ -104,7 +97,7 @@ public class GetGroupCommand : IGetGroupCommand
 
       foreach (DbOption option in question.Options)
       {
-        List<UserAnswerInfo> userAnswerInfos = new();\
+        List<UserAnswerInfo> userAnswerInfos = new();
 
         foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
         {

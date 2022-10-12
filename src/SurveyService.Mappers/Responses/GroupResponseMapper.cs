@@ -17,8 +17,7 @@ public class QuestionResponseMapper : IGroupResponseMapper
         Id = dbGroup.Id,
         Subject = dbGroup.Subject,
         Description = dbGroup.Description,
-        CreatedBy = dbGroup.CreatedBy,
-        CreatedAtUtc = dbGroup.CreatedAtUtc,
+        isActive = dbGroup.IsActive,
         Questions = questionInfos
       };
   }

@@ -6,7 +6,6 @@ namespace LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
 
 public record GetGroupFilter
 {
-  [Required]
   [FromQuery(Name = "groupid")]
   public Guid GroupId { get; set; }
 

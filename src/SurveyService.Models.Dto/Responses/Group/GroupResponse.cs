@@ -9,7 +9,6 @@ public record GroupResponse
   public Guid Id { get; set; }
   public string Subject { get; set; }
   public string Description { get; set; }
-  public Guid CreatedBy { get; set; }
-  public DateTime CreatedAtUtc { get; set; }
+  public bool isActive { get; set; }
   public List<QuestionInfo> Questions { get; set; }
 }
