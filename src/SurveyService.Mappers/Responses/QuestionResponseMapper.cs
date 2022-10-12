@@ -10,7 +10,7 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Responses;
 
 public class QuestionResponseMapper : IQuestionResponseMapper
 {
-  public QuestionResponse Map(DbQuestion dbQuestion, List<OptionInfo> optionInfos)
+  public QuestionResponse Map(DbQuestion dbQuestion, List<OptionInfo> optionInfos = null)
   {
     return dbQuestion is null
       ? null

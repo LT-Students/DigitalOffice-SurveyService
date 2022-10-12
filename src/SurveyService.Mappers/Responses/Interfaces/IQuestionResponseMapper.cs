@@ -9,5 +9,5 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 [AutoInject]
 public interface IQuestionResponseMapper
 {
-  QuestionResponse Map(DbQuestion dbQuestion, List<OptionInfo> optionInfos);
+  QuestionResponse Map(DbQuestion dbQuestion, List<OptionInfo> optionInfos = null);
 }

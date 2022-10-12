@@ -80,27 +80,34 @@ public class GetQuestionCommand : IGetQuestionCommand
       filter.IncludeUserInfo = false;
       response.Errors.Add("Personal information about user can't be loaded as question is anonymous.");
     }
-
+    
     List<OptionInfo> optionsInfo = new();
 
-    foreach (DbOption option in dbQuestion.Options)
+    if (filter.IncludeOptions)
     {
-      List<UserAnswerInfo> userAnswersInfo = new();
-      
-      foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
+      foreach (DbOption option in dbQuestion.Options)
       {
-        UserData userData = filter.IncludeUserInfo 
-          ? (await _userService.GetUsersDataAsync(new List<Guid> { optionUsersAnswer.UserId }, null)).FirstOrDefault()
-          : null;
-        UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
-        userAnswersInfo.Add(userAnswerInfo);
+        List<UserAnswerInfo> userAnswersInfo = new();
+
+        foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
+        {
+          UserData userData = filter.IncludeUserInfo
+            ? (await _userService.GetUsersDataAsync(new List<Guid> { optionUsersAnswer.UserId }, null)).FirstOrDefault()
+            : null;
+          UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
+          userAnswersInfo.Add(userAnswerInfo);
+        }
+
+        OptionInfo optionInfo = _optionInfoMapper.Map(option, userAnswersInfo);
+        optionsInfo.Add(optionInfo);
       }
 
-      OptionInfo optionInfo = _optionInfoMapper.Map(option, userAnswersInfo);
-      optionsInfo.Add(optionInfo);
+      response.Body = _questionResponseMapper.Map(dbQuestion, optionsInfo);
     }
-    
-    response.Body = _questionResponseMapper.Map(dbQuestion, optionsInfo);
+    else
+    {
+      response.Body = _questionResponseMapper.Map(dbQuestion);
+    }
 
     return response;
   }
