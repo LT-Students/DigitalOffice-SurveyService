@@ -7,14 +7,6 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Models;
 
 public class OptionInfoMapper: IOptionInfoMapper
 {
-  private readonly IUserAnswerInfoMapper _mapper;
-  
-  public OptionInfoMapper(
-    IUserAnswerInfoMapper userAnswerInfoMapper)
-  {
-    _mapper = userAnswerInfoMapper;
-  }
-  
   public OptionInfo Map(DbOption dbOption, List<UserAnswerInfo> userAnswerInfos)
   {
     return dbOption is null

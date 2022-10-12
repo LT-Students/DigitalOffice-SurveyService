@@ -74,7 +74,7 @@ public class GetQuestionCommand : IGetQuestionCommand
         HttpStatusCode.Forbidden,
         new List<string> { "Question is private, only author can view the results." });
     }
-
+    
     if (dbQuestion.IsAnonymous && filter.IncludeUserInfo)
     {
       filter.IncludeUserInfo = false;
