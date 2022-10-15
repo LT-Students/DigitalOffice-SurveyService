@@ -26,8 +26,7 @@ public class FindByAuthorCommand : IFindByAuthorCommand
     IBaseFindFilterValidator baseFindFilterValidator,
     IResponseCreator responseCreator,
     IQuestionRepository questionRepository,
-    IGroupRepository groupRepository
-    )
+    IGroupRepository groupRepository)
   {
     _baseFindFilterValidator = baseFindFilterValidator;
     _responseCreator = responseCreator;
