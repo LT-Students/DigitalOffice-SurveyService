@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 
