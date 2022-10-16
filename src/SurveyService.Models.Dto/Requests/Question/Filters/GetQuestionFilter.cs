@@ -10,7 +10,7 @@ public class GetQuestionFilter
   public Guid QuestionId { get; set; }
 
   [FromQuery(Name = "includeoptions")]
-  public bool IncludeOptions { get; set; } = false;
+  public bool IncludeOptions { get; set; } = true;
 
   [FromQuery(Name = "includeanswers")]
   public bool IncludeAnswers { get; set; } = false;
