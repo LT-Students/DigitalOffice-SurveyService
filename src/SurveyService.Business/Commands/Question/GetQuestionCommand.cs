@@ -50,7 +50,6 @@ public class GetQuestionCommand : IGetQuestionCommand
   
   public async Task<OperationResultResponse<QuestionResponse>> ExecuteAsync(GetQuestionFilter filter)
   {
-
     OperationResultResponse<QuestionResponse> response = new();
     if (filter is null)
     {

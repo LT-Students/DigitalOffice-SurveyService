@@ -19,25 +19,19 @@ public class QuestionRepository : IQuestionRepository
   {
     if (filter.IncludeAnswers)
     {
-      dbQuestions = filter.IncludeCustomOptions
-        ? dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive))
-          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers))
-        : dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
-          .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
+      dbQuestions = dbQuestions
+        .Include(question => question.Options.Where(option => option.IsActive))
+        .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
     }
     else
     {
-      dbQuestions = filter.IncludeCustomOptions
-        ? dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive))
-        : dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
+      dbQuestions = dbQuestions
+        .Include(question => question.Options.Where(option => option.IsActive));
     }
 
     return dbQuestions;
   }
+  
   public QuestionRepository(
     IDataProvider provider)
   {
