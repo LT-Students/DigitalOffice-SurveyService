@@ -16,7 +16,7 @@ public class QuestionRepository : IQuestionRepository
   private IQueryable<DbQuestion> CreateGetPredicates(
     GetQuestionFilter filter,
     IQueryable<DbQuestion> dbQuestions)
-  {
+  { 
     if (filter.IncludeAnswers)
     {
       dbQuestions = dbQuestions

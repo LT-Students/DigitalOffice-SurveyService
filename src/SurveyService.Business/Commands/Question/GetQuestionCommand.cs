@@ -5,10 +5,8 @@ using LT.DigitalOffice.Models.Broker.Models;
 using LT.DigitalOffice.SurveyService.Broker.Requests.Interfaces;
 using LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
-using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto.Models;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Question;
 using Microsoft.AspNetCore.Http;
@@ -26,8 +24,6 @@ public class GetQuestionCommand : IGetQuestionCommand
   private readonly IQuestionResponseMapper _questionResponseMapper;
   private readonly IResponseCreator _responseCreator;
   private readonly IUserService _userService;
-  private readonly IOptionInfoMapper _optionInfoMapper;
-  private readonly IUserAnswerInfoMapper _userAnswerInfoMapper;
   private readonly IHttpContextAccessor _httpContextAccessor;
 
   public GetQuestionCommand(
@@ -35,17 +31,13 @@ public class GetQuestionCommand : IGetQuestionCommand
     IQuestionRepository questionRepository, 
     IQuestionResponseMapper questionResponseMapper,
     IResponseCreator responseCreator,
-    IUserService userService,
-    IOptionInfoMapper optionInfoMapper,
-    IUserAnswerInfoMapper userAnswerInfoMapper)
+    IUserService userService)
   {
     _httpContextAccessor = httpContextAccessor;
     _repository = questionRepository;
     _questionResponseMapper = questionResponseMapper;
     _responseCreator = responseCreator;
     _userService = userService;
-    _optionInfoMapper = optionInfoMapper;
-    _userAnswerInfoMapper = userAnswerInfoMapper;
   }
   
   public async Task<OperationResultResponse<QuestionResponse>> ExecuteAsync(GetQuestionFilter filter)
@@ -79,26 +71,24 @@ public class GetQuestionCommand : IGetQuestionCommand
       filter.IncludeUserInfo = false;
       response.Errors.Add("Personal information about user can't be loaded as question is anonymous.");
     }
-    
-    List<OptionInfo> optionsInfo = new();
 
     if (filter.IncludeOptions)
     {
+      List<Tuple<DbOption, List<Tuple<DbUserAnswer, UserData>>>> optionsInfo = new();
+      
       foreach (DbOption option in dbQuestion.Options)
       {
-        List<UserAnswerInfo> userAnswersInfo = new();
+        List<Tuple<DbUserAnswer, UserData>> usersInfo = new();
 
         foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
         {
           UserData userData = filter.IncludeUserInfo
             ? (await _userService.GetUsersDataAsync(new List<Guid> { optionUsersAnswer.UserId }, null)).FirstOrDefault()
             : null;
-          UserAnswerInfo userAnswerInfo = _userAnswerInfoMapper.Map(optionUsersAnswer, userData);
-          userAnswersInfo.Add(userAnswerInfo);
+          usersInfo.Add(Tuple.Create(optionUsersAnswer, userData));
         }
 
-        OptionInfo optionInfo = _optionInfoMapper.Map(option, userAnswersInfo);
-        optionsInfo.Add(optionInfo);
+        optionsInfo.Add(Tuple.Create(option,usersInfo));
       }
 
       response.Body = _questionResponseMapper.Map(dbQuestion, optionsInfo);
