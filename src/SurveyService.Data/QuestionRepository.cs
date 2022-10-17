@@ -21,7 +21,7 @@ public class QuestionRepository : IQuestionRepository
     {
       dbQuestions = dbQuestions
         .Include(question => question.Options.Where(option => option.IsActive))
-        .ThenInclude(option => option.UsersAnswers.Where(ua => filter.IncludeAnswers));
+          .ThenInclude(option => option.UsersAnswers);
     }
     else
     {

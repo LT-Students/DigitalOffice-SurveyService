@@ -69,7 +69,7 @@ public class GetQuestionCommand : IGetQuestionCommand
     if (dbQuestion.IsAnonymous && filter.IncludeUserInfo)
     {
       filter.IncludeUserInfo = false;
-      response.Errors.Add("Personal information about user can't be loaded as question is anonymous.");
+      response.Errors.Add("Personal information about users can't be loaded as question is anonymous.");
     }
 
     if (filter.IncludeOptions)
