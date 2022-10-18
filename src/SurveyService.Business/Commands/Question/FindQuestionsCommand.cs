@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Business.Commands.Question;
 
-public class FindByAuthorCommand : IFindByAuthorCommand
+public class FindQuestionsCommand : IFindQuestionsCommand
 {
   private readonly IBaseFindFilterValidator _baseFindFilterValidator;
   private readonly IResponseCreator _responseCreator;
@@ -25,7 +25,7 @@ public class FindByAuthorCommand : IFindByAuthorCommand
   private readonly IGroupRepository _groupRepository;
   private readonly IHttpContextAccessor _httpContextAccessor;
 
-  public FindByAuthorCommand(
+  public FindQuestionsCommand(
     IBaseFindFilterValidator baseFindFilterValidator,
     IResponseCreator responseCreator,
     IQuestionRepository questionRepository,
@@ -39,20 +39,20 @@ public class FindByAuthorCommand : IFindByAuthorCommand
     _httpContextAccessor = httpContextAccessor;
   }
 
-  public async Task<FindResultResponse<FindByAuthorResultInfo>> ExecuteAsync(FindByAuthorFilter filter)
+  public async Task<FindResultResponse<FindQuestionsResultInfo>> ExecuteAsync(FindQuestionsFilter filter)
   {
     ValidationResult validationResult = _baseFindFilterValidator.Validate(filter);
 
     if (!validationResult.IsValid)
     {
-      return _responseCreator.CreateFailureFindResponse<FindByAuthorResultInfo>(HttpStatusCode.BadRequest,
+      return _responseCreator.CreateFailureFindResponse<FindQuestionsResultInfo>(HttpStatusCode.BadRequest,
         validationResult.Errors.Select(vf => vf.ErrorMessage).ToList());
     }
 
     (List<DbQuestion> dbQuestions, int totalCount) = await _questionRepository.FindByAuthorAsync(filter, _httpContextAccessor.HttpContext.GetUserId());
 
-    FindResultResponse<FindByAuthorResultInfo> response = new(
-      body: dbQuestions.Select(q => new FindByAuthorResultInfo
+    FindResultResponse<FindQuestionsResultInfo> response = new(
+      body: dbQuestions.Select(q => new FindQuestionsResultInfo
       {
         ItemType = ItemType.Question,
         ItemId = q.Id,
@@ -65,7 +65,7 @@ public class FindByAuthorCommand : IFindByAuthorCommand
     {
       (List<DbGroup> dbGroups, int totalGroupCount) = await _groupRepository.FindByAuthorAsync(filter, _httpContextAccessor.HttpContext.GetUserId());
 
-      response.Body.AddRange(dbGroups.Select(g => new FindByAuthorResultInfo
+      response.Body.AddRange(dbGroups.Select(g => new FindQuestionsResultInfo
       {
         ItemType = ItemType.Group,
         ItemId = g.Id,

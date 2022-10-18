@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 
 [AutoInject]
-public interface IFindByAuthorCommand
+public interface IFindQuestionsCommand
 {
-  Task<FindResultResponse<FindByAuthorResultInfo>> ExecuteAsync(FindByAuthorFilter filter);
+  Task<FindResultResponse<FindQuestionsResultInfo>> ExecuteAsync(FindQuestionsFilter filter);
 }

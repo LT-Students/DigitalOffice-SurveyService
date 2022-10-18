@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 
-public record FindByAuthorFilter : BaseFindFilter
+public record FindQuestionsFilter : BaseFindFilter
 {
   [FromQuery(Name = "isascendingsort")]
   public bool? IsAscendingSort { get; set; }

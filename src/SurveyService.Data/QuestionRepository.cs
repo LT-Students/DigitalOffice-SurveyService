@@ -54,7 +54,7 @@ public class QuestionRepository : IQuestionRepository
     return _provider.Questions.AnyAsync(x => x.Id == questionId);
   }
 
-  public async Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindByAuthorFilter filter, Guid authorId)
+  public async Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId)
   {
     IQueryable<DbQuestion> query = _provider.Questions.AsQueryable().OrderByDescending(q => q.CreatedAtUtc);
 

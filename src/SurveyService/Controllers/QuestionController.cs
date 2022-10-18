@@ -21,9 +21,9 @@ public class QuestionController : ControllerBase
   }
 
   [HttpGet("find")]
-  public async Task<FindResultResponse<FindByAuthorResultInfo>> FindAsync(
-    [FromServices] IFindByAuthorCommand command,
-    [FromQuery] FindByAuthorFilter filter)
+  public async Task<FindResultResponse<FindQuestionsResultInfo>> FindAsync(
+    [FromServices] IFindQuestionsCommand command,
+    [FromQuery] FindQuestionsFilter filter)
   {
     return await command.ExecuteAsync(filter);
   }
