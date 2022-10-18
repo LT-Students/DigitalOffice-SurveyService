@@ -1,4 +1,3 @@
-using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
@@ -15,14 +14,12 @@ namespace LT.DigitalOffice.SurveyService.Data;
 public class GroupRepository : IGroupRepository
 {
   private readonly IDataProvider _provider;
-  private readonly IHttpContextAccessor _httpContextAccessor;
 
   public GroupRepository(
     IDataProvider provider,
     IHttpContextAccessor httpContextAccessor)
   {
     _provider = provider;
-    _httpContextAccessor = httpContextAccessor;
   }
 
   public async Task<Guid?> CreateAsync(DbGroup dbGroup)
@@ -34,25 +31,21 @@ public class GroupRepository : IGroupRepository
 
     _provider.Groups.Add(dbGroup);
     await _provider.SaveAsync();
-    
+
     return dbGroup.Id;
   }
 
-  public async Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindByAuthorFilter filter)
+  public async Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindByAuthorFilter filter, Guid authorId)
   {
-    IQueryable<DbGroup> query = _provider.Groups.AsQueryable();
+    IQueryable<DbGroup> query = _provider.Groups.AsQueryable().OrderByDescending(g => g.CreatedAtUtc);
 
-    query = query.Where(g => g.CreatedBy == _httpContextAccessor.HttpContext.GetUserId());
+    query = query.Where(g => g.CreatedBy == authorId);
 
     if (filter.IsAscendingSort.HasValue)
     {
       query = filter.IsAscendingSort.Value
         ? query.OrderBy(g => g)
         : query.OrderByDescending(g => g.Subject);
-    }
-    else
-    {
-      query = query.OrderByDescending(g => g.CreatedAtUtc);
     }
 
     if (filter.IsActive.HasValue)

@@ -12,5 +12,5 @@ public interface IGroupRepository
 {
   Task<Guid?> CreateAsync(DbGroup dbGroup);
 
-  Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindByAuthorFilter filter);
+  Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindByAuthorFilter filter, Guid authorId);
 }

@@ -18,5 +18,5 @@ public interface IQuestionRepository
 
   Task<bool> DoesExistAsync(Guid questionId);
 
-  Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindByAuthorFilter filter);
+  Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindByAuthorFilter filter, Guid authorId);
 }
