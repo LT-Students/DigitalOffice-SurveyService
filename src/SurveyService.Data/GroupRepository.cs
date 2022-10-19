@@ -24,25 +24,25 @@ public class GroupRepository : IGroupRepository
       GetGroupFilter filter,
       IQueryable<DbGroup> query)
   {
-    if (filter.IncludeUserAnswers)
+    if (filter.IncludeQuestions)
     {
-      return query
+      if (filter.IncludeOptions)
+      {
+        if (filter.IncludeUserAnswers)
+        {
+        return query
               .Include(group => group.Questions.Where(question => question.IsActive))
               .ThenInclude(question => question.Options.Where(option => option.IsActive))
               .ThenInclude(option => option.UsersAnswers);
-    }
+        }
 
-    if (filter.IncludeOptions)
-    {
-      return query
+        return query
               .Include(group => group.Questions.Where(question => question.IsActive))
               .ThenInclude(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
-    }
+      }
 
-    if (filter.IncludeQuestions)
-    {
       return query
-              .Include(group => group.Questions.Where(question => question.IsActive));
+             .Include(group => group.Questions.Where(question => question.IsActive));
     }
 
     return query;

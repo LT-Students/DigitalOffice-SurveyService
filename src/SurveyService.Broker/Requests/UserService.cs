@@ -37,10 +37,8 @@ namespace LT.DigitalOffice.SurveyService.Broker.Requests
         return null;
       }
 
-      object request = IGetUsersDataRequest.CreateObj(usersIds);
-      
       List<UserData> usersData = (await _rcGetUsersData.ProcessRequest<IGetUsersDataRequest, IGetUsersDataResponse>(
-          request,
+          IGetUsersDataRequest.CreateObj(usersIds),
           errors,
           _logger))?.UsersData;
 

@@ -9,6 +9,6 @@ public record GroupResponse
   public Guid Id { get; set; }
   public string Subject { get; set; }
   public string Description { get; set; }
-  public bool isActive { get; set; }
+  public bool IsActive { get; set; }
   public List<QuestionInfo> Questions { get; set; }
 }

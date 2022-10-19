@@ -64,12 +64,12 @@ public class GetGroupCommand : IGetGroupCommand
         new List<string> { "Group not found" });
     }
 
-    if (dbGroup.Questions.FirstOrDefault().Deadline > DateTime.UtcNow 
-        && !dbGroup.Questions.FirstOrDefault().HasRealTimeResult
-        && filter.IncludeUserAnswers)
+    if(dbGroup.Questions.FirstOrDefault().Deadline > DateTime.UtcNow 
+       && !dbGroup.Questions.FirstOrDefault().HasRealTimeResult
+       && filter.IncludeUserAnswers)
     {
       return _responseCreator.CreateFailureResponse<GroupResponse>(
-        HttpStatusCode.BadRequest,
+        HttpStatusCode.Forbidden,
         new List<string> { "You cannot see the answers because the deadline has not yet come" });
     }
 
@@ -82,12 +82,12 @@ public class GetGroupCommand : IGetGroupCommand
         if (question.IsAnonymous)
         {
           return _responseCreator.CreateFailureResponse<GroupResponse>(
-            HttpStatusCode.BadRequest,
+            HttpStatusCode.Forbidden,
             new List<string> { "One of the questions is anonymous. The results are not available " });
         }
 
-        if (question.IsPrivate
-            && question.CreatedBy != _httpContextAccessor.HttpContext.GetUserId())
+        if(question.IsPrivate
+           && question.CreatedBy != _httpContextAccessor.HttpContext.GetUserId())
         {
           return _responseCreator.CreateFailureResponse<GroupResponse>(
             HttpStatusCode.Forbidden,
