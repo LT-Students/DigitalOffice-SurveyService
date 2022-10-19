@@ -29,8 +29,7 @@ namespace LT.DigitalOffice.SurveyService.Broker.Requests
     public async Task<List<UserData>> GetUsersDataAsync(
       List<Guid> usersIds,
       List<string> errors,
-      CancellationToken cancellationToken = default
-      )
+      CancellationToken cancellationToken = default)
     {
       if (usersIds is null || !usersIds.Any())
       {
@@ -38,9 +37,9 @@ namespace LT.DigitalOffice.SurveyService.Broker.Requests
       }
 
       List<UserData> usersData = (await _rcGetUsersData.ProcessRequest<IGetUsersDataRequest, IGetUsersDataResponse>(
-          IGetUsersDataRequest.CreateObj(usersIds),
-          errors,
-          _logger))?.UsersData;
+        IGetUsersDataRequest.CreateObj(usersIds),
+        errors,
+        _logger))?.UsersData;
 
       return usersData;
     }

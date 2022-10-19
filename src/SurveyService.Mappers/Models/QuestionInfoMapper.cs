@@ -1,13 +1,22 @@
-﻿using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
+﻿using LT.DigitalOffice.Models.Broker.Models;
+using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Models;
 
 public class QuestionInfoMapper : IQuestionInfoMapper
 {
-  public QuestionInfo Map(DbQuestion dbQuestion, List<OptionInfo> optionInfos)
+  private readonly IOptionInfoMapper _optionInfoMapper;
+
+  public QuestionInfoMapper(IOptionInfoMapper optionInfoMapper)
+  {
+    _optionInfoMapper = optionInfoMapper;
+  }
+
+  public QuestionInfo Map(DbQuestion dbQuestion, List<UserData> usersData)
   {
     return dbQuestion is null
       ? null
@@ -23,7 +32,7 @@ public class QuestionInfoMapper : IQuestionInfoMapper
         IsPrivate = dbQuestion.IsPrivate,
         HasMultipleChoice = dbQuestion.HasMultipleChoice,
         HasCustomOptions = dbQuestion.HasCustomOptions,
-        Options = optionInfos
+        Options = dbQuestion.Options.Select(o => _optionInfoMapper.Map(o, usersData)).ToList()
       };
   }
 }

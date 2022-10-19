@@ -9,5 +9,5 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 [AutoInject]
 public interface IOptionInfoMapper
 {
-  OptionInfo Map(DbOption dbOption, List<UserAnswerInfo> userAnswerInfos);
+  OptionInfo Map(DbOption dbOption, List<UserData> usersData);
 }
