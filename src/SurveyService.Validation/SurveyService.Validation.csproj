@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
@@ -10,4 +10,5 @@
   <ItemGroup>
     <Folder Include="Question\Interfaces\" />
   </ItemGroup>
+
 </Project>
