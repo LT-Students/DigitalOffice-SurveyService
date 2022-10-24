@@ -6,7 +6,6 @@ using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,8 +16,7 @@ public class GroupRepository : IGroupRepository
   private readonly IDataProvider _provider;
 
   public GroupRepository(
-    IDataProvider provider,
-    IHttpContextAccessor httpContextAccessor)
+    IDataProvider provider)
   {
     _provider = provider;
   }
