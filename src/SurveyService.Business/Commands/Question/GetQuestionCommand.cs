@@ -43,12 +43,6 @@ public class GetQuestionCommand : IGetQuestionCommand
   public async Task<OperationResultResponse<QuestionResponse>> ExecuteAsync(GetQuestionFilter filter)
   {
     OperationResultResponse<QuestionResponse> response = new();
-    if (filter is null)
-    {
-      return _responseCreator.CreateFailureResponse<QuestionResponse>(
-        HttpStatusCode.BadRequest,
-        new List<string> { "You must enter 'questionid'." });
-    }
 
     DbQuestion dbQuestion = await _repository.GetAsync(filter);
     
