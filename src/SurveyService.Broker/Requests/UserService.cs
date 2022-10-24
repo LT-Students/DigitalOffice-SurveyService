@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Broker.Requests;
+
 public class UserService : IUserService
 {
   private readonly IRequestClient<IGetUsersDataRequest> _rcGetUsersData;
@@ -28,18 +29,15 @@ public class UserService : IUserService
   public async Task<List<UserData>> GetUsersDataAsync(
     List<Guid> usersIds,
     List<string> errors,
-    CancellationToken cancellationToken = default
-    )
+    CancellationToken cancellationToken = default) 
   {
     if (usersIds is null || !usersIds.Any())
     {
       return null;
     }
 
-    object request = IGetUsersDataRequest.CreateObj(usersIds);
-    
     List<UserData> usersData = (await _rcGetUsersData.ProcessRequest<IGetUsersDataRequest, IGetUsersDataResponse>(
-        request,
+      IGetUsersDataRequest.CreateObj(usersIds),
         errors,
         _logger))?.UsersData;
 
