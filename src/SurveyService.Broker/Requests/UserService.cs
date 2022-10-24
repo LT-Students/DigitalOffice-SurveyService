@@ -35,12 +35,10 @@ public class UserService : IUserService
     {
       return null;
     }
-
-    List<UserData> usersData = (await _rcGetUsersData.ProcessRequest<IGetUsersDataRequest, IGetUsersDataResponse>(
+    
+    return (await _rcGetUsersData.ProcessRequest<IGetUsersDataRequest, IGetUsersDataResponse>(
       IGetUsersDataRequest.CreateObj(usersIds),
-        errors,
-        _logger))?.UsersData;
-
-    return usersData;
+      errors,
+      _logger))?.UsersData;
   }
 }
