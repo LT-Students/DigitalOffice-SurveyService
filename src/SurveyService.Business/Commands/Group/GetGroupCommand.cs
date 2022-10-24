@@ -7,7 +7,6 @@ using LT.DigitalOffice.SurveyService.Business.Commands.Group.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto.Models;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
 using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Group;
 using Microsoft.AspNetCore.Http;
@@ -58,39 +57,34 @@ public class GetGroupCommand : IGetGroupCommand
     {
       return _responseCreator.CreateFailureResponse<GroupResponse>(
         HttpStatusCode.Forbidden,
-        new List<string> { "You cannot see the answers because the deadline has not yet come" });
+        new List<string> { "You cannot see the answers because the deadline has not come yet" });
     }
 
     List<UserData> usersData = new List<UserData>();
 
     foreach (DbQuestion question in dbGroup.Questions)
     {
-      if (filter.IncludeUserAnswers)
+      if (filter.IncludeUserInfo && question.IsAnonymous)
       {
-        if (question.IsAnonymous)
-        {
-          return _responseCreator.CreateFailureResponse<GroupResponse>(
-            HttpStatusCode.Forbidden,
-            new List<string> { "One of the questions is anonymous. The results are not available " });
-        }
+        return _responseCreator.CreateFailureResponse<GroupResponse>(
+          HttpStatusCode.Forbidden,
+          new List<string> { "One of the questions is anonymous. The user information are not available " });
+      }
 
-        if (question.IsPrivate
-          && question.CreatedBy != _httpContextAccessor.HttpContext.GetUserId())
-        {
-          return _responseCreator.CreateFailureResponse<GroupResponse>(
-            HttpStatusCode.Forbidden,
-            new List<string> { "One of the questions is private, you are not the creator of it" });
-        }
+      if (filter.IncludeUserAnswers && question.IsPrivate
+        && question.CreatedBy != _httpContextAccessor.HttpContext.GetUserId())
+      {
+        return _responseCreator.CreateFailureResponse<GroupResponse>(
+          HttpStatusCode.Forbidden,
+          new List<string> { "One of the questions is private, you are not the author of it" });
       }
 
       usersData = filter.IncludeUserInfo
         ? (await _userService.GetUsersDataAsync(
           dbGroup.Questions.SelectMany(q => q.Options).SelectMany(o => o.UsersAnswers).Select(ua => ua.UserId).ToList(), new List<string>()))
-          : null;
+        : null;
     }
 
-    OperationResultResponse<GroupResponse> response = new(body: _groupResponseMapper.Map(dbGroup, usersData));
-
-    return response;
+    return new(body: _groupResponseMapper.Map(dbGroup, usersData));
   }
 }

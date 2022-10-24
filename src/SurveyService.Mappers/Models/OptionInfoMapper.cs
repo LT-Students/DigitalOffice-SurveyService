@@ -18,7 +18,6 @@ public class OptionInfoMapper: IOptionInfoMapper
 
   public OptionInfo Map(DbOption dbOption, List<UserData> usersData)
   {
-
     return dbOption is null
       ? null
       : new OptionInfo
