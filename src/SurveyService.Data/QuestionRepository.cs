@@ -15,13 +15,13 @@ public class QuestionRepository : IQuestionRepository
 
   private IQueryable<DbQuestion> CreateGetPredicates(
     GetQuestionFilter filter,
-    IQueryable<DbQuestion> dbQuestions)
+    IQueryable<DbQuestion> dbQuestions) 
   { 
     if (filter.IncludeAnswers)
     {
       dbQuestions = dbQuestions
         .Include(question => question.Options.Where(option => option.IsActive))
-          .ThenInclude(option => option.UsersAnswers);
+        .ThenInclude(option => option.UsersAnswers);
     }
     else
     {
