@@ -74,27 +74,13 @@ public class GetQuestionCommand : IGetQuestionCommand
 
     if (filter.IncludeOptions)
     {
-      List<Tuple<DbOption, List<Tuple<DbUserAnswer, UserData>>>> optionsInfo = new();
-      List<string> totalErrors = new ();
-      foreach (DbOption option in dbQuestion.Options)
-      {
-        List<Tuple<DbUserAnswer, UserData>> usersInfo = new();
-
-        foreach (DbUserAnswer optionUsersAnswer in option.UsersAnswers)
-        {
-          List<string> errors = new();
-          UserData userData = filter.IncludeUserInfo
-            ? (await _userService.GetUsersDataAsync(new List<Guid> { optionUsersAnswer.UserId }, errors)).FirstOrDefault()
-            : null;
-          usersInfo.Add(Tuple.Create(optionUsersAnswer, userData));
-          totalErrors.AddRange(errors);
-        }
-
-        optionsInfo.Add(Tuple.Create(option,usersInfo));
-      }
-
-      response.Body = _questionResponseMapper.Map(dbQuestion, optionsInfo);
-      response.Errors.AddRange(totalErrors);
+      var users = dbQuestion.Options.SelectMany(x => x.UsersAnswers.Select(y => y.UserId))
+        .ToList();
+      List<string> errors = new();
+      List<UserData> usersData = filter.IncludeUserInfo
+        ? await _userService.GetUsersDataAsync(users, errors)
+        : null;
+      response.Body = _questionResponseMapper.Map(dbQuestion, usersData);
     }
     else
     {

@@ -10,5 +10,5 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 [AutoInject]
 public interface IQuestionResponseMapper
 {
-  QuestionResponse Map(DbQuestion dbQuestion, List<Tuple<DbOption, List<Tuple<DbUserAnswer, UserData>>>> optionInfos = null);
+  QuestionResponse Map(DbQuestion dbQuestion, List<UserData> usersData = null);
 }

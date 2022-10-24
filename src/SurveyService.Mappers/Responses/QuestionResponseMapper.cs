@@ -23,7 +23,7 @@ public class QuestionResponseMapper : IQuestionResponseMapper
     _userAnswerInfoMapper = userAnswerInfoMapper;
   }
   
-  public QuestionResponse Map(DbQuestion dbQuestion, List<Tuple<DbOption, List<Tuple<DbUserAnswer, UserData>>>> optionInfos = null)
+  public QuestionResponse Map(DbQuestion dbQuestion, List<UserData> usersData = null)
   {
     return dbQuestion is null
       ? null
@@ -40,13 +40,7 @@ public class QuestionResponseMapper : IQuestionResponseMapper
         HasMultipleChoice = dbQuestion.HasMultipleChoice,
         HasCustomOptions = dbQuestion.HasCustomOptions,
         IsActive = dbQuestion.IsActive,
-        Options = optionInfos?
-          .Select(x =>
-            _optionInfoMapper.Map(x.Item1, (x.Item2)
-              .Select(y => 
-                _userAnswerInfoMapper.Map(y.Item1, y.Item2))
-              .ToList()))
-          .ToList()
+        Options = dbQuestion.Options.Select(dbOption => _optionInfoMapper.Map(dbOption, usersData)).ToList()
       };
   }
 }
