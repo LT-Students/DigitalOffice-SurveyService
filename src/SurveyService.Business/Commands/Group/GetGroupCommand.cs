@@ -57,7 +57,7 @@ public class GetGroupCommand : IGetGroupCommand
     {
       return _responseCreator.CreateFailureResponse<GroupResponse>(
         HttpStatusCode.Forbidden,
-        new List<string> { "You cannot see the answers because the deadline has not come yet" });
+        new List<string> { "You cannot see the answers because the deadline has not come yet." });
     }
 
     List<UserData> usersData = new List<UserData>();
@@ -68,20 +68,20 @@ public class GetGroupCommand : IGetGroupCommand
       {
         return _responseCreator.CreateFailureResponse<GroupResponse>(
           HttpStatusCode.Forbidden,
-          new List<string> { "One of the questions is anonymous. The user information are not available " });
+          new List<string> { "One of the questions is anonymous. User information is not available." });
       }
 
-      if (filter.IncludeUserAnswers && question.IsPrivate
+      if (question.IsPrivate && filter.IncludeUserAnswers
         && question.CreatedBy != _httpContextAccessor.HttpContext.GetUserId())
       {
         return _responseCreator.CreateFailureResponse<GroupResponse>(
           HttpStatusCode.Forbidden,
-          new List<string> { "One of the questions is private, you are not the author of it" });
+          new List<string> { "One of the questions is private, you are not the author of it." });
       }
 
       usersData = filter.IncludeUserInfo
         ? (await _userService.GetUsersDataAsync(
-          dbGroup.Questions.SelectMany(q => q.Options).SelectMany(o => o.UsersAnswers).Select(ua => ua.UserId).ToList(), new List<string>()))
+          dbGroup.Questions.SelectMany(q => q.Options).SelectMany(o => o.UsersAnswers).Select(ua => ua.UserId).Distinct().ToList(), new List<string>()))
         : null;
     }
 

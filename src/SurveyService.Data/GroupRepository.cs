@@ -1,8 +1,8 @@
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ public class GroupRepository : IGroupRepository
       }
 
       return query
-              .Include(group => group.Questions.Where(question => question.IsActive));
+        .Include(group => group.Questions.Where(question => question.IsActive));
     }
 
     return query;
