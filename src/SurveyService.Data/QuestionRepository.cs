@@ -16,17 +16,24 @@ public class QuestionRepository : IQuestionRepository
   private IQueryable<DbQuestion> CreateGetPredicates(
     GetQuestionFilter filter,
     IQueryable<DbQuestion> dbQuestions) 
-  { 
-    if (filter.IncludeAnswers)
+  {
+    if (filter.IncludeOptions)
     {
-      dbQuestions = dbQuestions
-        .Include(question => question.Options.Where(option => option.IsActive))
-        .ThenInclude(option => option.UsersAnswers);
+      if (filter.IncludeAnswers)
+      {
+        dbQuestions = dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive))
+          .ThenInclude(option => option.UsersAnswers);
+      }
+      else
+      {
+        dbQuestions = dbQuestions
+          .Include(question => question.Options.Where(option => option.IsActive));
+      }
     }
     else
     {
-      dbQuestions = dbQuestions
-        .Include(question => question.Options.Where(option => option.IsActive));
+      dbQuestions = dbQuestions.Where(question => question.Id == filter.QuestionId);
     }
 
     return dbQuestions;

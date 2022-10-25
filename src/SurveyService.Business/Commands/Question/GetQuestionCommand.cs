@@ -65,21 +65,23 @@ public class GetQuestionCommand : IGetQuestionCommand
       filter.IncludeUserInfo = false;
       response.Errors.Add("Personal information about users can't be loaded as question is anonymous.");
     }
-
-    if (filter.IncludeOptions)
+    
+    var users = dbQuestion.Options.SelectMany(x => x.UsersAnswers.Select(y => y.UserId))
+      .Distinct()
+      .ToList();
+    List<string> errors = new();
+    List<UserData> usersData = filter.IncludeUserInfo
+      ? await _userService.GetUsersDataAsync(users, errors)
+      : null;
+    
+    if (errors.Count != 0)
     {
-      var users = dbQuestion.Options.SelectMany(x => x.UsersAnswers.Select(y => y.UserId))
-        .ToList();
-      List<string> errors = new();
-      List<UserData> usersData = filter.IncludeUserInfo
-        ? await _userService.GetUsersDataAsync(users, errors)
-        : null;
-      response.Body = _questionResponseMapper.Map(dbQuestion, usersData);
+      return _responseCreator.CreateFailureResponse<QuestionResponse>(
+        HttpStatusCode.BadRequest,
+        errors);
     }
-    else
-    {
-      response.Body = _questionResponseMapper.Map(dbQuestion);
-    }
+    
+    response.Body = _questionResponseMapper.Map(dbQuestion, usersData);
 
     return response;
   }

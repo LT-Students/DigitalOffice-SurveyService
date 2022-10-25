@@ -2,9 +2,7 @@ using LT.DigitalOffice.Models.Broker.Models;
 using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
-using LT.DigitalOffice.SurveyService.Models.Dto.Models;
 using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Question;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
