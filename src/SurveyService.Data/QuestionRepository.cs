@@ -21,19 +21,19 @@ public class QuestionRepository : IQuestionRepository
     {
       if (filter.IncludeAnswers)
       {
-        dbQuestions = dbQuestions
+        dbQuestions = dbQuestions?
           .Include(question => question.Options.Where(option => option.IsActive))
           .ThenInclude(option => option.UsersAnswers);
       }
       else
       {
-        dbQuestions = dbQuestions
-          .Include(question => question.Options.Where(option => option.IsActive));
+        dbQuestions = dbQuestions?
+          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
       }
     }
     else
     {
-      dbQuestions = dbQuestions.Where(question => question.Id == filter.QuestionId);
+      dbQuestions = dbQuestions?.Where(question => question.Id == filter.QuestionId);
     }
 
     return dbQuestions;

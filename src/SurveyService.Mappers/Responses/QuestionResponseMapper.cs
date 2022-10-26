@@ -3,8 +3,10 @@ using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Question;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Responses;
 
@@ -23,6 +25,12 @@ public class QuestionResponseMapper : IQuestionResponseMapper
   
   public QuestionResponse Map(DbQuestion dbQuestion, List<UserData> usersData = null)
   {
+
+    foreach (DbOption dbQuestionOption in dbQuestion.Options)
+    {
+      Console.Write(dbQuestionOption.Content);
+    }
+    
     return dbQuestion is null
       ? null
       : new QuestionResponse
@@ -38,7 +46,7 @@ public class QuestionResponseMapper : IQuestionResponseMapper
         HasMultipleChoice = dbQuestion.HasMultipleChoice,
         HasCustomOptions = dbQuestion.HasCustomOptions,
         IsActive = dbQuestion.IsActive,
-        Options = dbQuestion.Options.Select(dbOption => _optionInfoMapper.Map(dbOption, usersData)).ToList()
+        Options = dbQuestion.Options?.Select(dbOption => _optionInfoMapper.Map(dbOption, usersData)).ToList()
       };
   }
 }

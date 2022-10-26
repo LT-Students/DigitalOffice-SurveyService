@@ -45,7 +45,13 @@ public class GetQuestionCommand : IGetQuestionCommand
     OperationResultResponse<QuestionResponse> response = new();
 
     DbQuestion dbQuestion = await _repository.GetAsync(filter);
-    
+
+    if (dbQuestion is null)
+    {
+      return _responseCreator.CreateFailureResponse<QuestionResponse>(
+        HttpStatusCode.NotFound,
+        new List<string> {"Question with specified id wasn't found"});
+    }
     if (dbQuestion.Deadline > DateTime.Now && !dbQuestion.HasRealTimeResult)
     {
       return _responseCreator.CreateFailureResponse<QuestionResponse>(
