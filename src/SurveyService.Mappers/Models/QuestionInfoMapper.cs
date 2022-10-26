@@ -32,7 +32,7 @@ public class QuestionInfoMapper : IQuestionInfoMapper
         IsPrivate = dbQuestion.IsPrivate,
         HasMultipleChoice = dbQuestion.HasMultipleChoice,
         HasCustomOptions = dbQuestion.HasCustomOptions,
-        Options = dbQuestion.Options.Select(o => _optionInfoMapper.Map(o, usersData)).ToList()
+        Options = dbQuestion.Options?.Select(o => _optionInfoMapper.Map(o, usersData)).ToList()
       };
   }
 }

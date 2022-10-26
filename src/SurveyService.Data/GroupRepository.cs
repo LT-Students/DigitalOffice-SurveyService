@@ -63,7 +63,8 @@ public class GroupRepository : IGroupRepository
   {
     return filter is null
             ? null
-            : CreateGetPredicates(filter, _provider.Groups.Where(group => group.Id == filter.GroupId).AsQueryable()).FirstOrDefaultAsync();
+            : CreateGetPredicates(filter, _provider.Groups.Where(group => group.Id == filter.GroupId).AsQueryable())
+              .FirstOrDefaultAsync();
   }
 
   public async Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId)
