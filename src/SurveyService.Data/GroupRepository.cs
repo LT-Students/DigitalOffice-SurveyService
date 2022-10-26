@@ -32,11 +32,11 @@ public class GroupRepository : IGroupRepository
         return filter.IncludeUserAnswers
         ? query
             .Include(group => group.Questions.Where(question => question.IsActive))
-            .ThenInclude(question => question.Options.Where(option => option.IsActive && !option.IsCustom))
+            .ThenInclude(question => question.Options.Where(option => option.IsActive))
+            .ThenInclude(option => option.UsersAnswers)
         : query
             .Include(group => group.Questions.Where(question => question.IsActive))
-            .ThenInclude(question => question.Options.Where(option => option.IsActive))
-            .ThenInclude(option => option.UsersAnswers);
+            .ThenInclude(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
       }
 
       return query
