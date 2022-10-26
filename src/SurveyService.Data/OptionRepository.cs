@@ -1,6 +1,8 @@
-﻿using LT.DigitalOffice.SurveyService.Data.Interfaces;
+﻿using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,11 +14,14 @@ namespace LT.DigitalOffice.SurveyService.Data;
 public class OptionRepository : IOptionRepository
 {
   private readonly IDataProvider _provider;
+  private readonly IHttpContextAccessor _httpContextAccessor;
 
   public OptionRepository(
-    IDataProvider provider)
+    IDataProvider provider,
+    IHttpContextAccessor httpContextAccessor)
   {
     _provider = provider;
+    _httpContextAccessor = httpContextAccessor;
   }
 
   public async Task<Guid?> CreateAsync(DbOption dbOption)
@@ -42,5 +47,19 @@ public class OptionRepository : IOptionRepository
       .Include(option => option.Question.Group)
         .ThenInclude(group => group.Questions)
       .ToListAsync();
+  }
+
+  public async Task<bool> EditOptionsActivityAsync(ICollection<DbOption> options)
+  {
+    foreach (DbOption dbOption in options)
+    {
+      dbOption.IsActive = false;
+      dbOption.ModifiedAtUtc = DateTime.UtcNow;
+      dbOption.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+    }
+
+    await _provider.SaveAsync();
+
+    return true;
   }
 }
