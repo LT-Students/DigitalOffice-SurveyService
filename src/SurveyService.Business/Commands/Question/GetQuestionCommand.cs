@@ -26,6 +26,7 @@ public class GetQuestionCommand : IGetQuestionCommand
   private readonly IUserService _userService;
   private readonly IHttpContextAccessor _httpContextAccessor;
 
+
   public GetQuestionCommand(
     IHttpContextAccessor httpContextAccessor,
     IQuestionRepository questionRepository, 
