@@ -74,9 +74,10 @@ public class GetQuestionCommand : IGetQuestionCommand
     
     List<string> errors = new();
     List<UserData> usersData = filter.IncludeUserInfo
-      ? await _userService.GetUsersDataAsync(dbQuestion.Options.SelectMany(x => x.UsersAnswers.Select(y => y.UserId))
-        .Distinct()
-        .ToList(), 
+      ? await _userService.GetUsersDataAsync(
+        dbQuestion.Options.SelectMany(x => x.UsersAnswers.Select(y => y.UserId))
+          .Distinct()
+          .ToList(), 
         errors)
       : null;
 
