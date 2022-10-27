@@ -31,10 +31,6 @@ public class QuestionRepository : IQuestionRepository
           .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
       }
     }
-    else
-    {
-      dbQuestions = dbQuestions?.Where(question => question.Id == filter.QuestionId);
-    }
 
     return dbQuestions;
   }
@@ -68,8 +64,8 @@ public class QuestionRepository : IQuestionRepository
     return filter is null
       ? Task.FromResult(default(DbQuestion))
       : CreateGetPredicates(filter,
-        _provider.Questions.AsQueryable().Where(question => question.Id == filter.QuestionId))
-        .FirstOrDefaultAsync();
+        _provider.Questions.AsQueryable())
+        .FirstOrDefaultAsync(question => question.Id == filter.QuestionId);
   }
 
   public async Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult)

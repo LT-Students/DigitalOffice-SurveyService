@@ -3,34 +3,23 @@ using LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Responses.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Question;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace LT.DigitalOffice.SurveyService.Mappers.Responses;
 
 public class QuestionResponseMapper : IQuestionResponseMapper
 {
   private readonly IOptionInfoMapper _optionInfoMapper;
-  private readonly IUserAnswerInfoMapper _userAnswerInfoMapper;
 
   public QuestionResponseMapper(
-    IOptionInfoMapper optionInfoMapper,
-    IUserAnswerInfoMapper userAnswerInfoMapper)
+    IOptionInfoMapper optionInfoMapper)
   {
     _optionInfoMapper = optionInfoMapper;
-    _userAnswerInfoMapper = userAnswerInfoMapper;
   }
   
   public QuestionResponse Map(DbQuestion dbQuestion, List<UserData> usersData = null)
   {
-
-    foreach (DbOption dbQuestionOption in dbQuestion.Options)
-    {
-      Console.Write(dbQuestionOption.Content);
-    }
-    
     return dbQuestion is null
       ? null
       : new QuestionResponse
