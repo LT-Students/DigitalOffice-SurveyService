@@ -11,4 +11,28 @@
     <Folder Include="Question\Interfaces\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Question\Resources\CreateQuestionRequestValidatorResource.ru-RU.Designer.cs">
+      <DependentUpon>CreateQuestionRequestValidatorResource.ru-RU.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Question\Resources\CreateQuestionRequestValidatorResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CreateQuestionRequestValidatorResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Question\Resources\CreateQuestionRequestValidatorResource.ru-RU.resx">
+      <LastGenOutput>CreateQuestionRequestValidatorResource.ru-RU.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Question\Resources\CreateQuestionRequestValidatorResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CreateQuestionRequestValidatorResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

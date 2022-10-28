@@ -1,6 +1,9 @@
 using FluentValidation;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
+using LT.DigitalOffice.SurveyService.Validation.Question.Resources;
+using System.Globalization;
+using System.Threading;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Question;
 
@@ -8,21 +11,23 @@ public class CreateGroupQuestionRequestValidator : AbstractValidator<CreateGroup
 {
   public CreateGroupQuestionRequestValidator()
   {
+    Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+
     RuleFor(q => q.Content)
       .MaximumLength(300)
-      .WithMessage("Content is too long.");
+      .WithMessage(CreateQuestionRequestValidatorResource.ContentLong);
 
     When(q => !q.HasCustomOptions, () =>
     {
       RuleFor(q => q.Options)
         .NotEmpty()
-        .WithMessage("This question should have one option at least.");
+        .WithMessage(CreateQuestionRequestValidatorResource.QuestionOption);
     });
 
     RuleForEach(q => q.Options)
       .Must(o => !o.IsCustom)
-      .WithMessage("Option cannot be a custom.")
+      .WithMessage(CreateQuestionRequestValidatorResource.OptionCustom)
       .Must(o => o.Content.Length < 301)
-      .WithMessage("Option is too long.");
+      .WithMessage(CreateQuestionRequestValidatorResource.OptionLong);
   }
 }
