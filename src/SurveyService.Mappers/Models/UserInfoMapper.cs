@@ -10,8 +10,8 @@ public class UserInfoMapper : IUserInfoMapper
   {
     return userData is null
       ? null
-      : new UserInfo 
-      { 
+      : new UserInfo
+      {
         Id = userData.Id,
         FirstName = userData.FirstName,
         MiddleName = userData.MiddleName,
