@@ -10,13 +10,12 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Models;
 public class OptionInfoMapper: IOptionInfoMapper
 {
   private readonly IUserAnswerInfoMapper _userAnswerInfoMapper;
-  
-  public OptionInfoMapper(
-    IUserAnswerInfoMapper userAnswerInfoMapper)
+
+  public OptionInfoMapper(IUserAnswerInfoMapper userAnswerInfoMapper)
   {
     _userAnswerInfoMapper = userAnswerInfoMapper;
   }
-  
+
   public OptionInfo Map(DbOption dbOption, List<UserData> usersData)
   {
     return dbOption is null

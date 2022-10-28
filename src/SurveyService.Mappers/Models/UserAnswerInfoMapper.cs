@@ -17,7 +17,7 @@ public class UserAnswerInfoMapper : IUserAnswerInfoMapper
     _userInfoMapper = userInfoMapper;
   }
   
-  public UserAnswerInfo Map(DbUserAnswer dbUserAnswer, List<UserData> userData)
+  public UserAnswerInfo Map(DbUserAnswer dbUserAnswer, List<UserData> usersData)
   {
     return dbUserAnswer is null
       ? null

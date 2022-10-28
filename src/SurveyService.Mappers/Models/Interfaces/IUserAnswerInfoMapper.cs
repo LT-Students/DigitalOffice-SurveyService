@@ -9,5 +9,5 @@ namespace LT.DigitalOffice.SurveyService.Mappers.Models.Interfaces;
 [AutoInject]
 public interface IUserAnswerInfoMapper
 {
-  UserAnswerInfo Map(DbUserAnswer dbUserAnswer, List<UserData> userData);
+  UserAnswerInfo Map(DbUserAnswer dbUserAnswer, List<UserData> usersData);
 }

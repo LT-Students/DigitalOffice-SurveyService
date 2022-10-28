@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.Kernel.BrokerSupport.Attributes;
+using LT.DigitalOffice.Kernel.BrokerSupport.Attributes;
 using LT.DigitalOffice.Kernel.BrokerSupport.Configurations;
 using LT.DigitalOffice.Models.Broker.Requests.User;
 
