@@ -29,7 +29,6 @@ public class QuestionController : ControllerBase
   {
     return await command.ExecuteAsync(filter);
   }
-}
 
   [HttpGet("find")]
   public async Task<FindResultResponse<FindQuestionsResultInfo>> FindAsync(

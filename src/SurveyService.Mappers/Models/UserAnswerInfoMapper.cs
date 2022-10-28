@@ -24,7 +24,7 @@ public class UserAnswerInfoMapper : IUserAnswerInfoMapper
       : new UserAnswerInfo
       {
         Id = dbUserAnswer.Id,
-        User = _userInfoMapper.Map(userData?.FirstOrDefault(x => x?.Id == dbUserAnswer.UserId))
+        User = _userInfoMapper.Map(usersData?.FirstOrDefault(x => x?.Id == dbUserAnswer.UserId))
       };
   }
 }
