@@ -14,9 +14,6 @@ namespace LT.DigitalOffice.SurveyService.Validation.Question;
 
 public class EditQuestionRequestValidator : ExtendedEditRequestValidator<DbQuestion, EditQuestionRequest>, IEditQuestionRequestValidator
 {
-
-  private readonly IQuestionRepository _questionRepository;
-
   private void HandleInternalPropertyValidation(
      Operation<EditQuestionRequest> requestedOperation,
      CustomContext context)
@@ -27,28 +24,28 @@ public class EditQuestionRequestValidator : ExtendedEditRequestValidator<DbQuest
     #region paths
 
     AddСorrectPaths(
-    new List<string>
-    {
-          nameof(EditQuestionRequest.Content),
-          nameof(EditQuestionRequest.IsAnonymous),
-          nameof(EditQuestionRequest.IsRevoteAvailable),
-          nameof(EditQuestionRequest.IsObligatory),
-          nameof(EditQuestionRequest.IsPrivate),
-          nameof(EditQuestionRequest.HasMultipleChoice),
-          nameof(EditQuestionRequest.Deadline),
-          nameof(EditQuestionRequest.HasRealTimeResult),
-          nameof(EditQuestionRequest.IsActive)
-    });
+      new List<string>
+      {
+        nameof(EditQuestionRequest.Content),
+        nameof(EditQuestionRequest.IsAnonymous),
+        nameof(EditQuestionRequest.IsRevoteAvailable),
+        nameof(EditQuestionRequest.IsObligatory),
+        nameof(EditQuestionRequest.IsPrivate),
+        nameof(EditQuestionRequest.HasMultipleChoice),
+        nameof(EditQuestionRequest.Deadline),
+        nameof(EditQuestionRequest.HasRealTimeResult),
+        nameof(EditQuestionRequest.IsActive)
+      });
 
-    AddСorrectOperations(nameof(EditQuestionRequest.Content), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.IsAnonymous), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.IsRevoteAvailable), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.IsObligatory), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.IsPrivate), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.HasMultipleChoice), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.Deadline), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.HasRealTimeResult), new List<OperationType> { OperationType.Replace });
-    AddСorrectOperations(nameof(EditQuestionRequest.IsActive), new List<OperationType> { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.Content), new() { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.IsAnonymous), new () { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.IsRevoteAvailable), new() { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.IsObligatory), new() { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.IsPrivate), new() { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.HasMultipleChoice), new() { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.Deadline), new() { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.HasRealTimeResult), new() { OperationType.Replace });
+    AddСorrectOperations(nameof(EditQuestionRequest.IsActive), new() { OperationType.Replace });
 
     #endregion
 
@@ -59,8 +56,8 @@ public class EditQuestionRequestValidator : ExtendedEditRequestValidator<DbQuest
       x => x == OperationType.Replace,
       new()
       {
-        { x => !string.IsNullOrEmpty(x.value?.ToString()), "Content cannot be empty." },
-        { x => x.value.ToString().Length < 300, "Content is too long." }
+        { x => !string.IsNullOrWhiteSpace(x.value?.ToString()), "Content cannot be empty." },
+        { x => x.value.ToString().Trim().Length < 301, "Content is too long." }
       },
       CascadeMode.Stop);
 
@@ -181,6 +178,7 @@ public class EditQuestionRequestValidator : ExtendedEditRequestValidator<DbQuest
 
     #endregion
   }
+
   public EditQuestionRequestValidator()
   {
     RuleForEach(x => x.Item2.Operations)
@@ -198,13 +196,13 @@ public class EditQuestionRequestValidator : ExtendedEditRequestValidator<DbQuest
         .Must(x =>
         {
           Operation isAnonymousOperation = x.Operations
-            .Where(operation => operation.path.Equals("/IsAnonymous"))
+            .Where(operation => operation.path.EndsWith(nameof(EditQuestionRequest.IsAnonymous), StringComparison.OrdinalIgnoreCase))
             .FirstOrDefault();
 
-          return !bool.TryParse(isAnonymousOperation?.value?.ToString(), out bool _)
-            || isAnonymousOperation.value.ToString().Equals("true");
-        }).
-        WithMessage("You cannot make a question non-anonymous if it has already been answered.");
+          return !bool.TryParse(isAnonymousOperation?.value?.ToString(), out bool res)
+            || res;
+        })
+        .WithMessage("You cannot make a question non-anonymous if it has already been answered.");
       });
   }
 }

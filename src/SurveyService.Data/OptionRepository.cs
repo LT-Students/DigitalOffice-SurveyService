@@ -49,7 +49,7 @@ public class OptionRepository : IOptionRepository
       .ToListAsync();
   }
 
-  public async Task<bool> EditOptionsActivityAsync(ICollection<DbOption> options)
+  public Task DisactivateAsync(ICollection<DbOption> options)
   {
     foreach (DbOption dbOption in options)
     {
@@ -58,8 +58,6 @@ public class OptionRepository : IOptionRepository
       dbOption.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
     }
 
-    await _provider.SaveAsync();
-
-    return true;
+    return _provider.SaveAsync();
   }
 }

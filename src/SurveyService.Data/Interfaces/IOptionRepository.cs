@@ -11,5 +11,5 @@ public interface IOptionRepository
 {
   Task<Guid?> CreateAsync(DbOption dbOption);
   Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds);
-  Task<bool> EditOptionsActivityAsync(ICollection<DbOption> options);
+  Task DisactivateAsync(ICollection<DbOption> options);
 }

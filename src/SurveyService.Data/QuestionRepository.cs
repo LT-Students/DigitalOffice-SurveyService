@@ -108,7 +108,7 @@ public class QuestionRepository : IQuestionRepository
     return await _provider.Questions
       .Where(q => q.Id == questionId)
       .Include(question => question.Options)
-        .ThenInclude(option => option.UsersAnswers)
+      .ThenInclude(option => option.UsersAnswers)
       .FirstOrDefaultAsync();
   }
 }

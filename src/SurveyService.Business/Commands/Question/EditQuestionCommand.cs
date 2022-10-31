@@ -28,7 +28,6 @@ public class EditQuestionCommand : IEditQuestionCommand
   private readonly IEditQuestionRequestValidator _validator;
   private readonly IPatchDbQuestionMapper _mapper;
 
-
   public EditQuestionCommand(
     IQuestionRepository questionRepository,
     IOptionRepository optionRepository,
@@ -50,16 +49,15 @@ public class EditQuestionCommand : IEditQuestionCommand
   public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid questioId, JsonPatchDocument<EditQuestionRequest> request)
   {
     Guid requestSenderId = _httpContextAccessor.HttpContext.GetUserId();
-    bool isAdmin = await _accessValidator.IsAdminAsync(requestSenderId);
+    DbQuestion dbQuestion = await _questionRepository.GetQuestionWithAnswersAsync(questioId);
 
-    DbQuestion question = await _questionRepository.GetQuestionWithAnswersAsync(questioId);
-
-    if (!isAdmin && requestSenderId != question.CreatedBy)
+    if (!await _accessValidator.IsAdminAsync(requestSenderId)
+      && requestSenderId != dbQuestion.CreatedBy)
     {
       return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.Forbidden);
     }
 
-    ValidationResult validationResult = await _validator.ValidateAsync((question, request));
+    ValidationResult validationResult = await _validator.ValidateAsync((dbQuestion, request));
 
     if (!validationResult.IsValid)
     {
@@ -67,17 +65,20 @@ public class EditQuestionCommand : IEditQuestionCommand
        (HttpStatusCode.BadRequest, validationResult.Errors.Select(e => e.ErrorMessage).ToList());
     }
 
-    string isActiveStr = request.Operations
-      .Where(operation => operation.path.Equals("/IsActive"))
-      .FirstOrDefault()?
-      .value.ToString();
-
-    if ((isActiveStr is null) || isActiveStr.Equals("false"))
+    if (request.Operations.Any(op => op.path.EndsWith(nameof(EditQuestionRequest.IsActive), StringComparison.OrdinalIgnoreCase))
+      && !request.Operations
+        .Where(op => op.path.EndsWith(nameof(EditQuestionRequest.IsActive), StringComparison.OrdinalIgnoreCase))
+        .Select(op =>
+        {
+          bool.TryParse(op.value.ToString(), out bool value);
+          return value;
+        })
+        .First())
     {
-      await _optionRepository.EditOptionsActivityAsync(question.Options);
+      await _optionRepository.DisactivateAsync(dbQuestion.Options);
     }
 
     return new OperationResultResponse<bool>(
-      body: await _questionRepository.EditAsync(_mapper.Map(request), question));
+      body: await _questionRepository.EditAsync(_mapper.Map(request), dbQuestion));
   }
 }
