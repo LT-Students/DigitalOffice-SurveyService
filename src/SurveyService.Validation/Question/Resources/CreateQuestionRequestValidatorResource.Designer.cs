@@ -64,27 +64,27 @@ namespace LT.DigitalOffice.SurveyService.Validation.Question.Resources {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Content is too long..
         /// </summary>
-        internal static string ContentLong {
+        internal static string ContentTooLong {
             get {
-                return ResourceManager.GetString("ContentLong", resourceCulture);
+                return ResourceManager.GetString("ContentTooLong", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на The deadline must be at least 24 hours from now..
         /// </summary>
-        internal static string Deadline {
+        internal static string EarlyDeadline {
             get {
-                return ResourceManager.GetString("Deadline", resourceCulture);
+                return ResourceManager.GetString("EarlyDeadline", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Group properties are incorrect, please - check the deadline and result display settings..
         /// </summary>
-        internal static string GroupIncorrect {
+        internal static string IncorrectGroupProperties {
             get {
-                return ResourceManager.GetString("GroupIncorrect", resourceCulture);
+                return ResourceManager.GetString("IncorrectGroupProperties", resourceCulture);
             }
         }
         
@@ -100,18 +100,18 @@ namespace LT.DigitalOffice.SurveyService.Validation.Question.Resources {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Option is too long..
         /// </summary>
-        internal static string OptionLong {
+        internal static string OptionTooLong {
             get {
-                return ResourceManager.GetString("OptionLong", resourceCulture);
+                return ResourceManager.GetString("OptionTooLong", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на This question should have one option at least..
         /// </summary>
-        internal static string QuestionOption {
+        internal static string QuestionWithNoOption {
             get {
-                return ResourceManager.GetString("QuestionOption", resourceCulture);
+                return ResourceManager.GetString("QuestionWithNoOption", resourceCulture);
             }
         }
     }

@@ -117,22 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContentLong" xml:space="preserve">
+  <data name="ContentTooLong" xml:space="preserve">
     <value>Content is too long.</value>
   </data>
-  <data name="Deadline" xml:space="preserve">
+  <data name="EarlyDeadline" xml:space="preserve">
     <value>The deadline must be at least 24 hours from now.</value>
   </data>
-  <data name="GroupIncorrect" xml:space="preserve">
+  <data name="IncorrectGroupProperties" xml:space="preserve">
     <value>Group properties are incorrect, please - check the deadline and result display settings.</value>
   </data>
   <data name="OptionCustom" xml:space="preserve">
     <value>Option cannot be a custom.</value>
   </data>
-  <data name="OptionLong" xml:space="preserve">
+  <data name="OptionTooLong" xml:space="preserve">
     <value>Option is too long.</value>
   </data>
-  <data name="QuestionOption" xml:space="preserve">
+  <data name="QuestionWithNoOption" xml:space="preserve">
     <value>This question should have one option at least.</value>
   </data>
 </root>

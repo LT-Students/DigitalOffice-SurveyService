@@ -117,22 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContentLong" xml:space="preserve">
+  <data name="ContentTooLong" xml:space="preserve">
     <value>Содержание слишком длинное.</value>
   </data>
-  <data name="Deadline" xml:space="preserve">
+  <data name="EarlyDeadline" xml:space="preserve">
     <value>Дедлайн должен быть как минимум через 24 часа.</value>
   </data>
-  <data name="GroupIncorrect" xml:space="preserve">
-    <value>Свойства группы неверны. Пожалуйста, проверьте настройки отображения дедлайна и результата.</value>
+  <data name="IncorrectGroupProperties" xml:space="preserve">
+    <value>Свойства группы неверны. Пожалуйста, проверьте настройки дедлайна и отображения результата.</value>
   </data>
   <data name="OptionCustom" xml:space="preserve">
     <value>Вариант ответа не может быть кастомным.</value>
   </data>
-  <data name="OptionLong" xml:space="preserve">
+  <data name="OptionTooLong" xml:space="preserve">
     <value>Вариант ответа слишком длинный.</value>
   </data>
-  <data name="QuestionOption" xml:space="preserve">
-    <value>Этот вопрос должен иметь хотя бы один вариант ответа.</value>
+  <data name="QuestionWithNoOption" xml:space="preserve">
+    <value>У этого вопроса должен быть хотя бы один вариант ответа.</value>
   </data>
 </root>

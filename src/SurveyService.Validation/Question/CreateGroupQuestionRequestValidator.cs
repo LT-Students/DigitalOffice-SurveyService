@@ -15,19 +15,19 @@ public class CreateGroupQuestionRequestValidator : AbstractValidator<CreateGroup
 
     RuleFor(q => q.Content)
       .MaximumLength(300)
-      .WithMessage(CreateQuestionRequestValidatorResource.ContentLong);
+      .WithMessage(CreateQuestionRequestValidatorResource.ContentTooLong);
 
     When(q => !q.HasCustomOptions, () =>
     {
       RuleFor(q => q.Options)
         .NotEmpty()
-        .WithMessage(CreateQuestionRequestValidatorResource.QuestionOption);
+        .WithMessage(CreateQuestionRequestValidatorResource.QuestionWithNoOption);
     });
 
     RuleForEach(q => q.Options)
       .Must(o => !o.IsCustom)
       .WithMessage(CreateQuestionRequestValidatorResource.OptionCustom)
       .Must(o => o.Content.Length < 301)
-      .WithMessage(CreateQuestionRequestValidatorResource.OptionLong);
+      .WithMessage(CreateQuestionRequestValidatorResource.OptionTooLong);
   }
 }
