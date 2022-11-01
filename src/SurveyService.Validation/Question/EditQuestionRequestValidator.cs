@@ -189,7 +189,7 @@ public class EditQuestionRequestValidator : ExtendedEditRequestValidator<DbQuest
       .Select(option => option.UsersAnswers.FirstOrDefault())
       .ToList()
       .Any()
-      && x.Item1.IsAnonymous == true,
+      && x.Item1.IsAnonymous,
       () =>
       {
         RuleFor(x => x.Item2)
