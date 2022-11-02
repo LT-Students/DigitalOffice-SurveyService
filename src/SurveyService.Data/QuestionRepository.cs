@@ -103,9 +103,9 @@ public class QuestionRepository : IQuestionRepository
     return true;
   }
 
-  public async Task<DbQuestion> GetQuestionWithAnswersAsync(Guid questionId)
+  public Task<DbQuestion> GetQuestionWithAnswersAsync(Guid questionId)
   {
-    return await _provider.Questions
+    return _provider.Questions
       .Where(q => q.Id == questionId)
       .Include(question => question.Options)
       .ThenInclude(option => option.UsersAnswers)
