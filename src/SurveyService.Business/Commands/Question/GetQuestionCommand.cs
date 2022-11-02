@@ -82,7 +82,7 @@ public class GetQuestionCommand : IGetQuestionCommand
       : null;
 
     response.Body = _questionResponseMapper.Map(dbQuestion, usersData);
-    response.Errors = errors;
+    response.Errors.AddRange(errors);
     
     return response;
   }
