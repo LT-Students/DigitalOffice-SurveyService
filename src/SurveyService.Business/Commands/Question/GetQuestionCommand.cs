@@ -52,6 +52,7 @@ public class GetQuestionCommand : IGetQuestionCommand
         HttpStatusCode.NotFound,
         new List<string> {"Question with specified id wasn't found"});
     }
+    
     if (dbQuestion.Deadline > DateTime.Now && !dbQuestion.HasRealTimeResult)
     {
       return _responseCreator.CreateFailureResponse<QuestionResponse>(
