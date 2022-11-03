@@ -1,8 +1,11 @@
+using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,11 +17,14 @@ namespace LT.DigitalOffice.SurveyService.Data;
 public class GroupRepository : IGroupRepository
 {
   private readonly IDataProvider _provider;
+  private readonly IHttpContextAccessor _httpContextAccessor;
 
   public GroupRepository(
-    IDataProvider provider)
+    IDataProvider provider,
+    IHttpContextAccessor httpContextAccessor)
   {
     _provider = provider;
+    _httpContextAccessor = httpContextAccessor;
   }
 
   private IQueryable<DbGroup> CreateGetPredicates(
@@ -90,5 +96,21 @@ public class GroupRepository : IGroupRepository
     return (
       await query.Skip(filter.SkipCount).Take(filter.TakeCount).ToListAsync(),
       await query.CountAsync());
+  }
+
+  public async Task<bool> EditAsync(JsonPatchDocument<DbGroup> patch, DbGroup group)
+  {
+    if (group is null || patch is null)
+    {
+      return false;
+    }
+
+    patch.ApplyTo(group);
+    group.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+    group.ModifiedAtUtc = DateTime.UtcNow;
+
+    await _provider.SaveAsync();
+
+    return true;
   }
 }

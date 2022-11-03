@@ -1,7 +1,9 @@
-﻿using LT.DigitalOffice.SurveyService.Data.Interfaces;
+﻿using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,17 @@ namespace LT.DigitalOffice.SurveyService.Data;
 public class QuestionRepository : IQuestionRepository
 {
   private readonly IDataProvider _provider;
+  private readonly IHttpContextAccessor _httpContextAccessor;
+  private readonly IOptionRepository _optionRepository;
 
-  public QuestionRepository(IDataProvider provider)
+  public QuestionRepository(
+    IDataProvider provider,
+    IHttpContextAccessor httpContextAccessor,
+    IOptionRepository optionRepository)
   {
     _provider = provider;
+    _httpContextAccessor = httpContextAccessor;
+    _optionRepository = optionRepository;
   }
 
   public async Task<Guid?> CreateAsync(DbQuestion dbQuestion)
@@ -41,7 +50,7 @@ public class QuestionRepository : IQuestionRepository
   {
     DbQuestion question = await _provider.Questions.FirstOrDefaultAsync(q => q.GroupId == groupId);
 
-    if((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
+    if ((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
     {
       return false;
     }
@@ -77,5 +86,18 @@ public class QuestionRepository : IQuestionRepository
     return (
       await query.Skip(filter.SkipCount).Take(filter.TakeCount).ToListAsync(),
       await query.CountAsync());
+  }
+
+  public Task DisactivateAsync(ICollection<DbQuestion> questions)
+  {
+    foreach (DbQuestion dbQuestion in questions)
+    {
+      dbQuestion.IsActive = false;
+      dbQuestion.ModifiedAtUtc = DateTime.UtcNow;
+      dbQuestion.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+      _optionRepository.DisactivateAsync(dbQuestion.Options);
+    }
+
+    return _provider.SaveAsync();
   }
 }

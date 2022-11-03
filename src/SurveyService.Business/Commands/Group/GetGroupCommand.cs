@@ -51,7 +51,8 @@ public class GetGroupCommand : IGetGroupCommand
         new List<string> { "Group not found" });
     }
 
-    if (dbGroup.Questions.FirstOrDefault().Deadline > DateTime.UtcNow
+    if (dbGroup.Questions.Any()
+      && dbGroup.Questions.FirstOrDefault().Deadline > DateTime.UtcNow
       && !dbGroup.Questions.FirstOrDefault().HasRealTimeResult
       && filter.IncludeUserAnswers)
     {

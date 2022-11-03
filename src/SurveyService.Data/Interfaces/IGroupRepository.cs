@@ -2,6 +2,7 @@ using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,4 +17,6 @@ public interface IGroupRepository
   Task<DbGroup> GetAsync(GetGroupFilter filter);
 
   Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId);
+
+  Task<bool> EditAsync(JsonPatchDocument<DbGroup> patch, DbGroup group);
 }
