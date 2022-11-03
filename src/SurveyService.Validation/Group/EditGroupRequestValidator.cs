@@ -48,7 +48,7 @@ public class EditGroupRequestValidator : BaseEditRequestValidator<EditGroupReque
     #region description
 
     AddFailureForPropertyIf(
-      nameof(EditGroupRequest.Subject),
+      nameof(EditGroupRequest.Description),
       x => x == OperationType.Replace,
       new()
       {
