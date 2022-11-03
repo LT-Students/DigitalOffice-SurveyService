@@ -1,8 +1,11 @@
-﻿using LT.DigitalOffice.SurveyService.Data.Interfaces;
+﻿using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +17,7 @@ namespace LT.DigitalOffice.SurveyService.Data;
 public class QuestionRepository : IQuestionRepository
 {
   private readonly IDataProvider _provider;
+  private readonly IHttpContextAccessor _httpContextAccessor;
   private IQueryable<DbQuestion> CreateGetPredicates(
     GetQuestionFilter filter,
     IQueryable<DbQuestion> dbQuestions) 
@@ -37,9 +41,11 @@ public class QuestionRepository : IQuestionRepository
   }
   
   public QuestionRepository(
-    IDataProvider provider)
+    IDataProvider provider,
+    IHttpContextAccessor httpContextAccessor)
   {
     _provider = provider;
+    _httpContextAccessor = httpContextAccessor;
   }
 
   public async Task<Guid?> CreateAsync(DbQuestion dbQuestion)
@@ -73,7 +79,7 @@ public class QuestionRepository : IQuestionRepository
   {
     DbQuestion question = await _provider.Questions.FirstOrDefaultAsync(q => q.GroupId == groupId);
 
-    if((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
+    if ((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
     {
       return false;
     }
@@ -109,5 +115,31 @@ public class QuestionRepository : IQuestionRepository
     return (
       await query.Skip(filter.SkipCount).Take(filter.TakeCount).ToListAsync(),
       await query.CountAsync());
+  }
+
+  public async Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion question)
+  {
+
+    if (question is null || patch is null)
+    {
+      return false;
+    }
+
+    patch.ApplyTo(question);
+    question.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+    question.ModifiedAtUtc = DateTime.UtcNow;
+
+    await _provider.SaveAsync();
+
+    return true;
+  }
+
+  public Task<DbQuestion> GetQuestionWithAnswersAsync(Guid questionId)
+  {
+    return _provider.Questions
+      .Where(q => q.Id == questionId)
+      .Include(question => question.Options)
+      .ThenInclude(option => option.UsersAnswers)
+      .FirstOrDefaultAsync();
   }
 }
