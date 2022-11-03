@@ -25,7 +25,7 @@ public class OptionInfoMapper: IOptionInfoMapper
         Id = dbOption.Id,
         Content = dbOption.Content,
         IsCustom = dbOption.IsCustom,
-        UsersAnswers = dbOption.UsersAnswers?.Select(ua => _userAnswerInfoMapper.Map(ua, usersData)).ToList()
+        UsersAnswers = dbOption.UsersAnswers?.Select(dbUserAnswer => _userAnswerInfoMapper.Map(dbUserAnswer, usersData)).ToList()
       };
   }
 }

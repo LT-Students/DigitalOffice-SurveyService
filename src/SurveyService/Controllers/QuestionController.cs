@@ -1,7 +1,9 @@
-﻿using LT.DigitalOffice.Kernel.Responses;
+using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Models;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
+using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Question;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,6 +21,14 @@ public class QuestionController : ControllerBase
     [FromBody] CreateSingleQuestionRequest request)
   {
     return await command.ExecuteAsync(request);
+  }
+  
+  [HttpGet("get")]
+  public async Task<OperationResultResponse<QuestionResponse>> GetAsync(
+    [FromServices] IGetQuestionCommand command,
+    [FromQuery] GetQuestionFilter filter)
+  {
+    return await command.ExecuteAsync(filter);
   }
 
   [HttpGet("find")]

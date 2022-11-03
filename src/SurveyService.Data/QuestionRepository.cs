@@ -3,6 +3,7 @@ using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,28 @@ public class QuestionRepository : IQuestionRepository
 {
   private readonly IDataProvider _provider;
   private readonly IHttpContextAccessor _httpContextAccessor;
+  private IQueryable<DbQuestion> CreateGetPredicates(
+    GetQuestionFilter filter,
+    IQueryable<DbQuestion> dbQuestions) 
+  {
+    if (filter.IncludeOptions)
+    {
+      if (filter.IncludeAnswers)
+      {
+        dbQuestions = dbQuestions?
+          .Include(question => question.Options.Where(option => option.IsActive))
+          .ThenInclude(option => option.UsersAnswers);
+      }
+      else
+      {
+        dbQuestions = dbQuestions?
+          .Include(question => question.Options.Where(option => option.IsActive && !option.IsCustom));
+      }
+    }
 
+    return dbQuestions;
+  }
+  
   public QuestionRepository(
     IDataProvider provider,
     IHttpContextAccessor httpContextAccessor)
@@ -42,6 +64,15 @@ public class QuestionRepository : IQuestionRepository
   public Task<DbQuestion> GetAsync(Guid questionId)
   {
     return _provider.Questions.FirstOrDefaultAsync(x => x.Id == questionId);
+  }
+
+  public Task<DbQuestion> GetAsync(GetQuestionFilter filter)
+  {
+    return filter is null
+      ? Task.FromResult(default(DbQuestion))
+      : CreateGetPredicates(filter,
+        _provider.Questions.AsQueryable())
+        .FirstOrDefaultAsync(question => question.Id == filter.QuestionId);
   }
 
   public async Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult)

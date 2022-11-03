@@ -1,5 +1,6 @@
 ﻿using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.SurveyService.Models.Db;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question.Filters;
 using Microsoft.AspNetCore.JsonPatch;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using System;
@@ -16,6 +17,8 @@ public interface IQuestionRepository
   Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult);
 
   Task<DbQuestion> GetAsync(Guid questionId);
+  
+  Task<DbQuestion> GetAsync(GetQuestionFilter filter);
 
   Task<bool> DoesExistAsync(Guid questionId);
 
