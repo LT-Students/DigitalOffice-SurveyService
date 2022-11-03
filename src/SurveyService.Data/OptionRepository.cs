@@ -60,16 +60,4 @@ public class OptionRepository : IOptionRepository
 
     return _provider.SaveAsync();
   }
-
-  public Task DisactivateAsync(ICollection<DbOption> options)
-  {
-    foreach (DbOption dbOption in options)
-    {
-      dbOption.IsActive = false;
-      dbOption.ModifiedAtUtc = DateTime.UtcNow;
-      dbOption.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-    }
-
-    return _provider.SaveAsync();
-  }
 }

@@ -19,10 +19,10 @@ public class QuestionRepository : IQuestionRepository
   private readonly IDataProvider _provider;
   private readonly IHttpContextAccessor _httpContextAccessor;
   private readonly IOptionRepository _optionRepository;
-  
+
   private IQueryable<DbQuestion> CreateGetPredicates(
     GetQuestionFilter filter,
-    IQueryable<DbQuestion> dbQuestions) 
+    IQueryable<DbQuestion> dbQuestions)
   {
     if (filter.IncludeOptions)
     {
@@ -41,7 +41,7 @@ public class QuestionRepository : IQuestionRepository
 
     return dbQuestions;
   }
-  
+
   public QuestionRepository(
     IDataProvider provider,
     IHttpContextAccessor httpContextAccessor,
