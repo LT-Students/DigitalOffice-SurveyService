@@ -11,35 +11,34 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LT.DigitalOffice.SurveyService.Broker.Requests
+namespace LT.DigitalOffice.SurveyService.Broker.Requests;
+
+public class UserService : IUserService
 {
-  public class UserService : IUserService
+  private readonly IRequestClient<IGetUsersDataRequest> _rcGetUsersData;
+  private readonly ILogger<UserService> _logger;
+
+  public UserService(
+    IRequestClient<IGetUsersDataRequest> rcGetUsersData,
+    ILogger<UserService> logger)
   {
-    private readonly IRequestClient<IGetUsersDataRequest> _rcGetUsersData;
-    private readonly ILogger<UserService> _logger;
+    _rcGetUsersData = rcGetUsersData;
+    _logger = logger;
+  }
 
-    public UserService(
-      IRequestClient<IGetUsersDataRequest> rcGetUsersData,
-      ILogger<UserService> logger)
+  public async Task<List<UserData>> GetUsersDataAsync(
+    List<Guid> usersIds,
+    List<string> errors,
+    CancellationToken cancellationToken = default) 
+  {
+    if (usersIds is null || !usersIds.Any())
     {
-      _rcGetUsersData = rcGetUsersData;
-      _logger = logger;
+      return null;
     }
-
-    public async Task<List<UserData>> GetUsersDataAsync(
-      List<Guid> usersIds,
-      List<string> errors,
-      CancellationToken cancellationToken = default)
-    {
-      if (usersIds is null || !usersIds.Any())
-      {
-        return null;
-      }
-
-      return (await _rcGetUsersData.ProcessRequest<IGetUsersDataRequest, IGetUsersDataResponse>(
-        IGetUsersDataRequest.CreateObj(usersIds),
-        errors,
-        _logger))?.UsersData;
-    }
+    
+    return (await _rcGetUsersData.ProcessRequest<IGetUsersDataRequest, IGetUsersDataResponse>(
+      IGetUsersDataRequest.CreateObj(usersIds),
+      errors,
+      _logger))?.UsersData;
   }
 }

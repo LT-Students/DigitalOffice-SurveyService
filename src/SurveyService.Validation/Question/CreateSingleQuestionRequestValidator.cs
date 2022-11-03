@@ -2,7 +2,10 @@
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using LT.DigitalOffice.SurveyService.Validation.Question.Interfaces;
+using LT.DigitalOffice.SurveyService.Validation.Question.Resources;
 using System;
+using System.Globalization;
+using System.Threading;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Question;
 
@@ -12,15 +15,17 @@ public class CreateSingleQuestionRequestValidator : AbstractValidator<CreateSing
     IQuestionRepository questionRepository
     )
   {
+    Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+
     RuleFor(q => q.Content)
       .MaximumLength(300)
-      .WithMessage("Content is too long.");
+      .WithMessage(CreateQuestionRequestValidatorResource.ContentTooLong);
 
     When(q => q.Deadline.HasValue, () =>
     {
       RuleFor(q => q.Deadline.Value)
         .Must(d => d > DateTime.UtcNow.AddDays(1).AddSeconds(2))
-        .WithMessage("The deadline must be at least 24 hours from now.");
+        .WithMessage(CreateQuestionRequestValidatorResource.EarlyDeadline);
     }).Otherwise(() =>
     {
       RuleFor(question => question.HasRealTimeResult)
@@ -31,20 +36,20 @@ public class CreateSingleQuestionRequestValidator : AbstractValidator<CreateSing
     {
       RuleFor(q => q)
         .MustAsync(async (q, _) => await questionRepository.CheckGroupProperties(q.GroupId.Value, q.Deadline, q.HasRealTimeResult))
-        .WithMessage("Group properties are incorrect, please - check the deadline and result display settings");
+        .WithMessage(CreateQuestionRequestValidatorResource.IncorrectGroupProperties);
     });
 
     When(q => !q.HasCustomOptions, () =>
     {
       RuleFor(q => q.Options)
         .NotEmpty()
-        .WithMessage("This question should have one option at least.");
+        .WithMessage(CreateQuestionRequestValidatorResource.QuestionWithNoOption);
     });
 
     RuleForEach(q => q.Options)
       .Must(o => !o.IsCustom)
-      .WithMessage("Option cannot be a custom.")
+      .WithMessage(CreateQuestionRequestValidatorResource.OptionCustom)
       .Must(o => o.Content.Length < 301)
-      .WithMessage("Option is too long.");
+      .WithMessage(CreateQuestionRequestValidatorResource.OptionTooLong);
   }
 }

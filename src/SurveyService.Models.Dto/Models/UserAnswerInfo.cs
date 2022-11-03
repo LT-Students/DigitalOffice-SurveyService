@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace LT.DigitalOffice.SurveyService.Models.Dto.Models;
 
