@@ -1,3 +1,55 @@
+﻿using FluentValidation.Results;
+using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
+using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Kernel.Helpers.Interfaces;
+using LT.DigitalOffice.Kernel.Responses;
+using LT.DigitalOffice.SurveyService.Business.Commands.Group.Interfaces;
+using LT.DigitalOffice.SurveyService.Data.Interfaces;
+using LT.DigitalOffice.SurveyService.Mappers.Patch.Interfaces;
+using LT.DigitalOffice.SurveyService.Models.Db;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
+using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
+using LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+
+namespace LT.DigitalOffice.SurveyService.Business.Commands.Group;
+
+public class EditGroupCommand : IEditGroupCommand
+{
+  private readonly IHttpContextAccessor _httpContextAccessor;
+  private readonly IGroupRepository _groupRepository;
+  private readonly IQuestionRepository _questionRepository;
+  private readonly IAccessValidator _accessValidator;
+  private readonly IResponseCreator _responseCreator;
+  private readonly IEditGroupRequestValidator _validator;
+  private readonly IPatchDbGroupMapper _mapper;
+
+  public EditGroupCommand(
+    IHttpContextAccessor httpContextAccessor,
+    IGroupRepository groupRepository,
+    IAccessValidator accessValidator,
+    IResponseCreator responseCreator,
+    IEditGroupRequestValidator validator,
+    IQuestionRepository questionRepository,
+    IPatchDbGroupMapper mapper)
+  {
+    _httpContextAccessor = httpContextAccessor;
+    _groupRepository = groupRepository;
+    _questionRepository = questionRepository;
+    _accessValidator = accessValidator;
+    _responseCreator = responseCreator;
+    _validator = validator;
+    _mapper = mapper;
+  }
+
+  public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid GroupId, JsonPatchDocument<EditGroupRequest> request)
+  {
     Guid senderId = _httpContextAccessor.HttpContext.GetUserId();
     DbGroup dbGroup = await _groupRepository.GetAsync(new GetGroupFilter { GroupId = GroupId });
 
