@@ -1,5 +1,6 @@
 ﻿using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.SurveyService.Models.Db;
+using Microsoft.AspNetCore.JsonPatch;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
 using System;
 using System.Collections.Generic;
@@ -19,4 +20,8 @@ public interface IQuestionRepository
   Task<bool> DoesExistAsync(Guid questionId);
 
   Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId);
+
+  Task<DbQuestion> GetQuestionWithAnswersAsync(Guid questionId);
+
+  Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion question);
 }

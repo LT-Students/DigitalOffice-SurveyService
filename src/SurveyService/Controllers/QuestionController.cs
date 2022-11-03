@@ -2,6 +2,7 @@
 using LT.DigitalOffice.SurveyService.Business.Commands.Question.interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Models;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -26,5 +27,14 @@ public class QuestionController : ControllerBase
     [FromQuery] FindQuestionsFilter filter)
   {
     return await command.ExecuteAsync(filter);
+  }
+
+  [HttpPatch("edit")]
+  public async Task<OperationResultResponse<bool>> EditAsync(
+    [FromServices] IEditQuestionCommand command,
+    [FromQuery] Guid questionId,
+    [FromBody] JsonPatchDocument<EditQuestionRequest> request)
+  {
+    return await command.ExecuteAsync(questionId, request);
   }
 }
