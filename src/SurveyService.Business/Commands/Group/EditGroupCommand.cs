@@ -53,11 +53,12 @@ public class EditGroupCommand : IEditGroupCommand
     Guid senderId = _httpContextAccessor.HttpContext.GetUserId();
     DbGroup dbGroup = await _groupRepository.GetAsync(new GetGroupFilter { GroupId = GroupId });
 
-    if (!await _accessValidator.IsAdminAsync(senderId) && senderId != dbGroup.CreatedBy)
+    if (!await _accessValidator.IsAdminAsync(senderId)
+      && senderId != dbGroup.CreatedBy)
     {
       return _responseCreator.CreateFailureResponse<bool>(
         HttpStatusCode.Forbidden,
-        new List<string> { "You cannot edit this group." });
+        new List<string> { "You have no rights to edit this group" });
     }
 
     ValidationResult validationResult = await _validator.ValidateAsync(request);
@@ -69,6 +70,8 @@ public class EditGroupCommand : IEditGroupCommand
         validationResult.Errors.Select(e => e.ErrorMessage).ToList());
     }
 
+    Guid modifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+
     if (request.Operations.Any(op => op.path.EndsWith(nameof(EditGroupRequest.IsActive), StringComparison.OrdinalIgnoreCase))
       && !request.Operations
         .Where(op => op.path.EndsWith(nameof(EditGroupRequest.IsActive), StringComparison.OrdinalIgnoreCase))
@@ -79,7 +82,7 @@ public class EditGroupCommand : IEditGroupCommand
         })
         .First())
     {
-      await _questionRepository.DisactivateAsync(dbGroup.Questions);
+      await _questionRepository.DisactivateAsync(dbGroup.Questions, modifiedBy);
     }
 
     return new OperationResultResponse<bool>(

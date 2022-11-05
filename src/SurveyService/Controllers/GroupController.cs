@@ -1,5 +1,4 @@
 using LT.DigitalOffice.Kernel.Responses;
-using LT.DigitalOffice.SurveyService.Business.Commands.Group;
 using LT.DigitalOffice.SurveyService.Business.Commands.Group.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
@@ -7,7 +6,6 @@ using LT.DigitalOffice.SurveyService.Models.Dto.Responses.Group;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Controllers;

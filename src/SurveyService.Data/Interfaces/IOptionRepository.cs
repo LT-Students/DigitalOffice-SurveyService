@@ -13,5 +13,5 @@ public interface IOptionRepository
 
   Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds);
 
-  Task DisactivateAsync(ICollection<DbOption> options);
+  Task DisactivateAsync(ICollection<DbOption> options, Guid modifiedBy);
 }

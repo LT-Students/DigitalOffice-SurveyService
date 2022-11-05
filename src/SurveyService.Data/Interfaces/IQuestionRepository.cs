@@ -22,7 +22,7 @@ public interface IQuestionRepository
 
   Task<bool> DoesExistAsync(Guid questionId);
 
-  Task DisactivateAsync(ICollection<DbQuestion> questions);
+  Task DisactivateAsync(ICollection<DbQuestion> questions, Guid modifiedBy);
 
   Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId);
 

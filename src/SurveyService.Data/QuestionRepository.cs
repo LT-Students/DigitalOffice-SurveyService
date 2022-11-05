@@ -83,7 +83,7 @@ public class QuestionRepository : IQuestionRepository
   {
     DbQuestion question = await _provider.Questions.FirstOrDefaultAsync(q => q.GroupId == groupId);
 
-    if ((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
+    if (question is null || question.Deadline != deadline || question.HasRealTimeResult != hasRealTimeResult)
     {
       return false;
     }
@@ -121,14 +121,14 @@ public class QuestionRepository : IQuestionRepository
       await query.CountAsync());
   }
 
-  public Task DisactivateAsync(ICollection<DbQuestion> questions)
+  public Task DisactivateAsync(ICollection<DbQuestion> questions, Guid modifiedBy)
   {
     foreach (DbQuestion dbQuestion in questions)
     {
       dbQuestion.IsActive = false;
       dbQuestion.ModifiedAtUtc = DateTime.UtcNow;
-      dbQuestion.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-      _optionRepository.DisactivateAsync(dbQuestion.Options);
+      dbQuestion.ModifiedBy = modifiedBy;
+      _optionRepository.DisactivateAsync(dbQuestion.Options, modifiedBy);
     }
 
     return _provider.SaveAsync();
