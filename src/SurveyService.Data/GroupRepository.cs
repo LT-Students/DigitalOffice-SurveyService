@@ -73,6 +73,14 @@ public class GroupRepository : IGroupRepository
               .FirstOrDefaultAsync();
   }
 
+  public Task<DbGroup> GetAsync(Guid groupId)
+  {
+    return _provider.Groups.Where(group => group.Id == groupId).AsQueryable()
+      .Include(group => group.Questions)
+      .ThenInclude(question => question.Options)
+      .FirstOrDefaultAsync();
+  }
+
   public async Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId)
   {
     IQueryable<DbGroup> query = _provider.Groups.AsQueryable().OrderByDescending(g => g.CreatedAtUtc);

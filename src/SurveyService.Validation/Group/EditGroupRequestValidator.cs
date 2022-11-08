@@ -18,12 +18,12 @@ public class EditGroupRequestValidator : BaseEditRequestValidator<EditGroupReque
     #region paths
 
     AddСorrectPaths(
-        new List<string>
-        {
-          nameof(EditGroupRequest.Subject),
-          nameof(EditGroupRequest.Description),
-          nameof(EditGroupRequest.IsActive)
-        });
+      new List<string>
+      {
+        nameof(EditGroupRequest.Subject),
+        nameof(EditGroupRequest.Description),
+        nameof(EditGroupRequest.IsActive)
+      });
 
     AddСorrectOperations(nameof(EditGroupRequest.Subject), new() { OperationType.Replace });
     AddСorrectOperations(nameof(EditGroupRequest.Description), new() { OperationType.Replace });

@@ -51,7 +51,7 @@ public class EditGroupCommand : IEditGroupCommand
   public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid GroupId, JsonPatchDocument<EditGroupRequest> request)
   {
     Guid senderId = _httpContextAccessor.HttpContext.GetUserId();
-    DbGroup dbGroup = await _groupRepository.GetAsync(new GetGroupFilter { GroupId = GroupId });
+    DbGroup dbGroup = await _groupRepository.GetAsync(GroupId);
 
     if (!await _accessValidator.IsAdminAsync(senderId)
       && senderId != dbGroup.CreatedBy)

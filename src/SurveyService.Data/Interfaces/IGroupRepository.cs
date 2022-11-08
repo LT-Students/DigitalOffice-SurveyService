@@ -16,6 +16,8 @@ public interface IGroupRepository
 
   Task<DbGroup> GetAsync(GetGroupFilter filter);
 
+  Task<DbGroup> GetAsync(Guid groupId);
+
   Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId);
 
   Task<bool> EditAsync(JsonPatchDocument<DbGroup> patch, DbGroup group);
