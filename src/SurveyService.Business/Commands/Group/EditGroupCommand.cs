@@ -70,8 +70,6 @@ public class EditGroupCommand : IEditGroupCommand
         validationResult.Errors.Select(e => e.ErrorMessage).ToList());
     }
 
-    Guid modifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-
     if (request.Operations.Any(op => op.path.EndsWith(nameof(EditGroupRequest.IsActive), StringComparison.OrdinalIgnoreCase))
       && !request.Operations
         .Where(op => op.path.EndsWith(nameof(EditGroupRequest.IsActive), StringComparison.OrdinalIgnoreCase))
@@ -82,7 +80,7 @@ public class EditGroupCommand : IEditGroupCommand
         })
         .First())
     {
-      await _questionRepository.DisactivateAsync(dbGroup.Questions, modifiedBy);
+      await _questionRepository.DisactivateAsync(dbGroup.Questions, senderId);
     }
 
     return new OperationResultResponse<bool>(
