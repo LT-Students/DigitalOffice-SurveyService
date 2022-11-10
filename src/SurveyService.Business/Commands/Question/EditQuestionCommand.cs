@@ -65,8 +65,6 @@ public class EditQuestionCommand : IEditQuestionCommand
        (HttpStatusCode.BadRequest, validationResult.Errors.Select(e => e.ErrorMessage).ToList());
     }
 
-    Guid modifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-
     if (request.Operations.Any(op => op.path.EndsWith(nameof(EditQuestionRequest.IsActive), StringComparison.OrdinalIgnoreCase))
       && !request.Operations
         .Where(op => op.path.EndsWith(nameof(EditQuestionRequest.IsActive), StringComparison.OrdinalIgnoreCase))
@@ -77,7 +75,7 @@ public class EditQuestionCommand : IEditQuestionCommand
         })
         .First())
     {
-      await _optionRepository.DisactivateAsync(dbQuestion.Options, modifiedBy);
+      await _optionRepository.DisactivateAsync(dbQuestion.Options, requestSenderId);
     }
 
     return new OperationResultResponse<bool>(
