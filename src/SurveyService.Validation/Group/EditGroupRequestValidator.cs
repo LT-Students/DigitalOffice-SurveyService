@@ -52,7 +52,7 @@ public class EditGroupRequestValidator : BaseEditRequestValidator<EditGroupReque
       x => x == OperationType.Replace,
       new()
       {
-        { x => x.value.ToString().Trim().Length < 501, "Description is too long." }
+        { x => x.value is null || x.value.ToString().Trim().Length < 501, "Description is too long." }
       },
       CascadeMode.Stop);
 
