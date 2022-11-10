@@ -10,6 +10,7 @@ using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -45,17 +46,17 @@ public class EditOptionCommand : IEditOptionCommand
     _editOptionRequestValidator = editOptionRequestValidator;
   }
   
-  public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid optionId, JsonPatchDocument<EditOptionRequest> request)
+  public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid optionId, JsonPatchDocument<EditOptionRequest> patch)
   {
-    Guid userId = _httpContextAccessor.HttpContext.GetUserId();
+    Guid requestSenderId = _httpContextAccessor.HttpContext.GetUserId();
     DbOption dbOption = (await _optionRepository.GetByIdsAsync(new List<Guid> { optionId })).FirstOrDefault();
 
-    if (!await _accessValidator.IsAdminAsync(userId) && userId != dbOption.CreatedBy)
+    if (!await _accessValidator.IsAdminAsync(requestSenderId) && requestSenderId != dbOption.CreatedBy)
     {
       return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.Forbidden);
     }
 
-    ValidationResult validationResult = await _editOptionRequestValidator.ValidateAsync((dbOption, request));
+    ValidationResult validationResult = await _editOptionRequestValidator.ValidateAsync((dbOption, patch));
 
     if (!validationResult.IsValid)
     {
@@ -63,15 +64,21 @@ public class EditOptionCommand : IEditOptionCommand
         validationResult.Errors.Select(error => error.ErrorMessage).ToList());
     }
     
-    if (request.Operations.Any(operation => operation.path.EndsWith(nameof(EditOptionRequest.IsActive),
-          StringComparison.OrdinalIgnoreCase) && request.Operations.Where(operation => operation.path.EndsWith(nameof(EditOptionRequest.IsActive), StringComparison.OrdinalIgnoreCase)).Select(
-          operation =>
+    if (patch.Operations.Any(operation =>
+          operation.path.EndsWith(nameof(EditOptionRequest.IsActive), StringComparison.OrdinalIgnoreCase)) &&
+        patch.Operations
+          .Where(operation =>
+            operation.path.EndsWith(nameof(EditOptionRequest.IsActive), StringComparison.OrdinalIgnoreCase))
+          .Select(operation =>
           {
             bool.TryParse(operation.value.ToString(), out bool value);
             return value;
           })
-          )
-        .First())
-    return new OperationResultResponse<bool>(null);
+          .FirstOrDefault())
+    {
+      await 
+    }
+
+    return new OperationResultResponse<bool>(body: await _optionRepository.EditAsync(_mapper.Map(patch), dbOption));
   }
 }

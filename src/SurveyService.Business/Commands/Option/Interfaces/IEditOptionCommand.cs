@@ -10,5 +10,5 @@ namespace LT.DigitalOffice.SurveyService.Business.Commands.Option.Interfaces;
 [AutoInject]
 public interface IEditOptionCommand
 {
-  Task<OperationResultResponse<bool>> ExecuteAsync(Guid optionId, JsonPatchDocument<EditOptionRequest> request);
+  Task<OperationResultResponse<bool>> ExecuteAsync(Guid optionId, JsonPatchDocument<EditOptionRequest> patch);
 }

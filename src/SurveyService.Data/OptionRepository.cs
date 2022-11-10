@@ -3,9 +3,11 @@ using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,5 +61,20 @@ public class OptionRepository : IOptionRepository
     }
 
     return _provider.SaveAsync();
+  }
+
+  public async Task<bool> EditAsync(JsonPatchDocument<DbOption> patch, DbOption dbOption)
+  {
+    if (patch is null || dbOption is null)
+    {
+      return false;
+    }
+    
+    patch.ApplyTo(dbOption);
+    dbOption.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+    dbOption.ModifiedAtUtc = DateTime.UtcNow;
+    await _provider.SaveAsync();
+
+    return true;
   }
 }
