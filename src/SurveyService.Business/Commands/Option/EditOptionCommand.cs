@@ -1,3 +1,4 @@
+using FluentValidation.Results;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.Helpers.Interfaces;
@@ -10,14 +11,11 @@ using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace LT.DigitalOffice.SurveyService.Business.Commands.Option;
 
