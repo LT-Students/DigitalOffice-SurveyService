@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using System;
 using System.Collections.Generic;
 
-
 namespace LT.DigitalOffice.SurveyService.Validation.Option;
 
 public class EditOptionRequestValidator : ExtendedEditRequestValidator<DbOption, EditOptionRequest>,  IEditOptionRequestValidator
