@@ -40,8 +40,10 @@ public class EditOptionRequestValidator : ExtendedEditRequestValidator<DbOption,
       x => x == OperationType.Replace,
       new Dictionary<Func<Operation<EditOptionRequest>, bool>, string>
       {
-        {x => x.value?.ToString()?.Length < 300, "Content lenght must be less than 300 symbols."}
-      });
+        {x => !string.IsNullOrWhiteSpace(x.value?.ToString()), "Content string must not be null or empty"},
+        {x => x.value.ToString().Length < 300, "Content lenght must be less than 300 symbols."}
+      },
+      CascadeMode.Stop);
 
     #endregion
 
