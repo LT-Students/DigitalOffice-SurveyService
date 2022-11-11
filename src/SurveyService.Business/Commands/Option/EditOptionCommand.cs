@@ -63,21 +63,6 @@ public class EditOptionCommand : IEditOptionCommand
       return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.BadRequest,
         validationResult.Errors.Select(error => error.ErrorMessage).ToList());
     }
-    
-    if (patch.Operations.Any(operation =>
-          operation.path.EndsWith(nameof(EditOptionRequest.IsActive), StringComparison.OrdinalIgnoreCase)) &&
-        patch.Operations
-          .Where(operation =>
-            operation.path.EndsWith(nameof(EditOptionRequest.IsActive), StringComparison.OrdinalIgnoreCase))
-          .Select(operation =>
-          {
-            bool.TryParse(operation.value.ToString(), out bool value);
-            return value;
-          })
-          .FirstOrDefault())
-    {
-      await 
-    }
 
     return new OperationResultResponse<bool>(body: await _optionRepository.EditAsync(_mapper.Map(patch), dbOption));
   }
