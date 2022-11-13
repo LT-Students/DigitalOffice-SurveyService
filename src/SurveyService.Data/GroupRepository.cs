@@ -75,7 +75,7 @@ public class GroupRepository : IGroupRepository
 
   public Task<DbGroup> GetAsync(Guid groupId)
   {
-    return _provider.Groups.Where(group => group.Id == groupId).AsQueryable()
+    return _provider.Groups.Where(group => group.Id == groupId)
       .Include(group => group.Questions)
       .ThenInclude(question => question.Options)
       .FirstOrDefaultAsync();
