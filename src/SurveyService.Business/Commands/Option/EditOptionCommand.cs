@@ -12,7 +12,6 @@ using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -47,14 +46,14 @@ public class EditOptionCommand : IEditOptionCommand
   public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid optionId, JsonPatchDocument<EditOptionRequest> patch)
   {
     Guid requestSenderId = _httpContextAccessor.HttpContext.GetUserId();
-    DbOption dbOption = (await _optionRepository.GetByIdsAsync(new List<Guid> { optionId })).FirstOrDefault();
+    DbOption dbOption = await _optionRepository.GetByIdAsync(optionId);
 
     if (!await _accessValidator.IsAdminAsync(requestSenderId) && requestSenderId != dbOption.CreatedBy)
     {
       return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.Forbidden);
     }
 
-    ValidationResult validationResult = await _editOptionRequestValidator.ValidateAsync((dbOption, patch));
+    ValidationResult validationResult = await _editOptionRequestValidator.ValidateAsync(patch);
 
     if (!validationResult.IsValid)
     {

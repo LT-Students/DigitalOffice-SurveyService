@@ -1,7 +1,6 @@
 using FluentValidation;
 using FluentValidation.Validators;
 using LT.DigitalOffice.Kernel.Validators;
-using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Option;
 using LT.DigitalOffice.SurveyService.Validation.Option.Interfaces;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -10,7 +9,7 @@ using System.Collections.Generic;
 
 namespace LT.DigitalOffice.SurveyService.Validation.Option;
 
-public class EditOptionRequestValidator : ExtendedEditRequestValidator<DbOption, EditOptionRequest>,  IEditOptionRequestValidator
+public class EditOptionRequestValidator : BaseEditRequestValidator<EditOptionRequest>,  IEditOptionRequestValidator
 {
   private void HandleInternalPropertyValidation(
     Operation<EditOptionRequest> requestedOperation,
@@ -22,8 +21,7 @@ public class EditOptionRequestValidator : ExtendedEditRequestValidator<DbOption,
     #region paths
     
     AddСorrectPaths(
-      new List<string> 
-      {
+      new List<string> {
         nameof(EditOptionRequest.Content),
         nameof(EditOptionRequest.IsActive)
       });
@@ -38,10 +36,9 @@ public class EditOptionRequestValidator : ExtendedEditRequestValidator<DbOption,
     AddFailureForPropertyIf(
       nameof(EditOptionRequest.Content),
       x => x == OperationType.Replace,
-      new Dictionary<Func<Operation<EditOptionRequest>, bool>, string>
-      {
+      new Dictionary<Func<Operation<EditOptionRequest>, bool>, string> {
         {x => !string.IsNullOrWhiteSpace(x.value?.ToString()), "Content string must not be null or empty"},
-        {x => x.value.ToString().Length < 300, "Content lenght must be less than 300 symbols."}
+        {x => x.value.ToString().Length < 301, "Content lenght must be less than 300 symbols."}
       },
       CascadeMode.Stop);
 
@@ -52,8 +49,7 @@ public class EditOptionRequestValidator : ExtendedEditRequestValidator<DbOption,
     AddFailureForPropertyIf(
       nameof(EditOptionRequest.IsActive),
       x => x == OperationType.Replace,
-      new Dictionary<Func<Operation<EditOptionRequest>, bool>, string>
-      {
+      new Dictionary<Func<Operation<EditOptionRequest>, bool>, string> {
         {x => bool.TryParse(x.value?.ToString(), out bool _),
           "Incorrect value format for IsActive"}
       });
@@ -63,7 +59,7 @@ public class EditOptionRequestValidator : ExtendedEditRequestValidator<DbOption,
 
   public EditOptionRequestValidator()
   {
-    RuleForEach(x => x.Item2.Operations)
+    RuleForEach(x => x.Operations)
       .Custom(HandleInternalPropertyValidation);
   }
 }

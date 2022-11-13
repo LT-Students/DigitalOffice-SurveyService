@@ -11,6 +11,8 @@ namespace LT.DigitalOffice.SurveyService.Data.Interfaces;
 public interface IOptionRepository
 {
   Task<Guid?> CreateAsync(DbOption dbOption);
+
+  Task<DbOption> GetByIdAsync(Guid optionId);
   
   Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds);
   

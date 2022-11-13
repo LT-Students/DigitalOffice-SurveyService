@@ -16,6 +16,7 @@ public class PatchDbOptionMapper : IPatchDbOptionMapper
     }
 
     JsonPatchDocument<DbOption> dbRequest = new();
+    
     foreach (Operation<EditOptionRequest> requestOperation in request.Operations)
     {
       dbRequest.Operations.Add(new Operation<DbOption>(requestOperation.op, requestOperation.path,
