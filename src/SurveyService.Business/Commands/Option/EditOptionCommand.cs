@@ -46,8 +46,13 @@ public class EditOptionCommand : IEditOptionCommand
   public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid optionId, JsonPatchDocument<EditOptionRequest> patch)
   {
     Guid requestSenderId = _httpContextAccessor.HttpContext.GetUserId();
-    DbOption dbOption = await _optionRepository.GetByIdAsync(optionId);
+    DbOption dbOption = await _optionRepository.GetAsync(optionId);
 
+    if (dbOption is null)
+    {
+      return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.NotFound);
+    }
+    
     if (!await _accessValidator.IsAdminAsync(requestSenderId) && requestSenderId != dbOption.CreatedBy)
     {
       return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.Forbidden);
@@ -61,6 +66,7 @@ public class EditOptionCommand : IEditOptionCommand
         validationResult.Errors.Select(error => error.ErrorMessage).ToList());
     }
 
-    return new OperationResultResponse<bool>(body: await _optionRepository.EditAsync(_mapper.Map(patch), dbOption));
+    return new OperationResultResponse<bool>(
+      body: await _optionRepository.EditAsync(_mapper.Map(patch), dbOption, _httpContextAccessor.HttpContext.GetUserId()));
   }
 }

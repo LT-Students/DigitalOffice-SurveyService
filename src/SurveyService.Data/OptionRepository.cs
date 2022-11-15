@@ -38,7 +38,7 @@ public class OptionRepository : IOptionRepository
     return dbOption.Id;
   }
   
-  public async Task<DbOption> GetByIdAsync(Guid optionId)
+  public async Task<DbOption> GetAsync(Guid optionId)
   {
     return await _provider.Options.FindAsync(optionId);
   }
@@ -67,7 +67,7 @@ public class OptionRepository : IOptionRepository
     return _provider.SaveAsync();
   }
 
-  public async Task<bool> EditAsync(JsonPatchDocument<DbOption> patch, DbOption dbOption)
+  public async Task<bool> EditAsync(JsonPatchDocument<DbOption> patch, DbOption dbOption, Guid? modifiedBy = null)
   {
     if (patch is null || dbOption is null)
     {
@@ -75,7 +75,7 @@ public class OptionRepository : IOptionRepository
     }
     
     patch.ApplyTo(dbOption);
-    dbOption.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+    dbOption.ModifiedBy = modifiedBy;
     dbOption.ModifiedAtUtc = DateTime.UtcNow;
     await _provider.SaveAsync();
 

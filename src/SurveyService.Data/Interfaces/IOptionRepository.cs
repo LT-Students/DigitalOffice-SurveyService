@@ -12,11 +12,11 @@ public interface IOptionRepository
 {
   Task<Guid?> CreateAsync(DbOption dbOption);
 
-  Task<DbOption> GetByIdAsync(Guid optionId);
+  Task<DbOption> GetAsync(Guid optionId);
   
   Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds);
   
   Task DisactivateAsync(ICollection<DbOption> options);
 
-  Task<bool> EditAsync(JsonPatchDocument<DbOption> patch, DbOption dbOption);
+  Task<bool> EditAsync(JsonPatchDocument<DbOption> patch, DbOption dbOption, Guid? modifiedBy = null);
 }

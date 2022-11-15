@@ -37,7 +37,7 @@ public class EditOptionRequestValidator : BaseEditRequestValidator<EditOptionReq
       nameof(EditOptionRequest.Content),
       x => x == OperationType.Replace,
       new Dictionary<Func<Operation<EditOptionRequest>, bool>, string> {
-        {x => !string.IsNullOrWhiteSpace(x.value?.ToString()), "Content string must not be null or empty"},
+        {x => !string.IsNullOrWhiteSpace(x.value?.ToString()), "Content must not be null or empty"},
         {x => x.value.ToString().Length < 301, "Content lenght must be less than 300 symbols."}
       },
       CascadeMode.Stop);
@@ -50,8 +50,7 @@ public class EditOptionRequestValidator : BaseEditRequestValidator<EditOptionReq
       nameof(EditOptionRequest.IsActive),
       x => x == OperationType.Replace,
       new Dictionary<Func<Operation<EditOptionRequest>, bool>, string> {
-        {x => bool.TryParse(x.value?.ToString(), out bool _),
-          "Incorrect value format for IsActive"}
+        {x => bool.TryParse(x.value?.ToString(), out bool _), "Incorrect value format for IsActive"}
       });
 
     #endregion
