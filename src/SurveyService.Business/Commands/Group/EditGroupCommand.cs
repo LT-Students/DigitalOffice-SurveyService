@@ -8,7 +8,6 @@ using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Mappers.Patch.Interfaces;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group;
-using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
 using LT.DigitalOffice.SurveyService.Validation.Group.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -53,6 +52,13 @@ public class EditGroupCommand : IEditGroupCommand
     Guid senderId = _httpContextAccessor.HttpContext.GetUserId();
     DbGroup dbGroup = await _groupRepository.GetAsync(GroupId);
 
+    if(dbGroup is null)
+    {
+      return _responseCreator.CreateFailureResponse<bool>(
+        HttpStatusCode.NotFound,
+        new List<string> { "Group not found." });
+    }
+
     if (!await _accessValidator.IsAdminAsync(senderId)
       && senderId != dbGroup.CreatedBy)
     {
@@ -80,10 +86,10 @@ public class EditGroupCommand : IEditGroupCommand
         })
         .First())
     {
-      await _questionRepository.DisactivateAsync(dbGroup.Questions, senderId);
+      await _questionRepository.DeactivateAsync(dbGroup.Questions, senderId);
     }
 
     return new OperationResultResponse<bool>(
-      body: await _groupRepository.EditAsync(_mapper.Map(request), dbGroup));
+      body: await _groupRepository.EditAsync(_mapper.Map(request), dbGroup, senderId));
   }
 }

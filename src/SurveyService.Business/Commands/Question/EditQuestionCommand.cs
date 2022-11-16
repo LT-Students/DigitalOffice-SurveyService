@@ -75,7 +75,7 @@ public class EditQuestionCommand : IEditQuestionCommand
         })
         .First())
     {
-      await _optionRepository.DisactivateAsync(dbQuestion.Options, requestSenderId);
+      await _optionRepository.DeactivateAsync(dbQuestion.Options, requestSenderId);
     }
 
     return new OperationResultResponse<bool>(

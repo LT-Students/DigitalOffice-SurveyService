@@ -106,16 +106,16 @@ public class GroupRepository : IGroupRepository
       await query.CountAsync());
   }
 
-  public async Task<bool> EditAsync(JsonPatchDocument<DbGroup> patch, DbGroup group)
+  public async Task<bool> EditAsync(JsonPatchDocument<DbGroup> patch, DbGroup dbGroup, Guid modifiedBy)
   {
-    if (group is null || patch is null)
+    if (dbGroup is null || patch is null)
     {
       return false;
     }
 
-    patch.ApplyTo(group);
-    group.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-    group.ModifiedAtUtc = DateTime.UtcNow;
+    patch.ApplyTo(dbGroup);
+    dbGroup.ModifiedBy = modifiedBy;
+    dbGroup.ModifiedAtUtc = DateTime.UtcNow;
 
     await _provider.SaveAsync();
 

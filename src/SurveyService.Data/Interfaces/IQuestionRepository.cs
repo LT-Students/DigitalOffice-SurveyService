@@ -22,11 +22,11 @@ public interface IQuestionRepository
 
   Task<bool> DoesExistAsync(Guid questionId);
 
-  Task DisactivateAsync(ICollection<DbQuestion> questions, Guid modifiedBy);
+  Task DeactivateAsync(ICollection<DbQuestion> dbQuestions, Guid modifiedBy);
 
   Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId);
 
   Task<DbQuestion> GetQuestionWithAnswersAsync(Guid questionId);
 
-  Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion question);
+  Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion dbQuestion);
 }

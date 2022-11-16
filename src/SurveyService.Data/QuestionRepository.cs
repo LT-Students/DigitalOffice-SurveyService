@@ -121,30 +121,30 @@ public class QuestionRepository : IQuestionRepository
       await query.CountAsync());
   }
 
-  public Task DisactivateAsync(ICollection<DbQuestion> questions, Guid modifiedBy)
+  public async Task DeactivateAsync(ICollection<DbQuestion> dbQuestions, Guid modifiedBy)
   {
-    foreach (DbQuestion dbQuestion in questions)
+    foreach (DbQuestion dbQuestion in dbQuestions)
     {
       dbQuestion.IsActive = false;
       dbQuestion.ModifiedAtUtc = DateTime.UtcNow;
       dbQuestion.ModifiedBy = modifiedBy;
-      _optionRepository.DisactivateAsync(dbQuestion.Options, modifiedBy);
+      await _optionRepository.DeactivateAsync(dbQuestion.Options, modifiedBy);
     }
 
-    return _provider.SaveAsync();
+    await _provider.SaveAsync();
   }
 
-  public async Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion question)
+  public async Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion dbQuestion)
   {
 
-    if (question is null || patch is null)
+    if (dbQuestion is null || patch is null)
     {
       return false;
     }
 
-    patch.ApplyTo(question);
-    question.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-    question.ModifiedAtUtc = DateTime.UtcNow;
+    patch.ApplyTo(dbQuestion);
+    dbQuestion.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+    dbQuestion.ModifiedAtUtc = DateTime.UtcNow;
 
     await _provider.SaveAsync();
 
