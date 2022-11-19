@@ -52,7 +52,7 @@ public class EditGroupCommand : IEditGroupCommand
     Guid senderId = _httpContextAccessor.HttpContext.GetUserId();
     DbGroup dbGroup = await _groupRepository.GetAsync(GroupId);
 
-    if(dbGroup is null)
+    if (dbGroup is null)
     {
       return _responseCreator.CreateFailureResponse<bool>(
         HttpStatusCode.NotFound,

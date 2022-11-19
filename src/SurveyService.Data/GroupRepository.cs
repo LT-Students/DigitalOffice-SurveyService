@@ -17,14 +17,11 @@ namespace LT.DigitalOffice.SurveyService.Data;
 public class GroupRepository : IGroupRepository
 {
   private readonly IDataProvider _provider;
-  private readonly IHttpContextAccessor _httpContextAccessor;
 
   public GroupRepository(
-    IDataProvider provider,
-    IHttpContextAccessor httpContextAccessor)
+    IDataProvider provider)
   {
     _provider = provider;
-    _httpContextAccessor = httpContextAccessor;
   }
 
   private IQueryable<DbGroup> CreateGetPredicates(
@@ -78,6 +75,7 @@ public class GroupRepository : IGroupRepository
     return _provider.Groups.Where(group => group.Id == groupId)
       .Include(group => group.Questions)
       .ThenInclude(question => question.Options)
+      .AsNoTracking()
       .FirstOrDefaultAsync();
   }
 
