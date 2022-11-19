@@ -1,8 +1,11 @@
+using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Group.Filters;
 using LT.DigitalOffice.SurveyService.Models.Dto.Requests.Question;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -67,6 +70,15 @@ public class GroupRepository : IGroupRepository
               .FirstOrDefaultAsync();
   }
 
+  public Task<DbGroup> GetAsync(Guid groupId)
+  {
+    return _provider.Groups.Where(group => group.Id == groupId)
+      .Include(group => group.Questions)
+      .ThenInclude(question => question.Options)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
+
   public async Task<(List<DbGroup>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId)
   {
     IQueryable<DbGroup> query = _provider.Groups.AsQueryable().OrderByDescending(g => g.CreatedAtUtc);
@@ -90,5 +102,21 @@ public class GroupRepository : IGroupRepository
     return (
       await query.Skip(filter.SkipCount).Take(filter.TakeCount).ToListAsync(),
       await query.CountAsync());
+  }
+
+  public async Task<bool> EditAsync(JsonPatchDocument<DbGroup> patch, DbGroup dbGroup, Guid modifiedBy)
+  {
+    if (dbGroup is null || patch is null)
+    {
+      return false;
+    }
+
+    patch.ApplyTo(dbGroup);
+    dbGroup.ModifiedBy = modifiedBy;
+    dbGroup.ModifiedAtUtc = DateTime.UtcNow;
+
+    await _provider.SaveAsync();
+
+    return true;
   }
 }

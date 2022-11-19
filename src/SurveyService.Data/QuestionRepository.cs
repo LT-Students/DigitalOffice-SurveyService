@@ -18,9 +18,11 @@ public class QuestionRepository : IQuestionRepository
 {
   private readonly IDataProvider _provider;
   private readonly IHttpContextAccessor _httpContextAccessor;
+  private readonly IOptionRepository _optionRepository;
+
   private IQueryable<DbQuestion> CreateGetPredicates(
     GetQuestionFilter filter,
-    IQueryable<DbQuestion> dbQuestions) 
+    IQueryable<DbQuestion> dbQuestions)
   {
     if (filter.IncludeOptions)
     {
@@ -39,13 +41,15 @@ public class QuestionRepository : IQuestionRepository
 
     return dbQuestions;
   }
-  
+
   public QuestionRepository(
     IDataProvider provider,
-    IHttpContextAccessor httpContextAccessor)
+    IHttpContextAccessor httpContextAccessor,
+    IOptionRepository optionRepository)
   {
     _provider = provider;
     _httpContextAccessor = httpContextAccessor;
+    _optionRepository = optionRepository;
   }
 
   public async Task<Guid?> CreateAsync(DbQuestion dbQuestion)
@@ -79,7 +83,7 @@ public class QuestionRepository : IQuestionRepository
   {
     DbQuestion question = await _provider.Questions.FirstOrDefaultAsync(q => q.GroupId == groupId);
 
-    if ((question is null) || (question.Deadline != deadline) || (question.HasRealTimeResult != hasRealTimeResult))
+    if (question is null || question.Deadline != deadline || question.HasRealTimeResult != hasRealTimeResult)
     {
       return false;
     }
@@ -117,17 +121,30 @@ public class QuestionRepository : IQuestionRepository
       await query.CountAsync());
   }
 
-  public async Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion question)
+  public async Task DeactivateAsync(ICollection<DbQuestion> dbQuestions, Guid modifiedBy)
+  {
+    foreach (DbQuestion dbQuestion in dbQuestions)
+    {
+      dbQuestion.IsActive = false;
+      dbQuestion.ModifiedAtUtc = DateTime.UtcNow;
+      dbQuestion.ModifiedBy = modifiedBy;
+      await _optionRepository.DeactivateAsync(dbQuestion.Options, modifiedBy);
+    }
+
+    await _provider.SaveAsync();
+  }
+
+  public async Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion dbQuestion)
   {
 
-    if (question is null || patch is null)
+    if (dbQuestion is null || patch is null)
     {
       return false;
     }
 
-    patch.ApplyTo(question);
-    question.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-    question.ModifiedAtUtc = DateTime.UtcNow;
+    patch.ApplyTo(dbQuestion);
+    dbQuestion.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+    dbQuestion.ModifiedAtUtc = DateTime.UtcNow;
 
     await _provider.SaveAsync();
 
