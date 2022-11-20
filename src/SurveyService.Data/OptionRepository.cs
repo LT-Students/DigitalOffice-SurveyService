@@ -38,9 +38,9 @@ public class OptionRepository : IOptionRepository
     return dbOption.Id;
   }
   
-  public async Task<DbOption> GetAsync(Guid optionId)
+  public Task<DbOption> GetAsync(Guid optionId)
   {
-    return await _provider.Options.FindAsync(optionId);
+    return _provider.Options.FirstOrDefaultAsync(x => x.Id == optionId);
   }
 
   public async Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds)
