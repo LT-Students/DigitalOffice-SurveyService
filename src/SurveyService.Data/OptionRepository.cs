@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
@@ -55,13 +55,13 @@ public class OptionRepository : IOptionRepository
       .ToListAsync();
   }
 
-  public Task DisactivateAsync(ICollection<DbOption> options)
+  public Task DeactivateAsync(ICollection<DbOption> dbOptions, Guid modifiedBy)
   {
-    foreach (DbOption dbOption in options)
+    foreach (DbOption dbOption in dbOptions)
     {
       dbOption.IsActive = false;
       dbOption.ModifiedAtUtc = DateTime.UtcNow;
-      dbOption.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+      dbOption.ModifiedBy = modifiedBy;
     }
 
     return _provider.SaveAsync();

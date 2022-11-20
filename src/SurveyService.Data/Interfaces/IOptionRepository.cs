@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.Kernel.Attributes;
+using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.SurveyService.Models.Db;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -16,7 +16,7 @@ public interface IOptionRepository
   
   Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds);
   
-  Task DisactivateAsync(ICollection<DbOption> options);
+  Task DeactivateAsync(ICollection<DbOption> dbOptions, Guid modifiedBy);
 
   Task<bool> EditAsync(JsonPatchDocument<DbOption> patch, DbOption dbOption, Guid? modifiedBy = null);
 }

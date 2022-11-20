@@ -17,14 +17,16 @@ public interface IQuestionRepository
   Task<bool> CheckGroupProperties(Guid groupId, DateTime? deadline, bool hasRealTimeResult);
 
   Task<DbQuestion> GetAsync(Guid questionId);
-  
+
   Task<DbQuestion> GetAsync(GetQuestionFilter filter);
 
   Task<bool> DoesExistAsync(Guid questionId);
+
+  Task DeactivateAsync(ICollection<DbQuestion> dbQuestions, Guid modifiedBy);
 
   Task<(List<DbQuestion>, int totalCount)> FindByAuthorAsync(FindQuestionsFilter filter, Guid authorId);
 
   Task<DbQuestion> GetQuestionWithAnswersAsync(Guid questionId);
 
-  Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion question);
+  Task<bool> EditAsync(JsonPatchDocument<DbQuestion> patch, DbQuestion dbQuestion);
 }
