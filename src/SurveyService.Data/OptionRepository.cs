@@ -75,7 +75,7 @@ public class OptionRepository : IOptionRepository
     }
     
     patch.ApplyTo(dbOption);
-    dbOption.ModifiedBy = modifiedBy;
+    dbOption.ModifiedBy = modifiedBy ?? _httpContextAccessor.HttpContext.GetUserId();
     dbOption.ModifiedAtUtc = DateTime.UtcNow;
     await _provider.SaveAsync();
 

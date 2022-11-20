@@ -67,6 +67,6 @@ public class EditOptionCommand : IEditOptionCommand
     }
 
     return new OperationResultResponse<bool>(
-      body: await _optionRepository.EditAsync(_mapper.Map(patch), dbOption, _httpContextAccessor.HttpContext.GetUserId()));
+      body: await _optionRepository.EditAsync(_mapper.Map(patch), dbOption, requestSenderId));
   }
 }
