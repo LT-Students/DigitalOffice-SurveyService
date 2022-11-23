@@ -1,6 +1,9 @@
-﻿using LT.DigitalOffice.SurveyService.Data.Interfaces;
+using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.SurveyService.Data.Interfaces;
 using LT.DigitalOffice.SurveyService.Data.Provider;
 using LT.DigitalOffice.SurveyService.Models.Db;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,11 +15,14 @@ namespace LT.DigitalOffice.SurveyService.Data;
 public class OptionRepository : IOptionRepository
 {
   private readonly IDataProvider _provider;
+  private readonly IHttpContextAccessor _httpContextAccessor;
 
   public OptionRepository(
-    IDataProvider provider)
+    IDataProvider provider,
+    IHttpContextAccessor httpContextAccessor)
   {
     _provider = provider;
+    _httpContextAccessor = httpContextAccessor;
   }
 
   public async Task<Guid?> CreateAsync(DbOption dbOption)
@@ -30,6 +36,11 @@ public class OptionRepository : IOptionRepository
     await _provider.SaveAsync();
 
     return dbOption.Id;
+  }
+  
+  public Task<DbOption> GetAsync(Guid optionId)
+  {
+    return _provider.Options.FirstOrDefaultAsync(x => x.Id == optionId);
   }
 
   public async Task<List<DbOption>> GetByIdsAsync(List<Guid> optionIds)
@@ -54,5 +65,20 @@ public class OptionRepository : IOptionRepository
     }
 
     return _provider.SaveAsync();
+  }
+
+  public async Task<bool> EditAsync(JsonPatchDocument<DbOption> patch, DbOption dbOption, Guid? modifiedBy = null)
+  {
+    if (patch is null || dbOption is null)
+    {
+      return false;
+    }
+    
+    patch.ApplyTo(dbOption);
+    dbOption.ModifiedBy = modifiedBy ?? _httpContextAccessor.HttpContext.GetUserId();
+    dbOption.ModifiedAtUtc = DateTime.UtcNow;
+    await _provider.SaveAsync();
+
+    return true;
   }
 }
