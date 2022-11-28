@@ -9,4 +9,6 @@ namespace LT.DigitalOffice.SurveyService.Data.Interfaces;
 public interface IUserAnswerRepository
 {
   Task<bool> CreateAsync(List<DbUserAnswer> dbUserAnswer);
+
+  Task<bool> RemoveAsync(DbUserAnswer dbUserAnswer);
 }

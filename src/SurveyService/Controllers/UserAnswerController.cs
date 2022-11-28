@@ -17,4 +17,12 @@ public class UserAnswerController : ControllerBase
   {
     return await command.ExecuteAsync(request);
   }
+
+  [HttpDelete("remove")]
+  public async Task<OperationResultResponse<bool>> RemoveAsync(
+    [FromServices] IRemoveUserAnswerCommand command,
+    [FromBody] RemoveUserAnswerRequest request)
+  {
+    return await command.ExecuteAsync(request);
+  }
 }

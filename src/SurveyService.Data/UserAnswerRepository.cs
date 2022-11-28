@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.SurveyService.Data;
+
 public class UserAnswerRepository : IUserAnswerRepository
 {
   private readonly IDataProvider _provider;
@@ -22,6 +23,19 @@ public class UserAnswerRepository : IUserAnswerRepository
     }
 
     _provider.UsersAnswers.AddRange(dbUserAnswers);
+    await _provider.SaveAsync();
+
+    return true;
+  }
+
+  public async Task<bool> RemoveAsync(DbUserAnswer dbUserAnswer)
+  {
+    if (dbUserAnswer is null)
+    {
+      return false;
+    }
+
+    _provider.UsersAnswers.Remove(dbUserAnswer);
     await _provider.SaveAsync();
 
     return true;
